@@ -9,27 +9,55 @@ public class Problema1 {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		//Converter converter1 = new Converter("5 3 1 3 4");
-		//resolverProblemaMochila(converter1);
-		//Converter converter2 = new Converter("10 4 9 8 4 2");
-		//resolverProblemaMochila(converter2);
-		/*Converter converter3 = new Converter("20 4 10 5 7 4");
-		resolverProblemaMochila(converter3);
-		Converter converter4 = new Converter("90 8 10 23 1 2 3 4 5 7");
-		resolverProblemaMochila(converter4);*/
-		//Converter converter5 = new Converter("45 44 43 12 9 8 2");
-		//resolverProblemaMochila(converter5);
-		//Converter converter6 = new Converter("35 6 34 33 10 12 11 2");
-		Converter converter6 = new Converter("6 5 5 4 1 2 3"); //Deberia elejir 1,2,3
-		//Converter converter6 = new Converter("6 5 1 2 3 4 5"); //Deberia elejir 1,2,3
-		resolverProblemaMochila(converter6);
-
-
-
 		
+		String res; 
+		System.out.print("Test1: ");
+		Converter converter1 = new Converter("5 3 1 3 4");
+		res = resolverProblemaMochila(converter1);
+		System.out.println( (res.equals("1 4 sum:5")) ? "OK" : "Fail: " + res);  
+				
+		System.out.print("Test2: ");				
+		Converter converter2 = new Converter("10 4 9 8 4 2");
+		res = resolverProblemaMochila(converter2);
+		System.out.println( (res.equals("8 2 sum:10")) ? "OK" : "Fail: " + res);
+		
+		System.out.print("Test3: ");
+		Converter converter3 = new Converter("20 4 10 5 7 4");
+		res = resolverProblemaMochila(converter3);
+		System.out.println( (res.equals("10 5 4 sum:19")) ? "OK" : "Fail: " + res);
+
+		System.out.print("Test4: ");
+		Converter converter4 = new Converter("90 8 10 23 1 2 3 4 5 7");
+		res = resolverProblemaMochila(converter4);
+		System.out.println( (res.equals("10 23 1 2 3 4 5 7 sum:55")) ? "OK" : "Fail: " + res);
+		
+		System.out.print("Test5: ");		
+		Converter converter5 = new Converter("45 8 4 10 44 43 12 9 8 2");
+		res = resolverProblemaMochila(converter5);
+		System.out.println( (res.equals("4 10 12 9  2 sum:45")) ? "OK" : "Fail: " + res);
+		
+		//Extras
+		System.out.print("Test6: ");
+		Converter converter6 = new Converter("35 6 34 33 10 12 11 2"); //Deberia dar 10 12 11 2
+		res = resolverProblemaMochila(converter6);
+		System.out.println( (res.equals("10 12 11 2 sum:35")) ? "OK" : "Fail: " + res);
+		
+		System.out.print("Test7: ");
+		Converter converter7 = new Converter("6 5 1 2 3 4 5"); //Deberia dar 1,2,3
+		res = resolverProblemaMochila(converter7);
+		System.out.println( (res.equals("1 2 3 sum:6")) ? "OK" : "Fail: " + res);
+		
+		System.out.print("Test8: ");
+		Converter converter8 = new Converter("6 5 5 4 1 2 3"); //Deberia dar 1,2,3
+		res = resolverProblemaMochila(converter8);
+		System.out.println( (res.equals("1 2 3 sum:6")) ? "OK" : "Fail: " + res);
+		
+		System.out.print("Test9: ");
+		Converter converter9 = new Converter("5 3 5 3 2"); //Deberia dar 3,2
+		System.out.println( (res.equals("3 2 sum:6")) ? "OK" : "Fail: " + res);
 	}
 
-	public static void resolverProblemaMochila(Converter converter){
+	public static String resolverProblemaMochila(Converter converter){
 		int W = converter.maximo; //Maximo tamaño de cinta "w" 
 		int numCanciones = converter.numCanciones; //Cantidad de canciones "n" //Replace by pistas
 		int [] canciones = converter.canciones; //Vector de costo/beneficio
@@ -48,11 +76,11 @@ public class Problema1 {
 						rastroMigajas[i][w] = 1;
 					}else if (usoMax[i-1][w-cost[i-1]] + cost[i-1] < usoMax[i-1][w]) {
 						usoMax[i][w] = usoMax[i-1][w];
-						rastroMigajas[i][w] = 0;
+						rastroMigajas[i][w] = 1;
 					}else{
 						//if(rastroMigajas[i-1][w-cost[i-1]] = 0)
 							usoMax[i][w] = usoMax[i-1][w];
-						rastroMigajas[i][w] = 0;
+						rastroMigajas[i][w] = 1;
 					}
 				}else{
 					usoMax[i][w] = usoMax[i-1][w];
@@ -60,24 +88,25 @@ public class Problema1 {
 			}
 		}
 
-		converter.mostrarMatriz();
+		//converter.mostrarMatriz();
 		System.out.println("");
-		converter.mostrarMatrizMigajas();
+		//converter.mostrarMatrizMigajas();
 		converter.mostrarSuma();
 
 		int k = W;
-		StringBuffer sb = new StringBuffer(); 
 		for (int i = numCanciones; i > 0 ; i--) {
 			if(rastroMigajas[i][k] == 1){
 				solucion.add(canciones[i-1]); 
 				k = k - cost[i-1];
 			}
 		}
-		for (int i = solucion.size()-1; i >= 0 ; i--) {
-			System.out.print(solucion.get(i));
-			System.out.print(" ");
+		String solucionStr = "";
+		for (int i = 0; i < solucion.size()-1 ; i++) {
+			solucionStr = solucion.get(i) + solucionStr + " ";
 		}
-		System.out.println("");
+		solucionStr = solucionStr + "sum:" + converter.getSuma();
+		System.out.println(solucionStr);
+		return solucionStr;
 	}
 	
 	public static class Converter{
@@ -103,6 +132,10 @@ public class Problema1 {
 		
 		public void mostrarSuma(){
 			System.out.println("Sum: " + usoMax[numCanciones][maximo]);
+		}
+		
+		public String getSuma(){
+			return usoMax[numCanciones][maximo] + "";
 		}
 		
 		public int[][] getUsoMax(){
