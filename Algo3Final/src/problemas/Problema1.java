@@ -109,7 +109,7 @@ public class Problema1 {
 		return solucionStr;
 	}
 	
-	public static class Converter{
+	private static class Converter{
 		
 		int maximo;
 		int numCanciones;
