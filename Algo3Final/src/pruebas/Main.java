@@ -1,49 +1,25 @@
-package problema2;
+package pruebas;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-//Problema2
+
+//Problema2 Probando
 public class Main {
 
     public static void main(String[] args) {
     	
-    	//City city = new City("7 0 1 0 2 0 4 2 4 2 3 3 1 4 3");
-    	//City city = new City("5 0 2 0 1 1 5 2 5 2 1");
-    	//City city = new City("9 0 1 0 2 0 3 0 4 1 4 2 1 2 0 3 0 3 1");
-    	//City city = new City("10 0 1 0 2 0 3 0 4 0 5 0 6 0 7 0 8 0 9");
-    	String datos = Consola.leerDatos();
+    	String datos = Consola.leerDatos2();
     	Parser parser = new Parser(datos);
-    	
-    	
-    	for (City city : parser.getCities()) {
-    		obtenerCaminos(city);
-		}
-
+    	sendInfo();
     }
-    
-    private static void obtenerCaminos(City city){
-    	//Converter converter = new Converter(datos);
-    	
-    	int max = city.getMax();
-    	int matAdj[][] = city.getMatAdj();
-    	int matCaminoI[][] = city.copyMatriz(matAdj);
-    	int matSuma[][] = city.copyMatriz(matAdj);
-    	
-    	for (int i = 1; i < max+1;  i++) {
-    		matCaminoI = city.multiplicarMatrices(matCaminoI,matAdj);
-			matSuma = city.sumarMatrices(matSuma,matCaminoI);
-		}
-    	
-    	System.out.println("matrix for city " + city.getName());
-    	city.marcarCaminosInfinitos(matSuma);
-    	city.mostrarMatriz(matSuma);
-    }
-    
+          
     private static class Consola{
     	
     	public static String leerDatos() {
@@ -64,19 +40,20 @@ public class Main {
     		return datos;
     	}
     	
-    	public static String leerDatos2() {
-    		Scanner in = new Scanner(new BufferedReader(new InputStreamReader(System.in)));
-    		
-    		String datos = "";
-   			while(in.hasNext()){
-   				datos = datos + in.nextLine() + " ";
-    		}
-    		return datos;
+    	 public static String leerDatos2() {
+			Scanner in = new Scanner(new BufferedReader(new InputStreamReader(System.in)));
+			
+			String datos = "";
+				while(in.hasNext()){
+					datos = datos + in.nextLine() + " ";
+			}
+			return datos;
     	}
+    	 
     }
-
-    private static class Parser{
     
+    private static class Parser{
+        
     	private List<City> cities = new ArrayList();
     	
     	public Parser(String datos){
@@ -84,36 +61,18 @@ public class Main {
     		int CANT_SPACES = 2;
     		int CANT_ELEMS = 2;
     		
-    		String[] numbers = datos.split(" ");
-			
-    		String dato = "";
+    		String dato;
     		int ejes;
-    		//int index = 0;
+    		int index = 0;
     		int name = 0;
-    		
-    		for (int index = 0;  index < numbers.length;) {
-    			dato = "";
-    			ejes = Integer.parseInt(numbers[index]);
-    			for (int j = index+1;  j < index + ejes*2; j=j+2) {
-    				dato = dato + " " + numbers[j] + " " + numbers[j+1];
-    			}
-    			dato = ejes + dato;
-    			cities.add(new City(dato,name));
-    			index = index + ejes*2 + EXTRA_SPACE;
-    			name++;
-			}
-    	}
-    	
-    	/*
-    	 * 
-    	 * while(index < datos.length()){
+    		//while(index < datos.length()){
     			ejes = Integer.parseInt(datos.charAt(index) + "");
     			dato = datos.substring(index, index + (ejes *(CANT_SPACES + CANT_ELEMS) + 1));
         		cities.add(new City(dato,name));
     			index = index + dato.length() + EXTRA_SPACE;
     			name++;
-			}
-    	 * */
+			//}
+    	}
     	
     	public List<City> getCities(){
     		return cities;
@@ -256,5 +215,24 @@ public class Main {
     public static void enter(){
     	System.out.println("");
     }
-        
+    
+    public static void sendInfo() {
+    	try{
+    		
+		 URL yahoo = new URL("http://www.yahoo.com/");
+	        URLConnection yc = yahoo.openConnection();
+	        BufferedReader in = new BufferedReader(
+	                                new InputStreamReader(
+	                                yc.getInputStream()));
+	        String inputLine;
+
+	        while ((inputLine = in.readLine()) != null) 
+	            System.out.println(inputLine);
+	        in.close();
+    	}
+    	catch (Exception e) {
+		}
+
+	 }
+    
 }
