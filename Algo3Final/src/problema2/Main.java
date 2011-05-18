@@ -1,11 +1,15 @@
 package problema2;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 
 //Problema2
 public class Main {
@@ -16,13 +20,17 @@ public class Main {
     	//City city = new City("5 0 2 0 1 1 5 2 5 2 1");
     	//City city = new City("9 0 1 0 2 0 3 0 4 1 4 2 1 2 0 3 0 3 1");
     	//City city = new City("10 0 1 0 2 0 3 0 4 0 5 0 6 0 7 0 8 0 9");
-    	String datos = Consola.leerDatos();
-    	Parser parser = new Parser(datos);
-    	
-    	
-    	for (City city : parser.getCities()) {
-    		obtenerCaminos(city);
-		}
+    	//Procesor.procesarDatos();
+		Grafo grafo = new Grafo();
+		grafo.agregarEje(0,1);
+		grafo.agregarEje(0,2);
+		grafo.agregarEje(1,2);
+		grafo.agregarEje(1,3);
+		grafo.agregarEje(2,3);
+		
+    	PathFinder encuentraCaminos = new PathFinder(grafo);
+    	encuentraCaminos.calcularCaminos();
+    	encuentraCaminos.mostrarCaminos();
 
     }
     
@@ -33,8 +41,8 @@ public class Main {
     	int matAdj[][] = city.getMatAdj();
     	int matCaminoI[][] = city.copyMatriz(matAdj);
     	int matSuma[][] = city.copyMatriz(matAdj);
-    	
-    	for (int i = 1; i < max+1;  i++) {
+    	int ITERACIONES = (max+1)* max;//max+1;
+    	for (int i = 1; i < ITERACIONES;  i++) {
     		matCaminoI = city.multiplicarMatrices(matCaminoI,matAdj);
 			matSuma = city.sumarMatrices(matSuma,matCaminoI);
 		}
@@ -44,82 +52,129 @@ public class Main {
     	city.mostrarMatriz(matSuma);
     }
     
-    private static class Consola{
+    public static class Grafo {
+        private Map<Integer, LinkedHashSet<Integer>> map = new HashMap();
+        List<Integer> nodos = new ArrayList<Integer>();
+        public int cantNodos = 0;
+
+        public Integer unNodo(){
+        	return nodos.get(0);
+        }
+        
+        public void agregarEje(Integer nodo1, Integer nodo2) {
+            LinkedHashSet<Integer> adjacent = map.get(nodo1);
+             if(!nodos.contains(nodo1)){
+            	 nodos.add(nodo1);
+            	 cantNodos++;
+             }
+             if(!nodos.contains(nodo2)){
+            	 nodos.add(nodo2);
+            	 cantNodos++;
+             }
+             
+            if(adjacent==null) {
+                adjacent = new LinkedHashSet<Integer>();
+                map.put(nodo1, adjacent);
+            }
+            adjacent.add(nodo2);
+        }
+
+        public boolean hayEje(String node1, String node2) {
+            Set<Integer> adyacente = map.get(node1);
+            if(adyacente == null) {
+                return false;
+            }
+            return adyacente.contains(node2);
+        }
+
+        public LinkedList<Integer> adyacentes(Integer last) {
+            LinkedHashSet<Integer> adyacente = map.get(last);
+            if(adyacente == null) {
+                return new LinkedList<Integer>();
+            }
+            return new LinkedList<Integer>(adyacente);
+        }
+        
+    }
+
+    
+    private static class PathFinder{
     	
-    	public static String leerDatos() {
-    		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    		String datos = "";
-    		String aux;
-    		try{
-    			aux = br.readLine();
-    		
-	    		while (aux!=null && !aux.equals("")){
-	    			datos = datos + aux + " ";
-	    			aux = br.readLine(); 
-	    		}
-    		}
-    		catch(IOException e){
-    			aux = null;
-    		}
-    		return datos;
+    	private Grafo grafo;
+    	private int[][] matCaminos;
+    	
+    	public PathFinder(Grafo grafo){
+    		this.grafo = grafo;
     	}
     	
-    	public static String leerDatos2() {
+    	public void calcularCaminos(){
+    		List<Integer> nodos = new ArrayList<Integer>();
+    		nodos.add( grafo.unNodo() );
+    		calcularCaminos( nodos );
+    	}
+    	
+    	public void calcularCaminos(List<Integer> visitados){
+    		
+    		int ultimo = visitados.size()-1;
+    		Integer primerNodo = visitados.get(ultimo);
+    		
+    		List<Integer> adyacentes = grafo.adyacentes(primerNodo);
+    		
+    		for (Integer nodo : adyacentes) {
+				//Encontramos un ciclo
+    			if(visitados.contains(nodo)){
+					
+				}else{
+					matCaminos[primerNodo][nodo] = 1;
+					visitados.add()
+					calcularCaminos();
+				}
+			}
+    	}
+    	
+    	public void mostrarCaminos(){
+			for (int i = 0; i < grafo.cantNodos; i++) {
+				for (int j = 0; j < grafo.cantNodos; j++) {
+					System.out.print(matCaminos[i][j]);
+					System.out.print(" ");
+				}
+				System.out.println("");
+			}
+		}
+    	
+    }
+    
+    private static class Procesor{
+    	public static void procesarDatos() {
     		Scanner in = new Scanner(new BufferedReader(new InputStreamReader(System.in)));
     		
-    		String datos = "";
-   			while(in.hasNext()){
-   				datos = datos + in.nextLine() + " ";
+    		int[] numbers;
+    		int nodo;
+    		int name = 0; 
+   			
+    		while(in.hasNextInt()){
+   				int ejes = in.nextInt();
+   				numbers = new int[ejes*2+1];
+   				numbers[0] = ejes;
+   				for (int i = 1; i < ejes*2+1; i=i+2) {
+   					nodo = in.nextInt();
+   					numbers[i] = nodo;
+   					nodo = in.nextInt();
+   					numbers[i+1] = nodo;
+				}
+   				
+   				City city = new City(numbers,name);
+   	    		obtenerCaminos(city);
+   				name++;
     		}
-    		return datos;
+   			in.close();
+    	}
+    	
+    	public static void process(int[] numbers){
+    		
     	}
     }
 
-    private static class Parser{
-    
-    	private List<City> cities = new ArrayList();
-    	
-    	public Parser(String datos){
-    		int EXTRA_SPACE = 1;
-    		int CANT_SPACES = 2;
-    		int CANT_ELEMS = 2;
-    		
-    		String[] numbers = datos.split(" ");
-			
-    		String dato = "";
-    		int ejes;
-    		//int index = 0;
-    		int name = 0;
-    		
-    		for (int index = 0;  index < numbers.length;) {
-    			dato = "";
-    			ejes = Integer.parseInt(numbers[index]);
-    			for (int j = index+1;  j < index + ejes*2; j=j+2) {
-    				dato = dato + " " + numbers[j] + " " + numbers[j+1];
-    			}
-    			dato = ejes + dato;
-    			cities.add(new City(dato,name));
-    			index = index + ejes*2 + EXTRA_SPACE;
-    			name++;
-			}
-    	}
-    	
-    	/*
-    	 * 
-    	 * while(index < datos.length()){
-    			ejes = Integer.parseInt(datos.charAt(index) + "");
-    			dato = datos.substring(index, index + (ejes *(CANT_SPACES + CANT_ELEMS) + 1));
-        		cities.add(new City(dato,name));
-    			index = index + dato.length() + EXTRA_SPACE;
-    			name++;
-			}
-    	 * */
-    	
-    	public List<City> getCities(){
-    		return cities;
-    	}
-    }
-    
     private static class City{
     	
     	int name;
@@ -127,18 +182,17 @@ public class Main {
 		int[][] matAdj;
 		int max;
     	
-		public City(String data){
-			this(data,0);
+		public City(int[] numbers){
+			this(numbers,0);
 		}
 		
-    	public City(String data, int name){
+    	public City(int[] numbers, int name){
     		this.name = name;
-			String[] numbers = data.split(" ");
-			ejes = Integer.parseInt(numbers[0]);
+			ejes = numbers[0];
 			
 			max = 0;
 			for (int i = 1;  i < numbers.length; i++) {
-				int nodo = Integer.parseInt(numbers[i]);
+				int nodo = numbers[i];
 				if(nodo > max){
 					max = nodo;
 				}
@@ -148,8 +202,8 @@ public class Main {
 			matAdj = new int [max][max];
 			
 			for (int i = 1;  i < numbers.length-1; i=i+2) {
-				int f = Integer.parseInt(numbers[i]);
-				int c = Integer.parseInt(numbers[i+1]);
+				int f = numbers[i];
+				int c = numbers[i+1];
 				matAdj[f][c] = 1;
 			}
 		}
@@ -180,7 +234,7 @@ public class Main {
 			for (int i = 0; i < max; i++) {
 				for (int j = 0; j < max; j++) {
 					System.out.print(mat[i][j]);
-					System.out.print("\t");
+					System.out.print(" ");
 				}
 				System.out.println("");
 			}
@@ -229,19 +283,7 @@ public class Main {
 			return matRes;
 		}
 		
-		@Deprecated
-		public boolean isMatrizCero(int mat[][]){
-			for (int i = 0; i < max; i++) {
-				for (int j = 0; j < max; j++) {
-					if((mat[i][j]!=0)){
-						return false;
-					}
-				}
-			}
-			return true;
-		}
-		
-		public void marcarCaminosInfinitos(int mat[][]){
+	public void marcarCaminosInfinitos(int mat[][]){
 			for (int i = 0; i < max; i++) {
 				for (int j = 0; j < max; j++) {
 					if((mat[i][j] > max)){
