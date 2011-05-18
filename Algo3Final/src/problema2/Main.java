@@ -105,6 +105,7 @@ public class Main {
     	
     	public PathFinder(Grafo grafo){
     		this.grafo = grafo;
+    		matCaminos = new int[grafo.cantNodos][grafo.cantNodos];
     	}
     	
     	public void calcularCaminos(){
@@ -138,7 +139,8 @@ public class Main {
 					}
 					
 					if(matCaminos[nodo][primerNodo] > 0){
-						matCaminos[primerNodo][] 
+						matCaminos[primerNodo][primerNodo] = -1;
+						matCaminos[nodo][primerNodo] = -1;
 					}
 										
 				}
