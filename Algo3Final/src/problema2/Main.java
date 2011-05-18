@@ -27,7 +27,7 @@ public class Main {
 		grafo.agregarEje(1,2);
 		grafo.agregarEje(1,3);
 		grafo.agregarEje(2,3);
-		
+				
     	PathFinder encuentraCaminos = new PathFinder(grafo);
     	encuentraCaminos.calcularCaminos();
     	encuentraCaminos.mostrarCaminos();
@@ -121,6 +121,12 @@ public class Main {
     		
     		List<Integer> adyacentes = grafo.adyacentes(primerNodo);
     		
+    		if(adyacentes.size() == 0){
+    			for (int i = 0; i < grafo.cantNodos; i++) {
+    				matCaminos[primerNodo][i] = 0;
+    			}
+    		}
+    		
     		for (Integer nodo : adyacentes) {
 				//Encontramos un ciclo
     			if(visitados.contains(nodo)){
@@ -131,12 +137,12 @@ public class Main {
 					calcularCaminos(visitados);
 					visitados.remove(nodo);
 					
+					System.out.println("(" + nodo + ") ");
 					for (int i = 0; i < grafo.cantNodos; i++) {
-						matCaminos[primerNodo][i] = matCaminos[nodo][i];
-						if(i == nodo){
-							matCaminos[primerNodo][i]++;
-						}
+						System.out.println(matCaminos[nodo][i] + ",");
+						matCaminos[primerNodo][i] += matCaminos[nodo][i];
 					}
+					System.out.println("");
 					
 					if(matCaminos[nodo][primerNodo] > 0){
 						matCaminos[primerNodo][primerNodo] = -1;
@@ -145,6 +151,7 @@ public class Main {
 										
 				}
 			}
+    		
     	}
     	
     	public void mostrarCaminos(){
