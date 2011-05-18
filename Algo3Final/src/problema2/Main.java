@@ -123,11 +123,24 @@ public class Main {
     		for (Integer nodo : adyacentes) {
 				//Encontramos un ciclo
     			if(visitados.contains(nodo)){
-					
+    				matCaminos[primerNodo][nodo]++;
+    				//matCaminos[primerNodo][nodo] = -1;
 				}else{
-					matCaminos[primerNodo][nodo] = 1;
-					visitados.add()
-					calcularCaminos();
+					visitados.add(nodo);
+					calcularCaminos(visitados);
+					visitados.remove(nodo);
+					
+					for (int i = 0; i < grafo.cantNodos; i++) {
+						matCaminos[primerNodo][i] = matCaminos[nodo][i];
+						if(i == nodo){
+							matCaminos[primerNodo][i]++;
+						}
+					}
+					
+					if(matCaminos[nodo][primerNodo] > 0){
+						matCaminos[primerNodo][] 
+					}
+										
 				}
 			}
     	}
