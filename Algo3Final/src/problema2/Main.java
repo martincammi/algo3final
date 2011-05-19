@@ -21,18 +21,21 @@ public class Main {
     	//City city = new City("9 0 1 0 2 0 3 0 4 1 4 2 1 2 0 3 0 3 1");
     	//City city = new City("10 0 1 0 2 0 3 0 4 0 5 0 6 0 7 0 8 0 9");
     	//Procesor.procesarDatos();
-		Grafo grafo = new Grafo();
-		grafo.agregarEje(0,1);
-		grafo.agregarEje(0,2);
-		grafo.agregarEje(1,2);
-		grafo.agregarEje(1,3);
-		grafo.agregarEje(2,3);
+		//Grafo grafo = new Grafo(); grafo.agregarEje(0,1); grafo.agregarEje(0,2); grafo.agregarEje(1,2); grafo.agregarEje(1,3); grafo.agregarEje(2,3);
+		//Grafo grafo = new Grafo(); grafo.agregarEje(0,1); grafo.agregarEje(1,2); grafo.agregarEje(2,0);
+    	//Grafo grafo = new Grafo(); grafo.agregarEje(0,1); grafo.agregarEje(1,2); grafo.agregarEje(2,3); grafo.agregarEje(3,0);
+    	//Grafo grafo = new Grafo(); grafo.agregarEje(0,1); grafo.agregarEje(0,2); grafo.agregarEje(1,2); grafo.agregarEje(2,1);
+    	//Grafo grafo = new Grafo(); grafo.agregarEje(0,1); grafo.agregarEje(1,2); grafo.agregarEje(2,3); grafo.agregarEje(3,1);
+		//Grafo grafo = new Grafo(); grafo.agregarEje(0,1); grafo.agregarEje(0,2); grafo.agregarEje(1,2); grafo.agregarEje(1,3); grafo.agregarEje(2,3);grafo.agregarEje(0,3);
+		Grafo grafo = new Grafo(); grafo.agregarEje(0,1); grafo.agregarEje(1,2); grafo.agregarEje(4,2); grafo.agregarEje(3,2); grafo.agregarEje(2,3);
 				
     	PathFinder encuentraCaminos = new PathFinder(grafo);
     	encuentraCaminos.calcularCaminos();
     	encuentraCaminos.mostrarCaminos();
 
     }
+    
+    
     
     private static void obtenerCaminos(City city){
     	//Converter converter = new Converter(datos);
@@ -102,10 +105,12 @@ public class Main {
     	
     	private Grafo grafo;
     	private int[][] matCaminos;
+    	private boolean[] fueVisitado;
     	
     	public PathFinder(Grafo grafo){
     		this.grafo = grafo;
     		matCaminos = new int[grafo.cantNodos][grafo.cantNodos];
+    		fueVisitado = new boolean[grafo.cantNodos];
     	}
     	
     	public void calcularCaminos(){
@@ -117,41 +122,101 @@ public class Main {
     	public void calcularCaminos(List<Integer> visitados){
     		
     		int ultimo = visitados.size()-1;
-    		Integer primerNodo = visitados.get(ultimo);
+    		boolean huboCiclo;
+    		boolean tengoCiclo = false;
+    		Integer nodoActual = visitados.get(ultimo);
     		
-    		List<Integer> adyacentes = grafo.adyacentes(primerNodo);
+    		List<Integer> adyacentes = grafo.adyacentes(nodoActual);
     		
     		if(adyacentes.size() == 0){
     			for (int i = 0; i < grafo.cantNodos; i++) {
-    				matCaminos[primerNodo][i] = 0;
+    				matCaminos[nodoActual][i] = 0; //Redundante ya es cero
     			}
     		}
     		
     		for (Integer nodo : adyacentes) {
 				//Encontramos un ciclo
     			if(visitados.contains(nodo)){
-    				matCaminos[primerNodo][nodo]++;
-    				//matCaminos[primerNodo][nodo] = -1;
+    				//matCaminos[nodoActual][nodo]++;
+    				matCaminos[nodoActual][nodo] = -1;
+    				matCaminos[nodoActual][nodoActual] = -1;
+    				matCaminos[nodo][nodoActual] = -1;
 				}else{
-					visitados.add(nodo);
-					calcularCaminos(visitados);
-					visitados.remove(nodo);
+					
+					if(!fueVisitado[nodo]){
+						visitados.add(nodo);
+						calcularCaminos(visitados);
+						visitados.remove(nodo);
+						
+						//Con pinzas
+						if(yoTengoUnCiclo(nodoActual)){
+							//matCaminos[nodoActual][nodoActual] = -1; //Tengo un ciclo con mi mismo
+							tengoCiclo = true;
+						}
+					}
 					
 					System.out.println("(" + nodo + ") ");
+					huboCiclo = false;
 					for (int i = 0; i < grafo.cantNodos; i++) {
 						System.out.println(matCaminos[nodo][i] + ",");
-						matCaminos[primerNodo][i] += matCaminos[nodo][i];
+						
+						if(matCaminos[nodo][i] == -1){
+							matCaminos[nodoActual][i] = -1;
+							huboCiclo = true;
+						}else{
+							matCaminos[nodoActual][i] += matCaminos[nodo][i];
+						}
+						
+						if(i == nodo){
+							matCaminos[nodoActual][i] += matCaminos[nodo][i] + 1;
+						}
+					}
+					if(huboCiclo){
+						matCaminos[nodoActual][nodo] = -1; //Tengo un ciclo con el otro
 					}
 					System.out.println("");
 					
-					if(matCaminos[nodo][primerNodo] > 0){
-						matCaminos[primerNodo][primerNodo] = -1;
-						matCaminos[nodo][primerNodo] = -1;
+					if(matCaminos[nodo][nodoActual] > 0){
+						matCaminos[nodoActual][nodoActual] = -1;
+						matCaminos[nodo][nodoActual] = -1;
 					}
 										
 				}
+    			if(tengoCiclo){
+    				List<Integer> nodosEnCiclo = new ArrayList<Integer>();
+    				nodosEnCiclo.add(nodoActual);
+    				vosTenesUnCicloAvisaALosDemas(nodo, nodoActual, nodosEnCiclo); //El otro tiene un ciclo conmigo
+    			}
+			}
+    		fueVisitado[nodoActual] = true;
+    	}
+    	
+    	public boolean yoTengoUnCiclo(Integer nodo){
+    		
+    		for (int i = 0; i < grafo.cantNodos; i++) {
+				if (matCaminos[nodo][i] == -1){
+					return true;
+				}
+			}
+    		return false;
+    	}
+    	
+    	public void vosTenesUnCicloAvisaALosDemas(Integer nodo, Integer nodoConCiclo, List<Integer> visitados){
+    		if(visitados.contains(nodo)){
+    			return;
+    		}
+    		visitados.add(nodo);
+    		//matCaminos[nodo][nodoConCiclo] = -1;
+    		for (Integer nodoVisitado : visitados) {
+    			matCaminos[nodo][nodoVisitado] = -1;
 			}
     		
+    		List<Integer> adyacentes = grafo.adyacentes(nodo);
+    		
+    		for (Integer nodoAdj : adyacentes) {
+    			vosTenesUnCicloAvisaALosDemas(nodoAdj,nodoConCiclo, visitados);	
+			}
+    		visitados.remove(nodo);
     	}
     	
     	public void mostrarCaminos(){
