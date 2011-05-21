@@ -30,7 +30,7 @@ public class Main {
     	int cantGrafos = grafos.size(); 
     	for (Grafo grafo : grafos) {
     		if(i == cantGrafos-1){
-    			//logActivated = true;
+    			logActivated = true;
     		}
     		encuentraCaminos = new PathFinder(grafo);
     		encuentraCaminos.calcularCaminos();
@@ -161,18 +161,17 @@ public class Main {
     		logln("Revisando adjacentes de " + nodoActual);
     		for (Integer nodoAdj : adyacentes) {
 				//Encontramos un ciclo
-    			log("nodo " + nodoAdj + ": ");
+    			log(nodoAdj + ") status: ");
     			if(visitados.contains(nodoAdj)){ //Encontré ciclo.
-    				logln("YA VISITADO");
+    				logln("Ya visitado.");
     				//matCaminos[nodoActual][nodo]++;
     				matCaminos[nodoActual][nodoAdj] = -1; //Ciclo con ese nodoAdj
     				//matCaminos[nodoActual][nodoActual] = -1; //Yo estoy en un ciclo (por ahora no me seteo) caso 5 en -1
     				matCaminos[nodoAdj][nodoActual] = -1; //El otro nodo tiene un ciclo conmigo. SI VA
     				matCaminos[nodoAdj][nodoAdj] = -1; //El otro nodo està ya en un ciclo (esto determinara que ese nodo luego propague) SI Va
 				}else{
-					
 					if(!fueVisitadoAlgunaVez[nodoAdj]){
-						logln("No visitado nunca");
+						logln("No visitado nunca.");
 						visitados.add(nodoAdj);
 						calcularCaminos(visitados);
 						visitados.remove(nodoAdj);
@@ -183,12 +182,14 @@ public class Main {
 							//matCaminos[nodoActual][nodoActual] = -1; //Tengo un ciclo con mi mismo
 							tengoCiclo = true;
 						}*/
+					}else{
+						logln("Procesando.");
 					}
 					
-					logln("(" + nodoAdj + ") ");
+					//log(nodoAdj + ") (");
 					//propagar = false;
 					for (int i = 0; i < grafo.cantNodos; i++) {
-						logln(matCaminos[nodoAdj][i] + ",");
+						//log(matCaminos[nodoAdj][i] + " ");
 						
 						//Si mi adyacente tiene un ciclo yo me lo copio
 						if(matCaminos[nodoAdj][i] == -1){
@@ -208,8 +209,11 @@ public class Main {
 							}
 						}
 					}
+					logln(nodoActual + " Obteniendo Feedback de " + nodoAdj);
+					mostrarNodo(nodoActual);
 				}
 			}
+    		mostrarNodo(nodoActual);
     		
     	   	if(propagar){
     	   		List<Integer> nodosEnCiclo = new ArrayList<Integer>();
@@ -269,6 +273,15 @@ public class Main {
 				}
 				logln("");
 			}
+		}
+    
+    	public void mostrarNodo(Integer nodo){
+    		log(nodo + " ) (");
+			for (int j = 0; j < grafo.cantNodos; j++) {
+				log(matCaminos[nodo][j]);
+				log(" ");
+			}
+			logln(")");
 		}
     	
     }
@@ -434,6 +447,7 @@ public class Main {
 			for (int j = 0; j < mat.length; j++) {
 				if (mat[i][j] != getMat(i,j,idGrafo)){
 					System.out.println("Fallo grafo " + idGrafo + " (" +i+ "," +j+ ")");
+					mostrarMatriz(mat,mat.length);
 					return;
 				}
 			}
@@ -460,6 +474,17 @@ public class Main {
 		grafo = new Grafo(); grafo.agregarEje(0,1);	grafo.agregarEje(1,2); grafo.agregarEje(4,2); grafo.agregarEje(3,2); grafo.agregarEje(2,3);
 		grafos.add(grafo);
 		grafo = new Grafo(); grafo.agregarEje(0,1);	grafo.agregarEje(1,2); grafo.agregarEje(2,3); grafo.agregarEje(3,4); grafo.agregarEje(4,1);
+		grafos.add(grafo);
+		//Test Practica
+		grafo = new Grafo(); grafo.agregarEje(0,1); grafo.agregarEje(0,2);
+		grafo.agregarEje(0,4); grafo.agregarEje(2,4); grafo.agregarEje(2,3);
+		grafo.agregarEje(3,1); grafo.agregarEje(4,3);
+		grafos.add(grafo);
+		
+		grafo = new Grafo(); grafo.agregarEje(0, 1); grafo.agregarEje(0, 2);
+		grafo.agregarEje(0, 3); grafo.agregarEje(0, 4); grafo.agregarEje(1, 4);
+		grafo.agregarEje(2, 1); grafo.agregarEje(2, 0); grafo.agregarEje(3, 0);
+		grafo.agregarEje(3, 1);
 		grafos.add(grafo);
 		
 		return grafos; 
@@ -547,6 +572,27 @@ public class Main {
     		return matRes7[i][j];
     	}
     	
+     	int matRes8 [][] = {
+        		{ 0, 4, 1, 3, 2 },
+        		{ 0, 0, 0, 0, 0 },
+        		{ 0, 2, 0, 2, 1 },
+        		{ 0, 1, 0, 0, 0 },
+        		{ 0, 1, 0, 1, 0 }
+        	};
+    	if(idGrafo == 8){
+    		return matRes8[i][j];
+    	}
+    	
+    	int matRes9 [][] = {
+    			{ -1, -1, -1, -1, -1 },
+        		{ 0, 0, 0, 0, 1 },
+        		{ -1, -1, -1, -1, -1 },
+        		{ -1, -1, -1, -1, -1 },
+        		{ 0, 0, 0, 0, 0 }
+        	};
+    	if(idGrafo == 9){
+    		return matRes9[i][j];
+    	}
     	return -1;
     }
  
@@ -567,4 +613,14 @@ public class Main {
     		System.out.print(value);
     	}
     }
+    
+    public static void mostrarMatriz(int mat1[][], int max){
+		for (int i = 0; i < max; i++) {
+			for (int j = 0; j < max; j++) {
+				System.out.print(mat1[i][j]);
+				System.out.print(" ");
+			}
+			System.out.println("");
+		}
+	}
 }
