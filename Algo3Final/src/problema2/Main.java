@@ -14,28 +14,38 @@ import java.util.Set;
 //Problema2
 public class Main {
 
+	static boolean logActivated = false;
+	//City city = new City("7 0 1 0 2 0 4 2 4 2 3 3 1 4 3");
+	//City city = new City("5 0 2 0 1 1 5 2 5 2 1");
+	//City city = new City("9 0 1 0 2 0 3 0 4 1 4 2 1 2 0 3 0 3 1");
+	//City city = new City("10 0 1 0 2 0 3 0 4 0 5 0 6 0 7 0 8 0 9");
+	//Procesor.procesarDatos();
+	
     public static void main(String[] args) {
     	
-    	//City city = new City("7 0 1 0 2 0 4 2 4 2 3 3 1 4 3");
-    	//City city = new City("5 0 2 0 1 1 5 2 5 2 1");
-    	//City city = new City("9 0 1 0 2 0 3 0 4 1 4 2 1 2 0 3 0 3 1");
-    	//City city = new City("10 0 1 0 2 0 3 0 4 0 5 0 6 0 7 0 8 0 9");
-    	//Procesor.procesarDatos();
-		//Grafo grafo = new Grafo(); grafo.agregarEje(0,1); grafo.agregarEje(0,2); grafo.agregarEje(1,2); grafo.agregarEje(1,3); grafo.agregarEje(2,3);
-		//Grafo grafo = new Grafo(); grafo.agregarEje(0,1); grafo.agregarEje(1,2); grafo.agregarEje(2,0);
-    	//Grafo grafo = new Grafo(); grafo.agregarEje(0,1); grafo.agregarEje(1,2); grafo.agregarEje(2,3); grafo.agregarEje(3,0);
-    	//Grafo grafo = new Grafo(); grafo.agregarEje(0,1); grafo.agregarEje(0,2); grafo.agregarEje(1,2); grafo.agregarEje(2,1);
-    	//Grafo grafo = new Grafo(); grafo.agregarEje(0,1); grafo.agregarEje(1,2); grafo.agregarEje(2,3); grafo.agregarEje(3,1);
-		//Grafo grafo = new Grafo(); grafo.agregarEje(0,1); grafo.agregarEje(0,2); grafo.agregarEje(1,2); grafo.agregarEje(1,3); grafo.agregarEje(2,3);grafo.agregarEje(0,3);
-		Grafo grafo = new Grafo(); grafo.agregarEje(0,1); grafo.agregarEje(1,2); grafo.agregarEje(4,2); grafo.agregarEje(3,2); grafo.agregarEje(2,3);
+    	PathFinder encuentraCaminos;
+    	List<Grafo> grafos = initTestGrafos();
+    	
+    	int i = 0;
+    	for (Grafo grafo : grafos) {
+    		encuentraCaminos = new PathFinder(grafo);
+    		encuentraCaminos.calcularCaminos();
+    		check(encuentraCaminos.matCaminos,i);
+    		i++;
+		}
+    	
+		
+
 				
-    	PathFinder encuentraCaminos = new PathFinder(grafo);
-    	encuentraCaminos.calcularCaminos();
-    	encuentraCaminos.mostrarCaminos();
+    	//PathFinder encuentraCaminos = new PathFinder(grafo);
+    	//encuentraCaminos.calcularCaminos();
+    	
+    	
+    	//encuentraCaminos.mostrarCaminos();
 
     }
-    
-    
+
+
     
     private static void obtenerCaminos(City city){
     	//Converter converter = new Converter(datos);
@@ -50,7 +60,7 @@ public class Main {
 			matSuma = city.sumarMatrices(matSuma,matCaminoI);
 		}
     	
-    	System.out.println("matrix for city " + city.getName());
+    	logln("matrix for city " + city.getName());
     	city.marcarCaminosInfinitos(matSuma);
     	city.mostrarMatriz(matSuma);
     }
@@ -100,7 +110,6 @@ public class Main {
         
     }
 
-    
     private static class PathFinder{
     	
     	private Grafo grafo;
@@ -134,58 +143,63 @@ public class Main {
     			}
     		}
     		
-    		for (Integer nodo : adyacentes) {
+    		logln("Revisando adjacentes de " + nodoActual);
+    		for (Integer nodoAdj : adyacentes) {
 				//Encontramos un ciclo
-    			if(visitados.contains(nodo)){
+    			log("nodo " + nodoAdj + ": ");
+    			if(visitados.contains(nodoAdj)){
+    				logln("YA VISITADO");
     				//matCaminos[nodoActual][nodo]++;
-    				matCaminos[nodoActual][nodo] = -1;
+    				matCaminos[nodoActual][nodoAdj] = -1;
     				matCaminos[nodoActual][nodoActual] = -1;
-    				matCaminos[nodo][nodoActual] = -1;
+    				matCaminos[nodoAdj][nodoActual] = -1;
 				}else{
-					
-					if(!fueVisitado[nodo]){
-						visitados.add(nodo);
+					if(!fueVisitado[nodoAdj]){
+						logln("No visitado nunca");
+						visitados.add(nodoAdj);
 						calcularCaminos(visitados);
-						visitados.remove(nodo);
+						visitados.remove(nodoAdj);
 						
 						//Con pinzas
 						if(yoTengoUnCiclo(nodoActual)){
+							logln("nodo " + nodoActual + "tiene ciclo");
 							//matCaminos[nodoActual][nodoActual] = -1; //Tengo un ciclo con mi mismo
 							tengoCiclo = true;
 						}
 					}
 					
-					System.out.println("(" + nodo + ") ");
+					logln("(" + nodoAdj + ") ");
 					huboCiclo = false;
 					for (int i = 0; i < grafo.cantNodos; i++) {
-						System.out.println(matCaminos[nodo][i] + ",");
+						logln(matCaminos[nodoAdj][i] + ",");
 						
-						if(matCaminos[nodo][i] == -1){
+						if(matCaminos[nodoAdj][i] == -1){
 							matCaminos[nodoActual][i] = -1;
 							huboCiclo = true;
 						}else{
-							matCaminos[nodoActual][i] += matCaminos[nodo][i];
+							matCaminos[nodoActual][i] += matCaminos[nodoAdj][i];
 						}
 						
-						if(i == nodo){
-							matCaminos[nodoActual][i] += matCaminos[nodo][i] + 1;
+						if(i == nodoAdj){
+							matCaminos[nodoActual][i] += matCaminos[nodoAdj][i] + 1;
 						}
 					}
 					if(huboCiclo){
-						matCaminos[nodoActual][nodo] = -1; //Tengo un ciclo con el otro
+						matCaminos[nodoActual][nodoAdj] = -1; //Tengo un ciclo con el otro
 					}
-					System.out.println("");
+					logln("");
 					
-					if(matCaminos[nodo][nodoActual] > 0){
+					if(matCaminos[nodoAdj][nodoActual] > 0){
 						matCaminos[nodoActual][nodoActual] = -1;
-						matCaminos[nodo][nodoActual] = -1;
+						matCaminos[nodoAdj][nodoActual] = -1;
 					}
 										
 				}
     			if(tengoCiclo){
+    				logln("como nodo " + nodoActual + "tiene ciclo avisa al resto");
     				List<Integer> nodosEnCiclo = new ArrayList<Integer>();
     				nodosEnCiclo.add(nodoActual);
-    				vosTenesUnCicloAvisaALosDemas(nodo, nodoActual, nodosEnCiclo); //El otro tiene un ciclo conmigo
+    				vosTenesUnCicloAvisaALosDemas(nodoAdj, nodoActual, nodosEnCiclo); //El otro tiene un ciclo conmigo
     			}
 			}
     		fueVisitado[nodoActual] = true;
@@ -207,13 +221,16 @@ public class Main {
     		}
     		visitados.add(nodo);
     		//matCaminos[nodo][nodoConCiclo] = -1;
+    		logln("avisando que nodo " + nodo + "tiene ciclo");
     		for (Integer nodoVisitado : visitados) {
+    			logln("nodo " + nodo + "pone -1 en su relación todos los visitados");
     			matCaminos[nodo][nodoVisitado] = -1;
 			}
     		
     		List<Integer> adyacentes = grafo.adyacentes(nodo);
     		
     		for (Integer nodoAdj : adyacentes) {
+    			logln("nodo " + nodo + " avisa a sus adyacentes");
     			vosTenesUnCicloAvisaALosDemas(nodoAdj,nodoConCiclo, visitados);	
 			}
     		visitados.remove(nodo);
@@ -222,10 +239,10 @@ public class Main {
     	public void mostrarCaminos(){
 			for (int i = 0; i < grafo.cantNodos; i++) {
 				for (int j = 0; j < grafo.cantNodos; j++) {
-					System.out.print(matCaminos[i][j]);
-					System.out.print(" ");
+					log(matCaminos[i][j]);
+					log(" ");
 				}
-				System.out.println("");
+				logln("");
 			}
 		}
     	
@@ -310,20 +327,20 @@ public class Main {
 		public void mostrarMatriz(){
 			for (int i = 0; i < max; i++) {
 				for (int j = 0; j < max; j++) {
-					System.out.print(matAdj[i][j]);
-					System.out.print("\t");
+					log(matAdj[i][j]);
+					log(" ");
 				}
-				System.out.println("");
+				logln("");
 			}
 		}
 		
 		public void mostrarMatriz(int mat[][]){
 			for (int i = 0; i < max; i++) {
 				for (int j = 0; j < max; j++) {
-					System.out.print(mat[i][j]);
-					System.out.print(" ");
+					log(mat[i][j]);
+					log(" ");
 				}
-				System.out.println("");
+				logln("");
 			}
 		}
 		
@@ -383,7 +400,132 @@ public class Main {
     }
     
     public static void enter(){
-    	System.out.println("");
+    	logln("");
     }
-        
+
+    public static void check(int mat[][], int idGrafo){
+    	
+    	for (int i = 0; i < mat.length; i++) {
+			for (int j = 0; j < mat.length; j++) {
+				if (mat[i][j] != getMat(i,j,idGrafo)){
+					System.out.println("Fallo grafo " + idGrafo + " (" +i+ "," +j+ ")");
+					return;
+				}
+			}
+		}
+    	System.out.println("Grafo " + idGrafo + " ok");
+    }
+    
+    public static List<Grafo> initTestGrafos(){
+    	
+    	List<Grafo> grafos = new ArrayList<Grafo>();
+    	Grafo grafo;
+    	grafo = new Grafo(); grafo.agregarEje(0,1); grafo.agregarEje(0,2); grafo.agregarEje(1,2); grafo.agregarEje(1,3); grafo.agregarEje(2,3);
+    	grafos.add(grafo);
+    	grafo = new Grafo(); grafo.agregarEje(0,1); grafo.agregarEje(1,2); grafo.agregarEje(2,0);
+    	grafos.add(grafo);
+    	grafo = new Grafo(); grafo.agregarEje(0,1); grafo.agregarEje(1,2); grafo.agregarEje(2,3); grafo.agregarEje(3,0);
+    	grafos.add(grafo);
+    	grafo = new Grafo(); grafo.agregarEje(0,1); grafo.agregarEje(0,2); grafo.agregarEje(1,2); grafo.agregarEje(2,1);
+    	grafos.add(grafo);
+    	grafo = new Grafo(); grafo.agregarEje(0,1); grafo.agregarEje(1,2); grafo.agregarEje(2,3); grafo.agregarEje(3,1);
+    	grafos.add(grafo);
+		grafo = new Grafo(); grafo.agregarEje(0,1); grafo.agregarEje(0,2); grafo.agregarEje(1,2); grafo.agregarEje(1,3); grafo.agregarEje(2,3);grafo.agregarEje(0,3);
+		grafos.add(grafo);
+		grafo = new Grafo(); grafo.agregarEje(0,1); grafo.agregarEje(1,2); grafo.agregarEje(4,2); grafo.agregarEje(3,2); grafo.agregarEje(2,3);
+		grafos.add(grafo);
+		
+		return grafos; 
+    }
+    
+    public static int getMat (int i, int j, int idGrafo){
+    	
+    	int matRes0 [][] = {
+    			{ 0, 1, 2, 3 },
+    			{ 0, 0, 1, 2 },
+    			{ 0, 0, 0, 1 },
+    			{ 0, 0, 0, 0 }
+    	};
+    	if(idGrafo == 0){
+    		return matRes0[i][j];
+    	}
+    	
+    	int matRes1 [][] = {
+        		{ -1, -1, -1 },
+        		{ -1, -1, -1 },
+        		{ -1, -1, -1 }
+        	};
+    	if(idGrafo == 1){
+    		return matRes1[i][j];
+    	}
+
+    	int matRes2 [][] = {
+        		{ -1, -1, -1, -1 },
+        		{ -1, -1, -1, -1 },
+        		{ -1, -1, -1, -1 },
+        		{ -1, -1, -1, -1 }
+        	};
+    	if(idGrafo == 2){
+    		return matRes2[i][j];
+    	}
+    	
+    	int matRes3 [][] = {
+        		{ 0, -1, -1 },
+        		{ 0, -1, -1 },
+        		{ 0, -1, -1 }
+        	};
+    	if(idGrafo == 3){
+    		return matRes3[i][j];
+    	}
+
+    	int matRes4 [][] = {
+        		{ 0, -1, -1, -1 },
+        		{ 0, -1, -1, -1 },
+        		{ 0, -1, -1, -1 },
+        		{ 0, -1, -1, -1 }
+        	};
+    	if(idGrafo == 4){
+    		return matRes4[i][j];
+    	}
+
+    	int matRes5 [][] = {
+        		{ 0, 1, 2, 4 },
+        		{ 0, 0, 1, 2 },
+        		{ 0, 0, 0, 1 },
+        		{ 0, 0, 0, 0 }
+        	};
+    	if(idGrafo == 5){
+    		return matRes5[i][j];
+    	}
+    	
+    	int matRes6 [][] = {
+        		{ 0, 1, -1, -1 },
+        		{ 0, 0, -1, -1 },
+        		{ 0, 0, -1, -1 },
+        		{ 0, 0, -1, -1 }
+        	};
+    	if(idGrafo == 6){
+    		return matRes6[i][j];
+    	}
+    	
+    	return -1;
+    }
+ 
+    public static void log(String string){
+    	if(logActivated){
+    		System.out.print(string);
+    	}
+    }
+    
+    public static void logln(String string){
+    	if(logActivated){
+    		System.out.println(string);
+    	}
+    }
+    
+    public static void log(int value){
+    	if(logActivated){
+    		System.out.print(value);
+    	}
+    }
 }
