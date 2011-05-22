@@ -96,7 +96,7 @@ public class Main {
             adjacent.add(nodo2);
         }
 
-        public boolean hayEje(String node1, String node2) {
+        public boolean hayEje(Integer node1, Integer node2) {
             Set<Integer> adyacente = map.get(node1);
             if(adyacente == null) {
                 return false;
@@ -161,17 +161,31 @@ public class Main {
     		logln("Revisando adjacentes de " + nodoActual);
     		for (Integer nodoAdj : adyacentes) {
 				//Encontramos un ciclo
-    			log(nodoAdj + ") status: ");
+    			//log(nodoAdj + " ");
     			if(visitados.contains(nodoAdj)){ //Encontré ciclo.
-    				logln("Ya visitado.");
+    				//logln("Ya visitado.");
     				//matCaminos[nodoActual][nodo]++;
+    				logln(nodoActual + " encontro ciclo con " + nodoAdj);
     				matCaminos[nodoActual][nodoAdj] = -1; //Ciclo con ese nodoAdj
     				//matCaminos[nodoActual][nodoActual] = -1; //Yo estoy en un ciclo (por ahora no me seteo) caso 5 en -1
     				matCaminos[nodoAdj][nodoActual] = -1; //El otro nodo tiene un ciclo conmigo. SI VA
     				matCaminos[nodoAdj][nodoAdj] = -1; //El otro nodo està ya en un ciclo (esto determinara que ese nodo luego propague) SI Va
+    				
+    				//tenesCicloMutuo(nodoAdj);
+    				tenesCicloMutuo(nodoActual);
+    				
+    				/*
+    				if(grafo.hayEje(nodoAdj, nodoActual)){ // Hay ciclo mutuo, llego a todos mis adyacentes infinitamente.
+    					for (Integer nodoAdjaAdj : adyacentes) {
+    						if(nodoAdjaAdj != nodoAdj){
+    							matCaminos[nodoAdj][nodoAdjaAdj] = -1;
+    						}
+    					}
+    				}*/
+    				
 				}else{
 					if(!fueVisitadoAlgunaVez[nodoAdj]){
-						logln("No visitado nunca.");
+						//logln("No visitado nunca.");
 						visitados.add(nodoAdj);
 						calcularCaminos(visitados);
 						visitados.remove(nodoAdj);
@@ -182,12 +196,11 @@ public class Main {
 							//matCaminos[nodoActual][nodoActual] = -1; //Tengo un ciclo con mi mismo
 							tengoCiclo = true;
 						}*/
-					}else{
-						logln("Procesando.");
 					}
 					
 					//log(nodoAdj + ") (");
 					//propagar = false;
+					logln(nodoActual + " Obteniendo Feedback de " + nodoAdj);
 					for (int i = 0; i < grafo.cantNodos; i++) {
 						//log(matCaminos[nodoAdj][i] + " ");
 						
@@ -209,7 +222,7 @@ public class Main {
 							}
 						}
 					}
-					logln(nodoActual + " Obteniendo Feedback de " + nodoAdj);
+					mostrarNodo(nodoAdj);
 					mostrarNodo(nodoActual);
 				}
 			}
@@ -217,17 +230,58 @@ public class Main {
     		
     	   	if(propagar){
     	   		List<Integer> nodosEnCiclo = new ArrayList<Integer>();
+    	   		boolean existeCicloMutuo = false; 
     	   		for (int i = 0; i < grafo.cantNodos; i++) {
     				if(matCaminos[nodoActual][i] == -1 && nodoActual != i){
     					int nodoConCiclo = i;
-    					propagarCiclo(nodoActual, nodoConCiclo, nodosEnCiclo);		
+    					logln(nodoActual + " propagando Ciclo en " + nodoConCiclo);
+    					propagarCiclo(nodoActual, nodoConCiclo, nodosEnCiclo);
     				}
     			}
+    	   		
+    	   		for (int i = 0; i < grafo.cantNodos; i++) {
+    	   			int nodoConCiclo = i;
+	    	   		if( tieneCicloMutuo(nodoActual, nodoConCiclo)){
+						tenesCicloMutuo(nodoConCiclo, nodoActual);
+						existeCicloMutuo = true;
+					}
+    	   		}
+    	   		//if(existeCicloMutuo){
+    	   			tenesCicloMutuo(nodoActual);
+    	   		//}
         	}
     	   	
     		fueVisitadoAlgunaVez[nodoActual] = true;
     	}
     	
+    	public boolean tieneCicloMutuo(Integer nodo1, Integer nodo2){
+    		return grafo.hayEje(nodo1, nodo2) && grafo.hayEje(nodo2, nodo1); 
+    	}
+    	
+    	public void tenesCicloMutuo(Integer nodo){
+    		List<Integer> adyacentes = grafo.adyacentes(nodo);
+    		for (Integer nodoAdj : adyacentes) {
+    			matCaminos[nodo][nodoAdj] = -1;
+			}
+    	}
+    	
+    	public void tenesCicloMutuo(Integer nodoConCicloMutuo1, Integer nodoConCicloMutuo2){
+    		tenesCicloMutuo(nodoConCicloMutuo1);
+    		
+    		List<Integer> adyacentes = grafo.adyacentes(nodoConCicloMutuo2);
+    		for (Integer nodoAdj : adyacentes) {
+    			matCaminos[nodoConCicloMutuo1][nodoAdj] = -1;
+			}
+    	}
+    	
+    	/**
+    	 * Avisa a todos los nodos que el nodoPropagador pueda alcanzar que marquen a
+    	 * nodoConCiclo como que tiene infinitos caminos. también avisa a los que están
+    	 * en la lista de nodosEnCiclo.
+    	 * @param nodoPropagador
+    	 * @param nodoConCiclo
+    	 * @param nodosEnCiclo
+    	 */
     	public void propagarCiclo(Integer nodoPropagador, int nodoConCiclo, List<Integer> nodosEnCiclo){
     		
     		if(nodosEnCiclo.contains(nodoPropagador)){
@@ -441,18 +495,19 @@ public class Main {
     	logln("");
     }
 
-    public static void check(int mat[][], int idGrafo){
+    public static boolean check(int mat[][], int idGrafo){
     	
     	for (int i = 0; i < mat.length; i++) {
 			for (int j = 0; j < mat.length; j++) {
 				if (mat[i][j] != getMat(i,j,idGrafo)){
 					System.out.println("Fallo grafo " + idGrafo + " (" +i+ "," +j+ ")");
 					mostrarMatriz(mat,mat.length);
-					return;
+					return false;
 				}
 			}
 		}
     	System.out.println("Grafo " + idGrafo + " ok");
+    	return true;
     }
     
     public static List<Grafo> initTestGrafos(){
@@ -485,6 +540,31 @@ public class Main {
 		grafo.agregarEje(0, 3); grafo.agregarEje(0, 4); grafo.agregarEje(1, 4);
 		grafo.agregarEje(2, 1); grafo.agregarEje(2, 0); grafo.agregarEje(3, 0);
 		grafo.agregarEje(3, 1);
+		grafos.add(grafo);
+		
+		/*
+		grafo = new Grafo(); grafo.agregarEje(0, 1); grafo.agregarEje(1, 2);
+		grafo.agregarEje(2, 3); grafo.agregarEje(2, 4); grafo.agregarEje(4, 5);
+		grafo.agregarEje(4, 6); grafo.agregarEje(6, 7); grafo.agregarEje(6, 1);
+		grafos.add(grafo);
+		*/
+		
+		grafo = new Grafo(); grafo.agregarEje(0, 1); grafo.agregarEje(1, 2);
+		grafo.agregarEje(2, 1); grafo.agregarEje(1, 3);
+		grafos.add(grafo);
+		
+		grafo = new Grafo(); grafo.agregarEje(0, 1); grafo.agregarEje(1, 2);
+		grafo.agregarEje(2, 1); grafo.agregarEje(1, 3); grafo.agregarEje(3, 1);
+		grafo.agregarEje(1, 4);
+		grafos.add(grafo);
+		
+		grafo = new Grafo(); grafo.agregarEje(0, 1); grafo.agregarEje(1, 2);
+		grafo.agregarEje(2, 3); grafo.agregarEje(3, 1);	grafo.agregarEje(1, 4);
+		grafos.add(grafo);
+		
+		grafo = new Grafo(); grafo.agregarEje(0, 1); grafo.agregarEje(1, 2);
+		grafo.agregarEje(2, 3); grafo.agregarEje(3, 4);	grafo.agregarEje(4, 1);
+		grafo.agregarEje(4, 5);
 		grafos.add(grafo);
 		
 		return grafos; 
@@ -593,6 +673,66 @@ public class Main {
     	if(idGrafo == 9){
     		return matRes9[i][j];
     	}
+    	/*
+    	int matRes10 [][] = {
+        		{ 0, -1, -1, -1, -1, -1, -1, -1 },
+        		{ 0, -1, -1, -1, -1, -1, -1, -1 },
+        		{ 0, -1, -1, -1, -1, -1, -1, -1 },
+        		{ 0, 0, 0, 0, 0, 0, 0, 0 },
+        		{ 0, -1, -1, -1, -1, -1, -1, -1 },
+        		{ 0, 0, 0, 0, 0, 0, 0, 0 },
+        		{ 0, -1, -1, -1, -1, -1, -1, -1 },
+        		{ 0, 0, 0, 0, 0, 0, 0, 0 },
+        	};
+    	if(idGrafo == 10){
+    		return matRes10[i][j];
+    	}*/
+    	int matRes10 [][] = {
+    			{ 0, -1, -1, -1 },
+        		{ 0, -1, -1, -1 },
+        		{ 0, -1, -1, -1 },
+        		{ 0, 0, 0, 0 }
+        	};
+    	if(idGrafo == 10){
+    		return matRes10[i][j];
+    	}
+    	
+    	int matRes11 [][] = {
+    			{ 0, -1, -1, -1, -1 },
+        		{ 0, -1, -1, -1, -1 },
+        		{ 0, -1, -1, -1, -1 },
+        		{ 0, -1, -1, -1, -1 },
+        		{ 0, 0, 0, 0, 0 }
+        	};
+    	if(idGrafo == 11){
+    		return matRes11[i][j];
+    	}
+    	
+    	int matRes12 [][] = {
+    			{ 0, -1, -1, -1, -1 },
+        		{ 0, -1, -1, -1, -1 },
+        		{ 0, -1, -1, -1, -1 },
+        		{ 0, -1, -1, -1, -1 },
+        		{ 0, 0, 0, 0, 0 }
+        	};
+    	if(idGrafo == 12){
+    		return matRes12[i][j];
+    	}
+    	
+    	
+    	int matRes13 [][] = {
+    			{ 0, -1, -1, -1, -1, -1 },
+    			{ 0, -1, -1, -1, -1, -1 },
+    			{ 0, -1, -1, -1, -1, -1 },
+    			{ 0, -1, -1, -1, -1, -1 },
+    			{ 0, -1, -1, -1, -1, -1 },
+        		{ 0, 0, 0, 0, 0, 0 }
+        	};
+    	if(idGrafo == 13){
+    		return matRes13[i][j];
+    	}
+    	
+    	
     	return -1;
     }
  
