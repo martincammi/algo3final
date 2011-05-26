@@ -1,9 +1,13 @@
 package problema3;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
+
 
 public class Main {
 
@@ -14,6 +18,11 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		
+		//runTests();
+		Procesor.procesarDatos(); 
+	}
+	
+	public static void runTests(){
 		List<Trabajo> trabajos = initiateTrabajos(); 
 		Encargado encargado;
 		
@@ -234,6 +243,12 @@ public class Main {
 				buscarSolucion();
 			}else{
 				existeSolucion = false;
+			}
+			
+			if(existeSolucion){
+				System.out.println(mostrar(pcs));
+			}else{
+				System.out.println("!");
 			}
 		}
 		
@@ -495,4 +510,39 @@ public class Main {
     	return str;
     }
 	
+    private static class Procesor{
+    	
+    	public static void procesarDatos() {
+    		Scanner in = new Scanner(new BufferedReader(new InputStreamReader(System.in)));
+    		
+    		List<Aplicacion> aplicaciones = new ArrayList<Aplicacion>();
+    		Encargado encargado;
+    		
+    		while(in.hasNext()){
+
+    			String linea = in.nextLine();
+    			String valores[] = linea.split(" ");
+    			while (valores.length > 1){
+	   				int cant = Integer.parseInt((valores[0]).charAt(1) + ""); 
+	   				String name = ((valores[0]).charAt(0)+ "");
+	   				String[] listaCompus = valores[1].split("");
+	   				List<Integer> listaComputadoras = new ArrayList<Integer>();
+	   				for (int i = 1; i < listaCompus.length-1; i++) {
+	   					listaComputadoras.add(new Integer(listaCompus[i]));
+					}
+	   				
+	   				Aplicacion aplicacion = new Aplicacion(cant, name, listaComputadoras);
+	   				aplicaciones.add(aplicacion);
+	   				
+	   				linea = in.nextLine();
+	   				valores = linea.split(" ");
+    			}
+    			Trabajo trabajo = new Trabajo(aplicaciones);
+    			encargado = new Encargado(trabajo);
+    			encargado.distribuirAplicaciones();
+    		}
+   			in.close();
+    	}
+    }
+    
 }
