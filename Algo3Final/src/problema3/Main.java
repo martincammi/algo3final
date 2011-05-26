@@ -518,29 +518,34 @@ public class Main {
     		List<Aplicacion> aplicaciones = new ArrayList<Aplicacion>();
     		Encargado encargado;
     		
-    		while(in.hasNext()){
-
-    			String linea = in.nextLine();
-    			String valores[] = linea.split(" ");
-    			while (valores.length > 1){
-	   				int cant = Integer.parseInt((valores[0]).charAt(1) + ""); 
-	   				String name = ((valores[0]).charAt(0)+ "");
-	   				String[] listaCompus = valores[1].split("");
-	   				List<Integer> listaComputadoras = new ArrayList<Integer>();
-	   				for (int i = 1; i < listaCompus.length-1; i++) {
-	   					listaComputadoras.add(new Integer(listaCompus[i]));
-					}
-	   				
-	   				Aplicacion aplicacion = new Aplicacion(cant, name, listaComputadoras);
-	   				aplicaciones.add(aplicacion);
-	   				
-	   				linea = in.nextLine();
-	   				valores = linea.split(" ");
-    			}
-    			Trabajo trabajo = new Trabajo(aplicaciones);
-    			encargado = new Encargado(trabajo);
-    			encargado.distribuirAplicaciones();
-    		}
+	    		while(in.hasNext()){
+	
+	    			try{
+	    			String linea = in.nextLine();
+	    			String valores[] = linea.split(" ");
+	    			while (valores.length > 1){
+		   				int cant = Integer.parseInt((valores[0]).charAt(1) + ""); 
+		   				String name = ((valores[0]).charAt(0)+ "");
+		   				String[] listaCompus = valores[1].split("");
+		   				List<Integer> listaComputadoras = new ArrayList<Integer>();
+		   				for (int i = 1; i < listaCompus.length-1; i++) {
+		   					listaComputadoras.add(new Integer(listaCompus[i]));
+						}
+		   				
+		   				Aplicacion aplicacion = new Aplicacion(cant, name, listaComputadoras);
+		   				aplicaciones.add(aplicacion);
+		   				
+		   				linea = in.nextLine();
+		   				valores = linea.split(" ");
+	    			}
+	    			Trabajo trabajo = new Trabajo(aplicaciones);
+	    			encargado = new Encargado(trabajo);
+	    			encargado.distribuirAplicaciones();
+	    			}catch (Exception e ){
+		    			
+	    	    	}
+	    		}
+    		
    			in.close();
     	}
     }
