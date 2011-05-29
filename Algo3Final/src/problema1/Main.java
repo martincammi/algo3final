@@ -6,17 +6,20 @@ import java.util.List;
 //Problema1
 public class Main {
 
+	public static boolean logActivated = true;
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		
 		String res; 
-		System.out.print("Test1: ");
+		logln("Test1: ");
 		Converter converter1 = new Converter("5 3 1 3 4");
 		res = resolverProblemaMochila(converter1);
-		System.out.println( (res.equals("1 4 sum:5")) ? "OK" : "Fail: " + res);  
-				
+		logln(res); 
+		//System.out.println( (res.equals("1 4 sum:5")) ? "OK" : "Fail: " + res);  
+		
+		/*
 		System.out.print("Test2: ");				
 		Converter converter2 = new Converter("10 4 9 8 4 2");
 		res = resolverProblemaMochila(converter2);
@@ -56,6 +59,8 @@ public class Main {
 		System.out.print("Test9: ");
 		Converter converter9 = new Converter("5 3 5 3 2"); //Deberia dar 3,2
 		System.out.println( (res.equals("3 2 sum:6")) ? "OK" : "Fail: " + res);
+		
+		*/
 	}
 
 	public static String resolverProblemaMochila(Converter converter){
@@ -90,9 +95,9 @@ public class Main {
 		}
 
 		//converter.mostrarMatriz();
-		System.out.println("");
+		//System.out.println("");
 		//converter.mostrarMatrizMigajas();
-		converter.mostrarSuma();
+		//converter.mostrarSuma();
 
 		int k = W;
 		for (int i = numCanciones; i > 0 ; i--) {
@@ -106,7 +111,7 @@ public class Main {
 			solucionStr = solucion.get(i) + solucionStr + " ";
 		}
 		solucionStr = solucionStr + "sum:" + converter.getSuma();
-		System.out.println(solucionStr);
+		//System.out.println(solucionStr);
 		return solucionStr;
 	}
 	
@@ -201,5 +206,23 @@ public class Main {
 			}
 		}
 	}
+	
+    public static void log(String string){
+    	if(logActivated){
+    		System.out.print(string);
+    	}
+    }
+    
+    public static void logln(String string){
+    	if(logActivated){
+    		System.out.println(string);
+    	}
+    }
+    
+    public static void log(int value){
+    	if(logActivated){
+    		System.out.print(value);
+    	}
+    }
 	
 }
