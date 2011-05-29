@@ -12,17 +12,20 @@ import java.util.Scanner;
 public class Main {
 
 	static boolean logActivated = false;
+	static boolean showResultOnConsole = true;
 	
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		
-		//runTests();
-		Procesor.procesarDatos(); 
+		runTests();
+		//runForOnlineJudge();
+
 	}
 	
 	public static void runTests(){
+		showResultOnConsole = false;
 		List<Trabajo> trabajos = initiateTrabajos(); 
 		Encargado encargado;
 		
@@ -35,6 +38,10 @@ public class Main {
 			check(encargado.pcs, encargado.existeSolucion, testId);
 			testId++;
 		}
+	}
+	
+	public static void runForOnlineJudge(){
+		Procesor.procesarDatos();
 	}
 	
 	public static List<Trabajo> initiateTrabajos(){
@@ -245,11 +252,14 @@ public class Main {
 				existeSolucion = false;
 			}
 			
-			if(existeSolucion){
-				System.out.println(mostrar(pcs));
-			}else{
-				System.out.println("!");
+			if(showResultOnConsole){
+				if(existeSolucion){
+					System.out.println(mostrar(pcs));
+				}else{
+					System.out.println("!");
+				}
 			}
+			
 		}
 		
 		public void buscarSolucion(){
@@ -517,33 +527,46 @@ public class Main {
     		
     		List<Aplicacion> aplicaciones = new ArrayList<Aplicacion>();
     		Encargado encargado;
-    		
-	    		while(in.hasNext()){
-	
-	    			try{
-	    			String linea = in.nextLine();
-	    			String valores[] = linea.split(" ");
-	    			while (valores.length > 1){
-		   				int cant = Integer.parseInt((valores[0]).charAt(1) + ""); 
-		   				String name = ((valores[0]).charAt(0)+ "");
-		   				String[] listaCompus = valores[1].split("");
-		   				List<Integer> listaComputadoras = new ArrayList<Integer>();
-		   				for (int i = 1; i < listaCompus.length-1; i++) {
-		   					listaComputadoras.add(new Integer(listaCompus[i]));
-						}
-		   				
-		   				Aplicacion aplicacion = new Aplicacion(cant, name, listaComputadoras);
-		   				aplicaciones.add(aplicacion);
-		   				
-		   				linea = in.nextLine();
-		   				valores = linea.split(" ");
-	    			}
-	    			Trabajo trabajo = new Trabajo(aplicaciones);
-	    			encargado = new Encargado(trabajo);
-	    			encargado.distribuirAplicaciones();
-	    			}catch (Exception e ){
+ 
+	    		while(in.hasNextLine()){
+	    			
+	    			String linea = "esteValorSeraPisado"; 
+	    			
+	    			while (linea.length() > 0){
+	    				
+	    				linea = in.nextLine();
+		    			String valores[] = linea.split(" ");
 		    			
-	    	    	}
+		    			if(linea.length() > 0){
+		    			
+		    				int cant = Integer.parseInt((valores[0]).charAt(1) + "");
+			   				
+			   				String name = ((valores[0]).charAt(0)+ "");
+			   				String[] listaCompus = valores[1].split("");
+			   				List<Integer> listaComputadoras = new ArrayList<Integer>();
+			   				for (int i = 1; i < listaCompus.length-1; i++) {
+			   					listaComputadoras.add(new Integer(listaCompus[i]));
+							}
+	
+			   				Aplicacion aplicacion = new Aplicacion(cant, name, listaComputadoras);
+			   				aplicaciones.add(aplicacion);
+		    			}
+		   				/*
+		   				if(in.hasNextLine()){
+		   					linea = in.nextLine();
+		   					valores = linea.split(" ");
+		   				}else{
+		   					valores = new String[0];
+		   				}*/
+	    			}
+	    			
+	    			if(aplicaciones.size() > 0){
+		    			Trabajo trabajo = new Trabajo(aplicaciones);
+		    			encargado = new Encargado(trabajo);
+		    			encargado.distribuirAplicaciones();
+		    			aplicaciones.clear();
+	    			}
+	    			
 	    		}
     		
    			in.close();
