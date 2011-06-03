@@ -31,10 +31,8 @@ public class Main {
 		
 		int testId = 0;
 		for (Trabajo trabajo : trabajos) {
-			//trabajo.mostrar();
 			encargado = new Encargado(trabajo);
 			encargado.distribuirAplicaciones();
-			//encargado.mostrarSolucion();
 			check(encargado.pcs, encargado.existeSolucion, testId);
 			testId++;
 		}

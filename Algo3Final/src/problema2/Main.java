@@ -11,10 +11,19 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
-//Problema2
+/**
+ * Problema2 - Problema de Numbering Paths.
+ * @author martincammi
+ * @pendings: 
+ * - Corregir el algoritmo
+ * - Corregir el Procesor para que lea de linea de comandos.
+ * - Escribir informe
+ * - Hacer mediciones
+ */
 public class Main {
 
 	static boolean logActivated = false;
+	static boolean showResultOnConsole = true;
 	//City city = new City("7 0 1 0 2 0 4 2 4 2 3 3 1 4 3");
 	//City city = new City("5 0 2 0 1 1 5 2 5 2 1");
 	//City city = new City("9 0 1 0 2 0 3 0 4 1 4 2 1 2 0 3 0 3 1");
@@ -23,23 +32,7 @@ public class Main {
 	
     public static void main(String[] args) {
     	
-    	PathFinder encuentraCaminos;
-    	List<Grafo> grafos = initTestGrafos();
-    	
-    	int i = 0;
-    	int cantGrafos = grafos.size(); 
-    	for (Grafo grafo : grafos) {
-    		if(i == cantGrafos-1){
-    			logActivated = true;
-    		}
-    		encuentraCaminos = new PathFinder(grafo);
-    		encuentraCaminos.calcularCaminos();
-    		check(encuentraCaminos.matCaminos,i);
-    		i++;
-		}
-    	
-		
-
+    	runTests();
 				
     	//PathFinder encuentraCaminos = new PathFinder(grafo);
     	//encuentraCaminos.calcularCaminos();
@@ -49,8 +42,87 @@ public class Main {
 
     }
 
-
+	public static void runTests(){
+		showResultOnConsole = false;
+		List<Grafo> grafos = initiateGrafos();
+		PathFinder encuentraCaminos;
+    	
+    	int testId = 0;
+    	for (Grafo grafo : grafos) {
+    		encuentraCaminos = new PathFinder(grafo);
+    		encuentraCaminos.calcularCaminos();
+    		check(encuentraCaminos.matCaminos,testId);
+    		testId++;
+		}
+	}
     
+	public static List<Grafo> initiateGrafos(){
+    	
+    	List<Grafo> grafos = new ArrayList<Grafo>();
+    	Grafo grafo;
+    	grafo = new Grafo(); grafo.agregarEje(0,1); grafo.agregarEje(0,2); grafo.agregarEje(1,2); grafo.agregarEje(1,3); grafo.agregarEje(2,3);
+    	grafos.add(grafo);
+    	
+    	grafo = new Grafo(); grafo.agregarEje(0,1); grafo.agregarEje(1,2); grafo.agregarEje(2,0);
+    	grafos.add(grafo);
+    	
+    	grafo = new Grafo(); grafo.agregarEje(0,1); grafo.agregarEje(1,2); grafo.agregarEje(2,3); grafo.agregarEje(3,0);
+    	grafos.add(grafo);
+    	
+    	grafo = new Grafo(); grafo.agregarEje(0,1); grafo.agregarEje(0,2); grafo.agregarEje(1,2); grafo.agregarEje(2,1);
+    	grafos.add(grafo);
+    	
+    	grafo = new Grafo(); grafo.agregarEje(0,1); grafo.agregarEje(1,2); grafo.agregarEje(2,3); grafo.agregarEje(3,1);
+    	grafos.add(grafo);
+    	
+		grafo = new Grafo(); grafo.agregarEje(0,1); grafo.agregarEje(0,2); grafo.agregarEje(1,2); grafo.agregarEje(1,3); grafo.agregarEje(2,3);grafo.agregarEje(0,3);
+		grafos.add(grafo);
+		
+		grafo = new Grafo(); grafo.agregarEje(0,1);	grafo.agregarEje(1,2); grafo.agregarEje(4,2); grafo.agregarEje(3,2); grafo.agregarEje(2,3);
+		grafos.add(grafo);
+		grafo = new Grafo(); grafo.agregarEje(0,1);	grafo.agregarEje(1,2); grafo.agregarEje(2,3); grafo.agregarEje(3,4); grafo.agregarEje(4,1);
+		grafos.add(grafo);
+		
+		//Test Practica
+		grafo = new Grafo(); grafo.agregarEje(0,1); grafo.agregarEje(0,2);
+		grafo.agregarEje(0,4); grafo.agregarEje(2,4); grafo.agregarEje(2,3);
+		grafo.agregarEje(3,1); grafo.agregarEje(4,3);
+		grafos.add(grafo);
+		
+		grafo = new Grafo(); grafo.agregarEje(0, 1); grafo.agregarEje(0, 2);
+		grafo.agregarEje(0, 3); grafo.agregarEje(0, 4); grafo.agregarEje(1, 4);
+		grafo.agregarEje(2, 1); grafo.agregarEje(2, 0); grafo.agregarEje(3, 0);
+		grafo.agregarEje(3, 1);
+		grafos.add(grafo);
+		
+		/*
+		grafo = new Grafo(); grafo.agregarEje(0, 1); grafo.agregarEje(1, 2);
+		grafo.agregarEje(2, 3); grafo.agregarEje(2, 4); grafo.agregarEje(4, 5);
+		grafo.agregarEje(4, 6); grafo.agregarEje(6, 7); grafo.agregarEje(6, 1);
+		grafos.add(grafo);
+		*/
+		
+		grafo = new Grafo(); grafo.agregarEje(0, 1); grafo.agregarEje(1, 2);
+		grafo.agregarEje(2, 1); grafo.agregarEje(1, 3);
+		grafos.add(grafo);
+		
+		grafo = new Grafo(); grafo.agregarEje(0, 1); grafo.agregarEje(1, 2);
+		grafo.agregarEje(2, 1); grafo.agregarEje(1, 3); grafo.agregarEje(3, 1);
+		grafo.agregarEje(1, 4);
+		grafos.add(grafo);
+		
+		grafo = new Grafo(); grafo.agregarEje(0, 1); grafo.agregarEje(1, 2);
+		grafo.agregarEje(2, 3); grafo.agregarEje(3, 1);	grafo.agregarEje(1, 4);
+		grafos.add(grafo);
+		
+		grafo = new Grafo(); grafo.agregarEje(0, 1); grafo.agregarEje(1, 2);
+		grafo.agregarEje(2, 3); grafo.agregarEje(3, 4);	grafo.agregarEje(4, 1);
+		grafo.agregarEje(4, 5);
+		grafos.add(grafo);
+		
+		return grafos; 
+    }
+	
     private static void obtenerCaminos(City city){
     	//Converter converter = new Converter(datos);
     	
@@ -510,65 +582,7 @@ public class Main {
     	return true;
     }
     
-    public static List<Grafo> initTestGrafos(){
-    	
-    	List<Grafo> grafos = new ArrayList<Grafo>();
-    	Grafo grafo;
-    	grafo = new Grafo(); grafo.agregarEje(0,1); grafo.agregarEje(0,2); grafo.agregarEje(1,2); grafo.agregarEje(1,3); grafo.agregarEje(2,3);
-    	grafos.add(grafo);
-    	grafo = new Grafo(); grafo.agregarEje(0,1); grafo.agregarEje(1,2); grafo.agregarEje(2,0);
-    	grafos.add(grafo);
-    	grafo = new Grafo(); grafo.agregarEje(0,1); grafo.agregarEje(1,2); grafo.agregarEje(2,3); grafo.agregarEje(3,0);
-    	grafos.add(grafo);
-    	grafo = new Grafo(); grafo.agregarEje(0,1); grafo.agregarEje(0,2); grafo.agregarEje(1,2); grafo.agregarEje(2,1);
-    	grafos.add(grafo);
-    	grafo = new Grafo(); grafo.agregarEje(0,1); grafo.agregarEje(1,2); grafo.agregarEje(2,3); grafo.agregarEje(3,1);
-    	grafos.add(grafo);
-		grafo = new Grafo(); grafo.agregarEje(0,1); grafo.agregarEje(0,2); grafo.agregarEje(1,2); grafo.agregarEje(1,3); grafo.agregarEje(2,3);grafo.agregarEje(0,3);
-		grafos.add(grafo);
-		grafo = new Grafo(); grafo.agregarEje(0,1);	grafo.agregarEje(1,2); grafo.agregarEje(4,2); grafo.agregarEje(3,2); grafo.agregarEje(2,3);
-		grafos.add(grafo);
-		grafo = new Grafo(); grafo.agregarEje(0,1);	grafo.agregarEje(1,2); grafo.agregarEje(2,3); grafo.agregarEje(3,4); grafo.agregarEje(4,1);
-		grafos.add(grafo);
-		//Test Practica
-		grafo = new Grafo(); grafo.agregarEje(0,1); grafo.agregarEje(0,2);
-		grafo.agregarEje(0,4); grafo.agregarEje(2,4); grafo.agregarEje(2,3);
-		grafo.agregarEje(3,1); grafo.agregarEje(4,3);
-		grafos.add(grafo);
-		
-		grafo = new Grafo(); grafo.agregarEje(0, 1); grafo.agregarEje(0, 2);
-		grafo.agregarEje(0, 3); grafo.agregarEje(0, 4); grafo.agregarEje(1, 4);
-		grafo.agregarEje(2, 1); grafo.agregarEje(2, 0); grafo.agregarEje(3, 0);
-		grafo.agregarEje(3, 1);
-		grafos.add(grafo);
-		
-		/*
-		grafo = new Grafo(); grafo.agregarEje(0, 1); grafo.agregarEje(1, 2);
-		grafo.agregarEje(2, 3); grafo.agregarEje(2, 4); grafo.agregarEje(4, 5);
-		grafo.agregarEje(4, 6); grafo.agregarEje(6, 7); grafo.agregarEje(6, 1);
-		grafos.add(grafo);
-		*/
-		
-		grafo = new Grafo(); grafo.agregarEje(0, 1); grafo.agregarEje(1, 2);
-		grafo.agregarEje(2, 1); grafo.agregarEje(1, 3);
-		grafos.add(grafo);
-		
-		grafo = new Grafo(); grafo.agregarEje(0, 1); grafo.agregarEje(1, 2);
-		grafo.agregarEje(2, 1); grafo.agregarEje(1, 3); grafo.agregarEje(3, 1);
-		grafo.agregarEje(1, 4);
-		grafos.add(grafo);
-		
-		grafo = new Grafo(); grafo.agregarEje(0, 1); grafo.agregarEje(1, 2);
-		grafo.agregarEje(2, 3); grafo.agregarEje(3, 1);	grafo.agregarEje(1, 4);
-		grafos.add(grafo);
-		
-		grafo = new Grafo(); grafo.agregarEje(0, 1); grafo.agregarEje(1, 2);
-		grafo.agregarEje(2, 3); grafo.agregarEje(3, 4);	grafo.agregarEje(4, 1);
-		grafo.agregarEje(4, 5);
-		grafos.add(grafo);
-		
-		return grafos; 
-    }
+    
     
     public static int getMat (int i, int j, int idGrafo){
     	

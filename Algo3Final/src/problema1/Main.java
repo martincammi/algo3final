@@ -1,70 +1,115 @@
 package problema1;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
-//Problema1
+import problema3.Main.Aplicacion;
+import problema3.Main.Encargado;
+import problema3.Main.Trabajo;
+
+/**
+ * Problema1 - Problema del pasaje de CD a cassette.
+ * @author martincammi
+ * @pendings: 
+ * - Corregir el algoritmo
+ * - Corregir el Procesor para que lea de linea de comandos.
+ * - Escribir informe
+ * - Hacer mediciones
+ */
 public class Main {
 
-	public static boolean logActivated = true;
+	public static boolean logActivated = false;
+	static boolean showResultOnConsole = true;
+	static List<CompactDisk> compacts = new ArrayList<CompactDisk>();
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		
-		String res; 
-		logln("Test1: ");
-		Converter converter1 = new Converter("5 3 1 3 4");
-		res = resolverProblemaMochila(converter1);
-		logln(res); 
-		//System.out.println( (res.equals("1 4 sum:5")) ? "OK" : "Fail: " + res);  
-		
-		/*
-		System.out.print("Test2: ");				
-		Converter converter2 = new Converter("10 4 9 8 4 2");
-		res = resolverProblemaMochila(converter2);
-		System.out.println( (res.equals("8 2 sum:10")) ? "OK" : "Fail: " + res);
-		
-		System.out.print("Test3: ");
-		Converter converter3 = new Converter("20 4 10 5 7 4");
-		res = resolverProblemaMochila(converter3);
-		System.out.println( (res.equals("10 5 4 sum:19")) ? "OK" : "Fail: " + res);
 
-		System.out.print("Test4: ");
-		Converter converter4 = new Converter("90 8 10 23 1 2 3 4 5 7");
-		res = resolverProblemaMochila(converter4);
-		System.out.println( (res.equals("10 23 1 2 3 4 5 7 sum:55")) ? "OK" : "Fail: " + res);
-		
-		System.out.print("Test5: ");		
-		Converter converter5 = new Converter("45 8 4 10 44 43 12 9 8 2");
-		res = resolverProblemaMochila(converter5);
-		System.out.println( (res.equals("4 10 12 9  2 sum:45")) ? "OK" : "Fail: " + res);
-		
-		//Extras
-		System.out.print("Test6: ");
-		Converter converter6 = new Converter("35 6 34 33 10 12 11 2"); //Deberia dar 10 12 11 2
-		res = resolverProblemaMochila(converter6);
-		System.out.println( (res.equals("10 12 11 2 sum:35")) ? "OK" : "Fail: " + res);
-		
-		System.out.print("Test7: ");
-		Converter converter7 = new Converter("6 5 1 2 3 4 5"); //Deberia dar 1,2,3
-		res = resolverProblemaMochila(converter7);
-		System.out.println( (res.equals("1 2 3 sum:6")) ? "OK" : "Fail: " + res);
-		
-		System.out.print("Test8: ");
-		Converter converter8 = new Converter("6 5 5 4 1 2 3"); //Deberia dar 1,2,3
-		res = resolverProblemaMochila(converter8);
-		System.out.println( (res.equals("1 2 3 sum:6")) ? "OK" : "Fail: " + res);
-		
-		System.out.print("Test9: ");
-		Converter converter9 = new Converter("5 3 5 3 2"); //Deberia dar 3,2
-		System.out.println( (res.equals("3 2 sum:6")) ? "OK" : "Fail: " + res);
-		
-		*/
+		runTests();
+		//runTests(6);
+		//runForOnlineJudge();
 	}
 
-	public static String resolverProblemaMochila(Converter converter){
-		int W = converter.maximo; //Maximo tamaño de cinta "w" 
+	public static void runTests(int testId){
+		showResultOnConsole = false;
+		List<CompactDisk> compacts = initiateCompacts();
+		
+		String resultado;
+		CompactDisk compactDisk = compacts.get(testId);
+		resultado = resolverProblemaMochila(compactDisk);
+		check(resultado, compactDisk, testId);
+	}
+	
+	public static void runTests(){
+		showResultOnConsole = false;
+		List<CompactDisk> compacts = initiateCompacts();
+		
+		String resultado;
+		int testId = 0; 
+		for (CompactDisk compactDisk : compacts) {
+			resultado = resolverProblemaMochila(compactDisk);
+			check(resultado, compactDisk, testId);
+			testId++;
+		}
+	}
+	
+	public static void runForOnlineJudge(){
+		Procesor.procesarDatos();
+	}
+	
+	public static List<CompactDisk> initiateCompacts(){
+		
+		//List<CompactDisk> compacts = new ArrayList<CompactDisk>();
+		compacts.add(new CompactDisk("5 3 1 3 4"));
+		compacts.add(new CompactDisk("10 4 9 8 4 2"));
+		compacts.add(new CompactDisk("20 4 10 5 7 4"));
+		compacts.add(new CompactDisk("90 8 10 23 1 2 3 4 5 7"));
+		compacts.add(new CompactDisk("45 8 4 10 44 43 12 9 8 2"));
+		compacts.add(new CompactDisk("35 6 34 33 10 12 11 2"));
+		compacts.add(new CompactDisk("6 5 1 2 3 4 5"));
+		compacts.add(new CompactDisk("6 5 5 4 1 2 3"));
+		compacts.add(new CompactDisk("5 3 5 3 2"));
+		
+		return compacts;
+	}
+	
+	
+	public static void check(String resultado, CompactDisk compactDisk, int testId){
+		
+		List<String> resultados = new ArrayList<String>();
+		
+		resultados.add("1 4 sum:5");
+		resultados.add("8 2 sum:10");
+		resultados.add("10 5 4 sum:19");
+		resultados.add("10 23 1 2 3 4 5 7 sum:55");
+		resultados.add("4 10 12 9 8 2 sum:45");
+		resultados.add("10 12 11 2 sum:35");
+		resultados.add("1 2 3 sum:6");
+		resultados.add("1 2 3 sum:6");
+		resultados.add("3 2 sum:5");
+		
+		String resultadoParaElTest = resultados.get(testId);
+		if(resultadoParaElTest.equals(resultado)){
+			System.out.println("Test" + testId + " Ok: ");
+		}else{
+			System.out.println("Test" + testId + " FALLO: " + resultado + " expected: " + resultados.get(testId));
+			compactDisk.mostrarMatriz();
+			System.out.println("");
+			compactDisk.mostrarMatrizMigajas();
+			compactDisk.mostrarSuma();
+		}
+	}
+	/*
+	private static int costo(int index){
+		return cost[index-1];
+	}*/
+	
+	public static String resolverProblemaMochila(CompactDisk converter){
+		int maximo = converter.maximo; //Maximo tamaño de cinta "w" 
 		int numCanciones = converter.numCanciones; //Cantidad de canciones "n" //Replace by pistas
 		int [] canciones = converter.canciones; //Vector de costo/beneficio
 		int [] cost = canciones;
@@ -74,48 +119,81 @@ public class Main {
 		
 		List solucion = new ArrayList();
 		
-		for (int w = 1; w <= W; ++w){
+		for (int w = 1; w <= maximo; ++w){
 			for (int i = 1; i < numCanciones+1; ++i){
 				if(cost[i-1] <= w){
-					if(usoMax[i-1][w-cost[i-1]] + cost[i-1] > usoMax[i-1][w]){
-						usoMax[i][w] = usoMax[i-1][w-cost[i-1]] + cost[i-1];
-						rastroMigajas[i][w] = 1;
-					}else if (usoMax[i-1][w-cost[i-1]] + cost[i-1] < usoMax[i-1][w]) {
-						usoMax[i][w] = usoMax[i-1][w];
-						rastroMigajas[i][w] = 1;
+					
+					int elemNuevo = usoMax[i-1][w-cost[i-1]] + cost[i-1];
+					int elemAnter = usoMax[i-1][w];
+					
+					if(elemNuevo > elemAnter){
+						
+						usoMax[i][w] = elemNuevo;
+						rastroMigajas[i][w] = 1 + rastroMigajas[i-1][w-cost[i-1]];
+						//rastroMigajas[i][w] = 1;
+					}else if (elemNuevo < elemAnter) {
+						
+						usoMax[i][w] = elemAnter;
+						rastroMigajas[i][w] = rastroMigajas[i-1][w];
+						//rastroMigajas[i][w] = 0;
 					}else{
-						//if(rastroMigajas[i-1][w-cost[i-1]] = 0)
-							usoMax[i][w] = usoMax[i-1][w];
-						rastroMigajas[i][w] = 1;
+						
+						usoMax[i][w] = usoMax[i-1][w];
+						rastroMigajas[i][w] = Math.max(rastroMigajas[i-1][w-cost[i-1]], rastroMigajas[i-1][w]);
+						//rastroMigajas[i][w] = 0;
 					}
 				}else{
 					usoMax[i][w] = usoMax[i-1][w];
+					rastroMigajas[i][w] = rastroMigajas[i-1][w]; 
 				}
 			}
 		}
-
-		//converter.mostrarMatriz();
-		//System.out.println("");
-		//converter.mostrarMatrizMigajas();
-		//converter.mostrarSuma();
-
-		int k = W;
+		/*
+		int k = maximo;
 		for (int i = numCanciones; i > 0 ; i--) {
 			if(rastroMigajas[i][k] == 1){
 				solucion.add(canciones[i-1]); 
 				k = k - cost[i-1];
 			}
 		}
+		*/
+		
+		int k = maximo;
+		for (int i = numCanciones; i > 0 ; i--) {
+			
+			int sumaNueva = usoMax[i-1][k-cost[i-1]] + cost[i-1];
+			int sumaAnter = usoMax[i-1][k];
+			int rastroMigasAnter = rastroMigajas[i-1][k];
+			int rastroMigasNuevo = rastroMigajas[i-1][k-cost[i-1]] + 1;
+			
+			if(sumaAnter < sumaNueva){
+				solucion.add(canciones[i-1]);
+				k = k - cost[i-1];
+			}
+			
+			if(sumaAnter > sumaNueva){
+				//skip
+			}
+			
+			if(sumaAnter == sumaNueva){
+				if(rastroMigasAnter < rastroMigasNuevo){
+					solucion.add(canciones[i-1]);
+					k = k - cost[i-1];
+				}
+			}
+				
+		}
+		
+		
 		String solucionStr = "";
-		for (int i = 0; i < solucion.size()-1 ; i++) {
-			solucionStr = solucion.get(i) + solucionStr + " ";
+		for (int i = 0; i < solucion.size() ; i++) {
+			solucionStr = solucion.get(i) + " " + solucionStr;
 		}
 		solucionStr = solucionStr + "sum:" + converter.getSuma();
-		//System.out.println(solucionStr);
 		return solucionStr;
 	}
 	
-	private static class Converter{
+	private static class CompactDisk{
 		
 		int maximo;
 		int numCanciones;
@@ -123,7 +201,7 @@ public class Main {
 		int[][] usoMax;
 		int[][] rastroMigajas;
 		
-		public Converter(String data){
+		public CompactDisk(String data){
 			String[] numbers = data.split(" ");
 			maximo = Integer.parseInt(numbers[0]);
 			numCanciones = Integer.parseInt(numbers[1]);
@@ -225,4 +303,56 @@ public class Main {
     	}
     }
 	
+    private static class Procesor{
+    	
+    	public static void procesarDatos() {
+    		Scanner in = new Scanner(new BufferedReader(new InputStreamReader(System.in)));
+    		
+    		List<Aplicacion> aplicaciones = new ArrayList<Aplicacion>();
+    		Encargado encargado;
+ 
+	    		while(in.hasNextLine()){
+	    			
+	    			String linea = "esteValorSeraPisado"; 
+	    			
+	    			while (linea.length() > 0){
+	    				
+	    				linea = in.nextLine();
+		    			String valores[] = linea.split(" ");
+		    			
+		    			if(linea.length() > 0){
+		    			
+		    				int cant = Integer.parseInt((valores[0]).charAt(1) + "");
+			   				
+			   				String name = ((valores[0]).charAt(0)+ "");
+			   				String[] listaCompus = valores[1].split("");
+			   				List<Integer> listaComputadoras = new ArrayList<Integer>();
+			   				for (int i = 1; i < listaCompus.length-1; i++) {
+			   					listaComputadoras.add(new Integer(listaCompus[i]));
+							}
+	
+			   				Aplicacion aplicacion = new Aplicacion(cant, name, listaComputadoras);
+			   				aplicaciones.add(aplicacion);
+		    			}
+		   				/*
+		   				if(in.hasNextLine()){
+		   					linea = in.nextLine();
+		   					valores = linea.split(" ");
+		   				}else{
+		   					valores = new String[0];
+		   				}*/
+	    			}
+	    			
+	    			if(aplicaciones.size() > 0){
+		    			Trabajo trabajo = new Trabajo(aplicaciones);
+		    			encargado = new Encargado(trabajo);
+		    			encargado.distribuirAplicaciones();
+		    			aplicaciones.clear();
+	    			}
+	    			
+	    		}
+    		
+   			in.close();
+    	}
+    }
 }
