@@ -30,7 +30,7 @@ public class Main {
 	public static void main(String[] args) {
 
 		runTests();
-		//runTests(6);
+		//runTests(0);
 		//runForOnlineJudge();
 	}
 
@@ -159,26 +159,28 @@ public class Main {
 		*/
 		
 		int k = maximo;
-		for (int i = numCanciones; i > 0 ; i--) {
+		for (int i = numCanciones; i > 0 && k != 0 ; i--) {
 			
-			int sumaNueva = usoMax[i-1][k-cost[i-1]] + cost[i-1];
-			int sumaAnter = usoMax[i-1][k];
-			int rastroMigasAnter = rastroMigajas[i-1][k];
-			int rastroMigasNuevo = rastroMigajas[i-1][k-cost[i-1]] + 1;
-			
-			if(sumaAnter < sumaNueva){
-				solucion.add(canciones[i-1]);
-				k = k - cost[i-1];
-			}
-			
-			if(sumaAnter > sumaNueva){
-				//skip
-			}
-			
-			if(sumaAnter == sumaNueva){
-				if(rastroMigasAnter < rastroMigasNuevo){
+			if(cost[i-1] <= k){
+				int sumaNueva = usoMax[i-1][k-cost[i-1]] + cost[i-1];
+				int sumaAnter = usoMax[i-1][k];
+				int rastroMigasAnter = rastroMigajas[i-1][k];
+				int rastroMigasNuevo = rastroMigajas[i-1][k-cost[i-1]] + 1;
+				
+				if(sumaAnter < sumaNueva){
 					solucion.add(canciones[i-1]);
 					k = k - cost[i-1];
+				}
+				
+				if(sumaAnter > sumaNueva){
+					//skip
+				}
+				
+				if(sumaAnter == sumaNueva){
+					if(rastroMigasAnter < rastroMigasNuevo){
+						solucion.add(canciones[i-1]);
+						k = k - cost[i-1];
+					}
 				}
 			}
 				
