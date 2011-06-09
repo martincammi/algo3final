@@ -16,6 +16,7 @@ public class RomanConverter {
 		romanBasicNumbers.put(5, "V");
 		romanBasicNumbers.put(10, "X");
 		romanBasicNumbers.put(50, "D");
+		romanBasicNumbers.put(100, "C");
 		
 		for (Integer romanBasicNumber : romanBasicNumbers.keySet()) {
 			descendingKeys.add(romanBasicNumber); 
@@ -41,6 +42,13 @@ public class RomanConverter {
 			while(number >= romanIndex){
 				resultado = resultado + romanBasicNumbers.get(romanIndex);
 				number = number - romanIndex;
+				
+				if(number > 0){
+					if(number == romanIndex - 1){
+						resultado = resultado + romanBasicNumbers.get(1) + romanBasicNumbers.get(romanIndex);
+						number = number - (romanIndex-1);
+					}
+				}
 			}
 		}
 		

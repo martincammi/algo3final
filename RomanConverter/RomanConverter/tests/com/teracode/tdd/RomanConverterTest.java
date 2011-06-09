@@ -89,7 +89,17 @@ public class RomanConverterTest {
 	}
 	
 	@Test
+	public void testConvertToFourtyNine(){
+		assertEquals("ID", romanConverter.convert(49));
+	}
+	
+	@Test
 	public void testConvertToFifty(){
 		assertEquals("D", romanConverter.convert(50));
+	}
+	
+	@Test
+	public void testConvertToSeventyNine(){
+		assertEquals("DXXIX", romanConverter.convert(79));
 	}
 }
