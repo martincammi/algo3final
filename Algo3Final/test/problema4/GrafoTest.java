@@ -11,6 +11,28 @@ import static org.junit.Assert.*;
 public class GrafoTest {
 
 	@Test
+	public void testCantNodos(){
+		Grafo grafo = new Main.Grafo();
+		grafo.agregarEje(1,2);
+		grafo.agregarEje(2,3);
+		grafo.agregarEje(3,4);
+		grafo.agregarEje(4,5);
+		
+		assertEquals(5,grafo.getCantNodos());
+	}
+	
+	@Test
+	public void testCantNodos2(){
+		Grafo grafo = new Main.Grafo();
+		grafo.agregarEje(1,2);
+		grafo.agregarEje(2,3);
+		
+		grafo.ocultarNodo(2);
+		
+		assertEquals(2,grafo.getCantNodos());
+	}
+	
+	@Test
 	public void testUnNodo(){
 		Grafo grafo = new Main.Grafo();
 		grafo.agregarEje(1,2);
@@ -133,6 +155,36 @@ public class GrafoTest {
 		assertEquals(2,grafo.gradoNodo(3));
 		assertEquals(4,grafo.gradoNodo(4));
 		assertEquals(2,grafo.gradoNodo(5));
+	}
+	
+	@Test
+	public void testGradoDeUnNodosOculto(){
+		Grafo grafo = new Main.Grafo();
+		grafo.agregarEje(1,2);
+		
+		assertEquals(1,grafo.gradoNodo(1));
+		grafo.ocultarNodo(1);
+		assertEquals(0,grafo.gradoNodo(1));
+		
+		assertEquals(0,grafo.gradoNodo(2));
+		grafo.ocultarNodo(2);
+		assertEquals(0,grafo.gradoNodo(2));
+		
+		grafo.mostrarNodo(1);
+		assertEquals(0,grafo.gradoNodo(1));
+		
+		grafo.mostrarNodo(2);
+		assertEquals(1,grafo.gradoNodo(2));
+		assertEquals(1,grafo.gradoNodo(1));
+	}
+	
+	@Test
+	public void testesConexo(){
+		Grafo grafo = new Main.Grafo();
+		grafo.agregarEje(1,2);
+		grafo.agregarEje(2,3);
+		grafo.agregarEje(3,4);
+		assertTrue(grafo.esConexo());
 	}
 	
 	

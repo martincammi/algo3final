@@ -45,7 +45,12 @@ public class Main {
         private Map<Integer, LinkedHashSet<Eje>> mapaAdyacencia = new HashMap();
         private Map<Integer, Boolean> nodosVisibles = new HashMap();
         public int cantEjes = 0;
+        public int cantNodos = 0;
 
+        public int getCantNodos(){
+        	return cantNodos; 
+        }
+        
         /**
          * Devuelve un nodo cualquiera visible
          * @return
@@ -78,10 +83,12 @@ public class Main {
         
         private void agregarAAdjacentes(Integer nodo1, Integer nodo2){
         	LinkedHashSet<Eje> adyacentes = mapaAdyacencia.get(nodo1);
-        	mostrarNodo(nodo1);
+        	//mostrarNodo(nodo1);
+        	nodosVisibles.put(nodo1, true);
             
             if(adyacentes == null) {
             	adyacentes = new LinkedHashSet<Eje>();
+            	cantNodos++; 
             }
 
             //No se chequea que el eje exista -> podria ser un multigrafo.
@@ -106,17 +113,23 @@ public class Main {
         	return respuesta;
         }
         
+        //Y si hay ejes no visibles?
         public int gradoNodo(Integer nodo){
-        	LinkedHashSet<Eje> adyacentes = mapaAdyacencia.get(nodo);
-        	return adyacentes.size();
+        	if(nodosVisibles.get(nodo)){
+        		Set<Eje> adyacentes = ejes(nodo);
+        		return adyacentes.size();
+        	}
+        	return 0;
         }
         
         public void ocultarNodo(Integer nodo){
         	nodosVisibles.put(nodo, false);
+        	cantNodos--;
         }
         
         public void mostrarNodo(Integer nodo){
         	nodosVisibles.put(nodo, true);
+        	cantNodos++;
         }
         
         public boolean estaOcultoNodo(Integer nodo){
@@ -160,23 +173,43 @@ public class Main {
         
         public boolean esConexo(){
         	
+        	Integer nodo = getNodo();
+        	LinkedHashSet<Eje> ejesAdy = mapaAdyacencia.get(nodo);
+        	LinkedHashSet<Eje> explorando = new LinkedHashSet<Eje>();
+        	
+        	for (Eje eje : ejesAdy) {
+				explorando.add(eje);
+			}
+        	
+        	while(!explorando.isEmpty()){
+        		
+        		Eje unEje = explorando.iterator().next();
+        		explorando.remove(unEje);
+        		if(!ejesAdy.contains(unEje)){
+        			ejesAdy.add(unEje);
+        			explorando.addAll(mapaAdyacencia.get(unEje.nodo2));
+        		}
+        	}
+        	
+
+        		
         	/*
         	choose a vertex x
-        	make a list L of vertices reachable from x,
-        	and another list K of vertices to be explored.
-        	initially, L = K = x.
+        	make a list "ejesAdj" of vertices reachable from x,
+        	and another list "explorando" of vertices to be explored.
+        	initially, "ejesAdj" = "explorando" = x.
 
-        	while K is nonempty
-        	find and remove some vertex y in K
+        	while "explorando" is nonempty
+        	find and remove some vertex y in "explorando"
         	for each edge (y,z)
-        	if (z is not in L)
-        	add z to both L and K
+        	if (z is not in "ejesAdj")
+        	add z to both "ejesAdj" and "explorando"
 
-        	if L has fewer than n items
+        	if "ejesAdj" has fewer than n items
         	return disconnected
         	else return connected
         	*/
-        	return false;
+        	return ejesAdy.size() >= cantNodos;
         }
     }
     
