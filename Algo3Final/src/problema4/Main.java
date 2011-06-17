@@ -2,8 +2,8 @@ package problema4;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -15,116 +15,168 @@ public class Main {
 		//runTests();
 		//runTests(0);
 		//runForOnlineJudge();
-		runTestsGrafo();
 	}
 	
-	public static void runTestsGrafo(){
-		Grafo grafo = new Grafo();
-		grafo.agregarEje(1,2);
-		assertTrue(grafo.hayEje(1,2));
-		
-		grafo = new Grafo();
-		grafo.agregarEje(2,1);
-		assertTrue(grafo.hayEje(1,2));
-		
-		grafo = new Grafo();
-		grafo.agregarEje(2,1);
-		grafo.agregarEje(1,2);
-		assertTrue(grafo.hayEje(1,2));
-		assertTrue(grafo.hayEje(2,1));
-		
-		grafo = new Grafo();
-		grafo.agregarEje(2,1);
-		grafo.agregarEje(1,2);
-		assertTrue("[(1,2)]".equals(printList(grafo.ejes(1))));
-		assertTrue("[(2,1)]".equals(printList(grafo.ejes(2))));
-		
-		grafo = new Grafo();
-		grafo.agregarEje(1,2);
-		grafo.agregarEje(2,3);
-		grafo.agregarEje(3,4);
-		grafo.agregarEje(2,5);
-		grafo.agregarEje(5,7);
-		print(grafo.ejes(2));
-	}
+	 public List<Eje> fleury(Grafo grafo){
+	    	
+    	int aristasRecorridas = 0;
+    	List<Eje> recorrido = new ArrayList<Eje>();
+    	int aristasTotales = grafo.cantEjes;
+    	Integer nodo1 = grafo.getNodo();
+    	Integer nodo2 = nodo1;
+    	while(nodo1 != nodo2 || aristasRecorridas != aristasTotales){
+    		
+    		for (Eje eje : grafo.ejes(nodo1)) {
+				Integer nodoAdj = eje.nodo2;
+				grafo.ocultarEje(eje);
+				if (grafo.gradoNodo(nodoAdj) == 0) {
+					grafo.ocultarNodo(nodo1);
+				}
+				if(grafo.esConexo()){
+					
+				}
+			}
+    	}
+
+	  }
 	
-	private static void assertTrue(boolean valor){
-		System.out.println(valor? "OK": "FAIL");
-	}
-	
-	private static String printList(List<Eje> lista){
-		StringBuffer sb = new StringBuffer();
-		sb.append("[");
-		for (Eje eje : lista) {
-			sb.append("(" + eje.getNodo1() + "," + eje.getNodo2() + ")");
-		}
-		sb.append("]");
-		return sb.toString();
-	}
-	
-	private static void print(List<Eje> list){
-		System.out.println(printList(list));
-	}
-	
-	private static void print(String string){
-		System.out.println(string);
-	}
 	
     public static class Grafo {
-        private Map<Integer, LinkedHashSet<Integer>> nodoAdjacentes = new HashMap();
+        private Map<Integer, LinkedHashSet<Eje>> mapaAdyacencia = new HashMap();
+        private Map<Integer, Boolean> nodosVisibles = new HashMap();
         public int cantEjes = 0;
 
-        public Integer unNodo(){
-        	return nodoAdjacentes.keySet().iterator().next();
+        /**
+         * Devuelve un nodo cualquiera visible
+         * @return
+         */
+        public Integer getNodo(){
+        	
+        	for (Integer nodo: mapaAdyacencia.keySet()) {
+        		if(nodosVisibles.get(nodo)){
+        			return nodo;
+        		}
+			}
+        	return null;
         }
         
         public void agregarEje(Integer nodo1, Integer nodo2) {
-        	boolean agrego1 = agregarAAdjacentes(nodo1,nodo2);
-        	boolean agrego2 = agregarAAdjacentes(nodo2,nodo1);
-        	
-        	if(agrego1 || agrego2){
-        		cantEjes++;
-        	}
+        	agregarAAdjacentes(nodo1,nodo2);
+        	agregarAAdjacentes(nodo2,nodo1);
         }
         
-        private boolean agregarAAdjacentes(Integer nodo1, Integer nodo2){
-        	LinkedHashSet<Integer> adjacent = nodoAdjacentes.get(nodo1);
-            
-            if(adjacent == null) {
-            	adjacent = new LinkedHashSet<Integer>();
-            	nodoAdjacentes.put(nodo1, adjacent);
-            }
-            
-            if(!adjacent.contains(nodo2)){
-            	adjacent.add(nodo2);
-            	return true;
-            }
-            return false;
+        public boolean hayEje(Integer nodo1, Integer nodo2){
+        	LinkedHashSet<Eje> adyacentes = mapaAdyacencia.get(nodo1);
+        	
+        	for (Eje eje : adyacentes) {
+				if(eje.nodo2.equals(nodo2)){
+					return true;
+				}
+			}
+        	return false;
         }
-
-        public boolean hayEje(Integer node1, Integer node2) {
-            Set<Integer> adyacentes1 = nodoAdjacentes.get(node1);
-            Set<Integer> adyacentes2 = nodoAdjacentes.get(node2);
-            
-            if(adyacentes1 == null)  {
-                return false;
-            }
-            return adyacentes1.contains(node2) || adyacentes2.contains(node1);
-        }
-
-        public LinkedList<Eje> ejes(Integer nodo) {
-            LinkedHashSet<Integer> adyacentes = nodoAdjacentes.get(nodo);
+        
+        private void agregarAAdjacentes(Integer nodo1, Integer nodo2){
+        	LinkedHashSet<Eje> adyacentes = mapaAdyacencia.get(nodo1);
+        	mostrarNodo(nodo1);
             
             if(adyacentes == null) {
-                return new LinkedList<Eje>();
+            	adyacentes = new LinkedHashSet<Eje>();
             }
-            
-            LinkedList<Eje> ejes = new LinkedList<Eje>();
-            for (Integer unNodo : adyacentes) {
-				ejes.add(new Eje(nodo, unNodo));
+
+            //No se chequea que el eje exista -> podria ser un multigrafo.
+            Eje unEje = new Eje(nodo1,nodo2);
+        	adyacentes.add(unEje);
+        	mapaAdyacencia.put(nodo1, adyacentes);
+        	cantEjes++;
+        }
+
+        public Set<Eje> ejes(Integer nodo) {
+        	LinkedHashSet<Eje> adyacentes = mapaAdyacencia.get(nodo);
+        	LinkedHashSet<Eje> respuesta = new LinkedHashSet<Eje>();  
+        	
+        	for (Eje eje : adyacentes) {
+				if(eje.visible){
+					if(!estaOcultoNodo(eje.nodo1) && !estaOcultoNodo(eje.nodo2)){
+						respuesta.add(eje);
+					}
+				}
 			}
-            
-            return ejes;
+        	
+        	return respuesta;
+        }
+        
+        public int gradoNodo(Integer nodo){
+        	LinkedHashSet<Eje> adyacentes = mapaAdyacencia.get(nodo);
+        	return adyacentes.size();
+        }
+        
+        public void ocultarNodo(Integer nodo){
+        	nodosVisibles.put(nodo, false);
+        }
+        
+        public void mostrarNodo(Integer nodo){
+        	nodosVisibles.put(nodo, true);
+        }
+        
+        public boolean estaOcultoNodo(Integer nodo){
+        	return !nodosVisibles.get(nodo);
+        }
+        
+        public void ocultarEje(Eje eje){
+        	Integer nodo1 = eje.nodo1;
+        	Integer nodo2 = eje.nodo2;
+        	ocultarEje(nodo1,nodo2);
+        }
+        
+        public void ocultarEje(Integer nodo1, Integer nodo2){
+        	cambiarEstadoDeUnEje(nodo1,nodo2, false);
+        	cambiarEstadoDeUnEje(nodo2,nodo1, false);
+        }
+        
+        public void mostrarEje(Integer nodo1, Integer nodo2){
+        	cambiarEstadoDeUnEje(nodo1,nodo2, true);
+        	cambiarEstadoDeUnEje(nodo2,nodo1, true);
+        }
+        
+        /**
+         * Oculta un eje para los adyacentes del nodo1
+         * @param nodo1
+         * @param nodo2
+         */
+        private void cambiarEstadoDeUnEje(Integer nodo1, Integer nodo2, boolean visible){
+        	LinkedHashSet<Eje> adyacentes = mapaAdyacencia.get(nodo1);
+        	
+        	for (Eje eje : adyacentes) {
+    			if(eje.nodo2.equals(nodo2)){
+    				if(visible){
+    					eje.mostrar();
+    				}else{
+    					eje.ocultar();
+    				}
+    			}
+			}        	
+        }
+        
+        public boolean esConexo(){
+        	
+        	/*
+        	choose a vertex x
+        	make a list L of vertices reachable from x,
+        	and another list K of vertices to be explored.
+        	initially, L = K = x.
+
+        	while K is nonempty
+        	find and remove some vertex y in K
+        	for each edge (y,z)
+        	if (z is not in L)
+        	add z to both L and K
+
+        	if L has fewer than n items
+        	return disconnected
+        	else return connected
+        	*/
+        	return false;
         }
     }
     
@@ -165,22 +217,5 @@ public class Main {
     		}
     		return null;
     	}
-    }
-    
-    public List<Eje> fleury(Grafo grafo){
-    	
-    	int aristasRecorridas = 0;
-    	List<Eje> recorrido = new ArrayList<Eje>();
-    	int aristasTotales = grafo.cantEjes;
-    	Integer nodo1 = grafo.unNodo();
-    	Integer nodo2 = nodo1;
-    	while(nodo1 != nodo2 || aristasRecorridas != aristasTotales){
-    		
-    		for (Eje eje : grafo.ejes(nodo1)) {
-				Integer nodoAdj = eje.getOpposite(nodo1);
-				
-			}
-    	}
-
     }
 }
