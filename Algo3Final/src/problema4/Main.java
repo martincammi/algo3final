@@ -2,7 +2,7 @@ package problema4;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -17,27 +17,48 @@ public class Main {
 		//runForOnlineJudge();
 	}
 	
+	 //Precondicion: todos los nodos el grafo deben tener grado par.
 	 public List<Eje> fleury(Grafo grafo){
-	    	
+
+		boolean algunoImpar = false;
+			for (Integer nodo : grafo.getNodos()) {
+				if(grafo.gradoNodo(nodo) %2 !=0){
+					algunoImpar = true;
+					break;
+				}
+			}
+		
+	 	if(algunoImpar){
+	 		//return null;
+	 	}
+		 
     	int aristasRecorridas = 0;
     	List<Eje> recorrido = new ArrayList<Eje>();
     	int aristasTotales = grafo.cantEjes;
-    	Integer nodo1 = grafo.getNodo();
-    	Integer nodo2 = nodo1;
-    	while(nodo1 != nodo2 || aristasRecorridas != aristasTotales){
+    	Integer nodoActual = grafo.getNodo();
+    	Integer nodoInicial = new Integer(nodoActual);
+    	while(!nodoActual.equals(nodoInicial) || aristasRecorridas != aristasTotales){
     		
-    		for (Eje eje : grafo.ejes(nodo1)) {
-				Integer nodoAdj = eje.nodo2;
+    		for (Eje eje : grafo.ejes(nodoActual)) {
+				Integer nodoSiguiente = eje.nodo2;
 				grafo.ocultarEje(eje);
-				if (grafo.gradoNodo(nodoAdj) == 0) {
-					grafo.ocultarNodo(nodo1);
+				if (grafo.gradoNodo(nodoActual) == 0) {
+					grafo.ocultarNodo(nodoActual);
 				}
 				if(grafo.esConexo()){
-					
+					recorrido.add(eje);
+					aristasRecorridas++;
+					nodoActual = nodoSiguiente;
+					break;
+				}else{
+				  if (grafo.estaOcultoNodo(nodoActual)) {
+                         grafo.mostrarNodo(nodoActual);
+                  }
+                  grafo.mostrarEje(eje);
 				}
 			}
     	}
-
+    	return recorrido;
 	  }
 	
 	
@@ -49,6 +70,18 @@ public class Main {
 
         public int getCantNodos(){
         	return cantNodos; 
+        }
+        
+        public Set<Integer> getNodos(){
+        	Set<Integer> nodos = new HashSet<Integer>();
+        	for (Integer nodo : mapaAdyacencia.keySet()) {
+        		if(nodosVisibles.get(nodo)){
+        			nodos.add(nodo);
+        		}
+			}
+        	
+        	return nodos;
+        	
         }
         
         /**
@@ -66,8 +99,13 @@ public class Main {
         }
         
         public void agregarEje(Integer nodo1, Integer nodo2) {
+        	
         	agregarAAdjacentes(nodo1,nodo2);
-        	agregarAAdjacentes(nodo2,nodo1);
+        	
+        	if(!nodo1.equals(nodo2)){
+        		agregarAAdjacentes(nodo2,nodo1);
+        	}
+        	cantEjes++;
         }
         
         public boolean hayEje(Integer nodo1, Integer nodo2){
@@ -95,10 +133,14 @@ public class Main {
             Eje unEje = new Eje(nodo1,nodo2);
         	adyacentes.add(unEje);
         	mapaAdyacencia.put(nodo1, adyacentes);
-        	cantEjes++;
         }
 
-        public Set<Eje> ejes(Integer nodo) {
+        /**
+         * Devuelve todos los ejes de un nodo (no devuelve los ocultos)
+         * @param nodo
+         * @return
+         */
+        public LinkedHashSet<Eje> ejes(Integer nodo) {
         	LinkedHashSet<Eje> adyacentes = mapaAdyacencia.get(nodo);
         	LinkedHashSet<Eje> respuesta = new LinkedHashSet<Eje>();  
         	
@@ -145,11 +187,17 @@ public class Main {
         public void ocultarEje(Integer nodo1, Integer nodo2){
         	cambiarEstadoDeUnEje(nodo1,nodo2, false);
         	cambiarEstadoDeUnEje(nodo2,nodo1, false);
+        	cantEjes--;
+        }
+        
+        public void mostrarEje(Eje eje){
+        	mostrarEje(eje.nodo1,eje.nodo2);
         }
         
         public void mostrarEje(Integer nodo1, Integer nodo2){
         	cambiarEstadoDeUnEje(nodo1,nodo2, true);
         	cambiarEstadoDeUnEje(nodo2,nodo1, true);
+        	cantEjes++;
         }
         
         /**
@@ -174,21 +222,38 @@ public class Main {
         public boolean esConexo(){
         	
         	Integer nodo = getNodo();
-        	LinkedHashSet<Eje> ejesAdy = mapaAdyacencia.get(nodo);
+        	LinkedHashSet<Eje> ejesAdy = new LinkedHashSet<Eje>();
+        	LinkedHashSet<Eje> adyacentes = ejes(nodo);
+        	
+        	for (Eje eje : adyacentes) {
+				ejesAdy.add(eje);
+			}
+        	
         	LinkedHashSet<Eje> explorando = new LinkedHashSet<Eje>();
         	
         	for (Eje eje : ejesAdy) {
 				explorando.add(eje);
 			}
+        	Eje unEjePrimerNodo;
+        	
+        	if(explorando.iterator().hasNext() || gradoNodo(nodo) == 0){
+        		unEjePrimerNodo = new Eje(nodo,nodo);	
+        	}else{
+        		unEjePrimerNodo = null;
+        	}
         	
         	while(!explorando.isEmpty()){
         		
         		Eje unEje = explorando.iterator().next();
         		explorando.remove(unEje);
-        		if(!ejesAdy.contains(unEje)){
-        			ejesAdy.add(unEje);
-        			explorando.addAll(mapaAdyacencia.get(unEje.nodo2));
-        		}
+
+        		for (Eje unEje2 : ejes(unEje.nodo2)) {
+        			if(!ejesAdy.contains(unEje2)){
+            			ejesAdy.add(unEje2);
+            			explorando.addAll(ejes(unEje2.nodo2));
+            		}	
+				}
+        	   	
         	}
         	
 
@@ -209,7 +274,19 @@ public class Main {
         	return disconnected
         	else return connected
         	*/
+        	if(unEjePrimerNodo != null){
+        		ejesAdy.add(unEjePrimerNodo);	
+        	}
         	return ejesAdy.size() >= cantNodos;
+        }
+        
+        public static boolean mismoEje(Eje eje1, Eje eje2){
+        	return eje1.nodo1.equals(eje2.nodo1) && eje1.nodo2.equals(eje2.nodo2) ||
+        		   eje1.nodo1.equals(eje2.nodo2) && eje1.nodo2.equals(eje2.nodo1);
+        }
+        
+        public static Eje revert(Eje eje){
+        	return new Eje(eje.nodo2, eje.nodo1);
         }
     }
     
@@ -250,5 +327,22 @@ public class Main {
     		}
     		return null;
     	}
+    	
+    	public String toString(){
+    		return "["+nodo1+","+nodo2+"]";
+    	}
+
+    	@Override
+		public boolean equals(Object obj) {
+      	  Eje eje = (Eje) obj;
+      	  return nodo1.equals(eje.nodo1) && nodo2.equals(eje.nodo2) ||
+				 nodo1.equals(eje.nodo2) && nodo2.equals(eje.nodo1);
+		}
+    	
+    	@Override
+    	public int hashCode() {
+   			return nodo1 + nodo2; 
+    	}
+      	
     }
 }
