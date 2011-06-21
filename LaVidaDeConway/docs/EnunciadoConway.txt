@@ -1,0 +1,30 @@
+La idea es reproducir el famoso juego de vida artificial.
+
+Las clases y mtodos son:
+
+class Conway {
+    public:
+        void Step();
+        Tablero get();
+}
+
+class Tablero {
+    public:
+        bool isAlive(int x, int y);
+        void setAlive(int x, int y);
+        void kill(int x, int y);
+}
+
+En un Tablero de 10 x 10, sin wrapping
+
+Reglas de supervivencia (la celda que miro esta viva):
+
+0-2 vecinos: muere de soledad
+3-5 vecinos: vive
+6-9 vecinos: muere por hacinamiento
+
+(la celda que miro esta muerta) (1,0)
+
+Hay generacin espontnea en las celdas vacias cuando hay 2 o 4 vecinos.
+
+La aplicacin de las reglas es instantanea, o sea, que dado un estado E, la evaluacin de E+1 es contra E, no contra E+1 parcial.
