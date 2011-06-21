@@ -5,12 +5,10 @@ public class Conway {
 	public static int LENGHT = 10;
 	boolean tablero[][] = new boolean[LENGHT][LENGHT];
 	
-	public Conway(){
-		for (int i = 0; i < LENGHT; i++) {
-			for (int j = 0; j < LENGHT; j++) {
-				tablero[i][j] = false;
-			}	
-		}
+	public Conway(){}
+	
+	public Conway(boolean[][] tableroNuevo){
+		copiaTablero(tableroNuevo);
 	}
 	
 	public boolean[][] get(){
@@ -21,62 +19,86 @@ public class Conway {
 		tablero[i][j] = valor; 
 	}
 	
-	public void kill(int i, int j, boolean valor){
-		tablero[i][j] = false; 
+	public void kill(int i, int j){
+		tablero[i][j] = false;
 	}
 	
 	public boolean isAlive(int i, int j){
-		return tablero[i][j]; 
+		return tablero[i][j];
 	}
 	
-	public int vecinosVivos(int f, int c){
+	public int vecinosVivos(int i, int j){
 		
 		int vivos = 0;
 		
-		if(f>0 && c>0){
-			if(tablero[f-1][c-1]){
+		if(i>0 && j>0){
+			if(tablero[i-1][j-1]){
 				vivos++;
 			}
 		}
 		
-		if(f>0){
-			if(tablero[f-1][c]){
+		if(i>0){
+			if(tablero[i-1][j]){
 				vivos++;
 			}
 		}
 		
-		if(f>0){
-			if(tablero[f-1][c+1]){
+		if(i>0){
+			if(tablero[i-1][j+1]){
 				vivos++;
 			}
 		}
 		
-		if(c>0){
-			if(tablero[f][c-1]){
+		if(j>0){
+			if(tablero[i][j-1]){
 				vivos++;
 			}
 		}
 		
 		
-		if(tablero[f][c+1]){
+		if(tablero[i][j+1]){
 			vivos++;
 		}
 		
-		if(c>0){
-			if(tablero[f+1][c-1]){
+		if(j>0){
+			if(tablero[i+1][j-1]){
 				vivos++;
 			}
 		}
 		
-		if(tablero[f+1][c]){
+		if(tablero[i+1][j]){
 			vivos++;
 		}
 		
-		if(tablero[f+1][c+1]){
+		if(tablero[i+1][j+1]){
 			vivos++;
 		}
 		
 		return vivos; 
 	}
+	
+	public void step(){
+		Conway conwayInicial = new Conway(tablero);
+		
+		for (int i = 0; i < Conway.LENGHT; i++) {
+			for (int j = 0; j < Conway.LENGHT; j++) {
+				if(conwayInicial.isAlive(i,j)){
+					int vecinos = conwayInicial.vecinosVivos(i,j);
+					if(vecinos == 0 || vecinos == 2){
+						kill(i,j);
+					}
+				}
+			}	
+		}
+	}
+	
+	private void copiaTablero(boolean[][] tableroNuevo){
+		for (int i = 0; i < Conway.LENGHT; i++) {
+			for (int j = 0; j < Conway.LENGHT; j++) {
+				tablero[i][j] = tableroNuevo[i][j];
+			}	
+		}
+	}
+	
 	
 }
