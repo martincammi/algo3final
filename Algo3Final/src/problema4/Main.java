@@ -16,6 +16,28 @@ public class Main {
 		//runTests(0);
 		//runForOnlineJudge();
 	}
+	//Soporta hasta dos nodos de grado impar, no más.
+	public List<Eje> carteroChino(Grafo grafo){
+		List<Integer> nodosGradoImpar = grafo.getNodosGradoImpar();
+		for (Integer nodo : nodosGradoImpar) {
+			if(grafo.gradoNodo(nodo) == 1){
+				Eje unicoEje = grafo.ejes(nodo).get(0);
+				grafo.agregarEje(unicoEje);
+			}
+			
+			if(grafo.gradoNodo(nodo) > 1){
+				List<Eje> ejes = grafo.ejes(nodo);
+				Eje ejeAux = ejes.get(0);
+				for (Eje eje : ejes) {
+					if(eje.getPeso() < ejeAux.getPeso()){
+						ejeAux = eje;
+					}
+				}
+				grafo.agregarEje(ejeAux); //Agrego otro eje al de menor peso
+			}
+		}
+		return fleury(grafo);
+	}
 	
 	 //Precondicion: todos los nodos el grafo deben tener grado par.
 	 public List<Eje> fleury(Grafo grafo){
@@ -29,7 +51,7 @@ public class Main {
 			}
 		
 	 	if(algunoImpar){
-	 		//return null;
+	 		return null;
 	 	}
 		 
     	int aristasRecorridas = 0;
@@ -63,13 +85,26 @@ public class Main {
 	
 	
     public static class Grafo {
-        private Map<Integer, LinkedHashSet<Eje>> mapaAdyacencia = new HashMap();
+        private Map<Integer, List<Eje>> mapaAdyacencia = new HashMap();
         private Map<Integer, Boolean> nodosVisibles = new HashMap();
         public int cantEjes = 0;
         public int cantNodos = 0;
 
         public int getCantNodos(){
         	return cantNodos; 
+        }
+        
+        public List<Integer> getNodosGradoImpar(){
+        	List<Integer> nodosGradoImpar = new ArrayList<Integer>();
+        	
+        	for (Integer nodo : mapaAdyacencia.keySet()) {
+				int grado = mapaAdyacencia.get(nodo).size();
+				if(grado%2==1){ //Es Impar
+					nodosGradoImpar.add(nodo);
+				}
+			}
+        	
+        	return nodosGradoImpar;
         }
         
         public Set<Integer> getNodos(){
@@ -98,18 +133,32 @@ public class Main {
         	return null;
         }
         
-        public void agregarEje(Integer nodo1, Integer nodo2) {
-        	
-        	agregarAAdjacentes(nodo1,nodo2);
+        public void agregarEje(Eje eje) {
+        	agregarEje(eje.nodo1, eje.nodo2,eje.getPeso());
+        }
+        
+        public void agregarEje(Integer nodo1, Integer nodo2, Integer peso) {
+
+        	agregarAAdjacentes(nodo1,nodo2, peso);
         	
         	if(!nodo1.equals(nodo2)){
-        		agregarAAdjacentes(nodo2,nodo1);
+        		agregarAAdjacentes(nodo2,nodo1, peso);
+        	}
+        	cantEjes++;
+        }
+        
+        public void agregarEje(Integer nodo1, Integer nodo2) {
+        	Integer peso = 0;
+        	agregarAAdjacentes(nodo1,nodo2, peso);
+        	
+        	if(!nodo1.equals(nodo2)){
+        		agregarAAdjacentes(nodo2,nodo1, peso);
         	}
         	cantEjes++;
         }
         
         public boolean hayEje(Integer nodo1, Integer nodo2){
-        	LinkedHashSet<Eje> adyacentes = mapaAdyacencia.get(nodo1);
+        	List<Eje> adyacentes = mapaAdyacencia.get(nodo1);
         	
         	for (Eje eje : adyacentes) {
 				if(eje.nodo2.equals(nodo2)){
@@ -119,18 +168,18 @@ public class Main {
         	return false;
         }
         
-        private void agregarAAdjacentes(Integer nodo1, Integer nodo2){
-        	LinkedHashSet<Eje> adyacentes = mapaAdyacencia.get(nodo1);
+        private void agregarAAdjacentes(Integer nodo1, Integer nodo2, Integer peso){
+        	List<Eje> adyacentes = mapaAdyacencia.get(nodo1);
         	//mostrarNodo(nodo1);
         	nodosVisibles.put(nodo1, true);
             
             if(adyacentes == null) {
-            	adyacentes = new LinkedHashSet<Eje>();
+            	adyacentes = new ArrayList<Eje>();
             	cantNodos++; 
             }
 
             //No se chequea que el eje exista -> podria ser un multigrafo.
-            Eje unEje = new Eje(nodo1,nodo2);
+            Eje unEje = new Eje(nodo1,nodo2, peso);
         	adyacentes.add(unEje);
         	mapaAdyacencia.put(nodo1, adyacentes);
         }
@@ -140,9 +189,9 @@ public class Main {
          * @param nodo
          * @return
          */
-        public LinkedHashSet<Eje> ejes(Integer nodo) {
-        	LinkedHashSet<Eje> adyacentes = mapaAdyacencia.get(nodo);
-        	LinkedHashSet<Eje> respuesta = new LinkedHashSet<Eje>();  
+        public List<Eje> ejes(Integer nodo) {
+        	List<Eje> adyacentes = mapaAdyacencia.get(nodo);
+        	List<Eje> respuesta = new ArrayList<Eje>();  
         	
         	for (Eje eje : adyacentes) {
 				if(eje.visible){
@@ -158,7 +207,7 @@ public class Main {
         //Y si hay ejes no visibles?
         public int gradoNodo(Integer nodo){
         	if(nodosVisibles.get(nodo)){
-        		Set<Eje> adyacentes = ejes(nodo);
+        		List<Eje> adyacentes = ejes(nodo);
         		return adyacentes.size();
         	}
         	return 0;
@@ -205,15 +254,20 @@ public class Main {
          * @param nodo1
          * @param nodo2
          */
-        private void cambiarEstadoDeUnEje(Integer nodo1, Integer nodo2, boolean visible){
-        	LinkedHashSet<Eje> adyacentes = mapaAdyacencia.get(nodo1);
+        private void cambiarEstadoDeUnEje(Integer nodo1, Integer nodo2, boolean loQuieroMostrar){
+        	List<Eje> adyacentes = mapaAdyacencia.get(nodo1);
         	
         	for (Eje eje : adyacentes) {
     			if(eje.nodo2.equals(nodo2)){
-    				if(visible){
+    				
+    				if(!eje.visible && loQuieroMostrar){
     					eje.mostrar();
-    				}else{
+    					break;
+    				}
+    				
+    				if(eje.visible && !loQuieroMostrar){
     					eje.ocultar();
+    					break;
     				}
     			}
 			}        	
@@ -222,22 +276,31 @@ public class Main {
         public boolean esConexo(){
         	
         	Integer nodo = getNodo();
-        	LinkedHashSet<Eje> ejesAdy = new LinkedHashSet<Eje>();
-        	LinkedHashSet<Eje> adyacentes = ejes(nodo);
+        	List<Eje> ejesAdy = new ArrayList<Eje>();
+        	List<Eje> adyacentes = ejes(nodo);
         	
         	for (Eje eje : adyacentes) {
 				ejesAdy.add(eje);
 			}
         	
-        	LinkedHashSet<Eje> explorando = new LinkedHashSet<Eje>();
+        	List<Eje> explorando = new ArrayList<Eje>();
         	
+        	boolean tieneUnNodo = false;
         	for (Eje eje : ejesAdy) {
 				explorando.add(eje);
+				tieneUnNodo = true;
 			}
+        	//Caso borde para determinar si recorrimos todos los nodos (ya que el primero quedaba fuera)
         	Eje unEjePrimerNodo;
-        	
-        	if(explorando.iterator().hasNext() || gradoNodo(nodo) == 0){
-        		unEjePrimerNodo = new Eje(nodo,nodo);	
+        	 
+        	if(tieneUnNodo || gradoNodo(nodo) == 0){
+        		if(tieneUnNodo){
+        			Eje primerEje = explorando.iterator().next();
+        			unEjePrimerNodo = ejeSimetrico(primerEje) ? null: new Eje(nodo,nodo);
+        		}else{
+        			unEjePrimerNodo = new Eje(nodo,nodo);
+        		}
+        		
         	}else{
         		unEjePrimerNodo = null;
         	}
@@ -280,6 +343,10 @@ public class Main {
         	return ejesAdy.size() >= cantNodos;
         }
         
+        public static boolean ejeSimetrico(Eje eje){
+        	return eje.nodo1.equals(eje.nodo2);
+        }
+        
         public static boolean mismoEje(Eje eje1, Eje eje2){
         	return eje1.nodo1.equals(eje2.nodo1) && eje1.nodo2.equals(eje2.nodo2) ||
         		   eje1.nodo1.equals(eje2.nodo2) && eje1.nodo2.equals(eje2.nodo1);
@@ -295,11 +362,25 @@ public class Main {
     	Integer nodo1;
     	Integer nodo2;
     	boolean visible;
+    	Integer peso;
+    	
+    	public Eje(Integer nodo1, Integer nodo2, Integer peso){
+    		this(nodo1,nodo2);
+    		setPeso(peso);
+    	}
     	
     	public Eje(Integer nodo1, Integer nodo2){
     		this.nodo1 = nodo1;
     		this.nodo2 = nodo2;
     		visible = true;
+    	}
+    	
+    	public Integer getPeso(){
+    		return peso;
+    	}
+    	
+    	public void setPeso(Integer peso){
+    		this.peso = peso;
     	}
     	
     	public void ocultar(){
