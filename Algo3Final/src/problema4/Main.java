@@ -1,13 +1,19 @@
 package problema4;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
+/**
+ * Para las complejidades mencionadas se notarà:
+ * n como la cantidad de nodos
+ * m como la cantidad de ejes
+ * @author martin.cammi
+ *
+ */
 public class Main {
 	
 	public static void main(String[] args) {
@@ -17,30 +23,45 @@ public class Main {
 		//runForOnlineJudge();
 	}
 	//Soporta hasta dos nodos de grado impar, no más.
-	public List<Eje> carteroChino(Grafo grafo){
+	public Integer carteroChino(GrafoNodos grafo){
+		//No existe grafo con un nodo de grado impar, entonces tiene 0 o 2 nodos.
 		List<Integer> nodosGradoImpar = grafo.getNodosGradoImpar();
-		for (Integer nodo : nodosGradoImpar) {
-			if(grafo.gradoNodo(nodo) == 1){
-				Eje unicoEje = grafo.ejes(nodo).get(0);
-				grafo.agregarEje(unicoEje);
-			}
+		List<Eje> recorrido = null;
+		
+		//Si entra acá es que tiene dos nodos de grado impar
+		if(nodosGradoImpar.size() == 2){
+			Integer nodo1 = nodosGradoImpar.get(0);
+			Integer nodo2 = nodosGradoImpar.get(1);
 			
-			if(grafo.gradoNodo(nodo) > 1){
-				List<Eje> ejes = grafo.ejes(nodo);
-				Eje ejeAux = ejes.get(0);
-				for (Eje eje : ejes) {
-					if(eje.getPeso() < ejeAux.getPeso()){
-						ejeAux = eje;
-					}
-				}
-				grafo.agregarEje(ejeAux); //Agrego otro eje al de menor peso
+			if(grafo.hayEje(nodo1, nodo2)){
+				grafo.agregarEje(new Eje(nodo1,nodo2,grafo.getPeso(nodo1,nodo2)));
+			}else{
+				recorrido = dijkstra(grafo, nodo1, nodo2);
 			}
 		}
-		return fleury(grafo);
+		
+		if(recorrido != null){
+			for (Eje eje : recorrido) {
+				grafo.agregarEje(eje);
+			}
+		}
+		
+		recorrido = fleury(grafo);
+		
+		Integer costoCaminoMinimo = 0;
+		for (Eje eje : recorrido) {
+			costoCaminoMinimo += eje.getPeso();
+		}
+		return costoCaminoMinimo;
 	}
 	
-	 //Precondicion: todos los nodos el grafo deben tener grado par.
-	 public List<Eje> fleury(Grafo grafo){
+	/**
+	 * Encuentra un circuito euleriano en un grafo euleriano.
+	 * @complejidadTemporal 
+	 * @precondicion: Todos los nodos tienen que tener grafo par.
+	 *  
+	 */
+	 public List<Eje> fleury(GrafoEjes grafo){
 
 		boolean algunoImpar = false;
 			for (Integer nodo : grafo.getNodos()) {
@@ -61,13 +82,13 @@ public class Main {
     	Integer nodoInicial = new Integer(nodoActual);
     	while(!nodoActual.equals(nodoInicial) || aristasRecorridas != aristasTotales){
     		
-    		for (Eje eje : grafo.ejes(nodoActual)) {
+    		for (Eje eje : grafo.ejes(nodoActual)) { //O(n-1)
 				Integer nodoSiguiente = eje.nodo2;
-				grafo.ocultarEje(eje);
+				grafo.ocultarEje(eje); //O(n-1)
 				if (grafo.gradoNodo(nodoActual) == 0) {
-					grafo.ocultarNodo(nodoActual);
+					grafo.ocultarNodo(nodoActual); //O(n-1)
 				}
-				if(grafo.esConexo()){
+				if(grafo.esConexo()){ //O((n-1)^3)
 					recorrido.add(eje);
 					aristasRecorridas++;
 					nodoActual = nodoSiguiente;
@@ -76,15 +97,92 @@ public class Main {
 				  if (grafo.estaOcultoNodo(nodoActual)) {
                          grafo.mostrarNodo(nodoActual);
                   }
-                  grafo.mostrarEje(eje);
+                  grafo.mostrarEje(eje); //O(n-1)
 				}
 			}
     	}
     	return recorrido;
 	  }
 	
-	
-    public static class Grafo {
+	 /**
+	  * Dados dos nodos encuentra el minimo camino para llegar de uno a otro.
+	  * @complejidadTemporal O(n^2)
+	  * @param grafo
+	  * @return
+	  */
+	 public List<Eje> dijkstra(GrafoNodos grafo, Integer nodoInicial, Integer nodoFinal){
+		 
+		 Map<Integer, Integer> antecesores = new HashMap<Integer, Integer>();
+		 grafo.setDistance(nodoInicial, 0);
+		 List<Integer> sinVisitar = new ArrayList<Integer>();
+		 
+		 sinVisitar.add(nodoInicial);
+		 
+		 while (!sinVisitar.isEmpty()) {
+			 
+			 Integer nodo = getNodoMenorDistancia(sinVisitar,grafo); //O(n)
+			 
+			 List<Integer> vecinos = grafo.getVecinos(nodo);
+			 for (Integer vecino: vecinos) { //O(n)
+				if(!grafo.isVisited(vecino)){
+					actulizarDistancia(nodo,vecino,grafo, antecesores); //O(1)
+					sinVisitar.add(vecino);	
+				}
+			 }
+			 grafo.visitarNodo(nodo);
+			 sinVisitar.remove(nodo);
+		 }
+		 
+		 List<Eje> recorrido = new ArrayList<Eje>();
+		 Integer nodoActual = nodoFinal;
+		 Integer nodoAnterior = antecesores.get(nodoFinal);
+		 while(nodoAnterior != null){ //O(n-1)
+			 recorrido.add(new Eje(nodoAnterior, nodoActual,grafo.getPeso(nodoAnterior, nodoActual)));
+			 nodoActual = nodoAnterior;
+			 nodoAnterior = antecesores.get(nodoActual);
+		 }
+		 
+		 Collections.reverse(recorrido);
+		 return recorrido;
+	 }
+	 
+	 /**
+	  * Obtiene el nodo de menor distancia de la lista.
+	  * @complejidadTemporal O(n)
+	  * @param nodos
+	  * @param grafo
+	  * @return
+	  */
+	 public Integer getNodoMenorDistancia(List<Integer> nodos, GrafoNodos grafo){
+		 Integer nodoMenorDistancia = null;
+		 for (Integer nodo: nodos) {
+			if(nodoMenorDistancia == null || grafo.getDistance(nodo) < grafo.getDistance(nodoMenorDistancia) ){
+				nodoMenorDistancia = nodo;
+			}
+		}
+		 return nodoMenorDistancia;
+	 }
+	 
+	 /**
+	  * Actualiza la menor distancia de nodoDesde hasta nodoHasta.
+	  * @complejidadTemporal O(1)
+	  * @param nodoDesde
+	  * @param nodoHasta
+	  * @param grafo
+	  */
+	 public void actulizarDistancia(Integer nodoDesde, Integer nodoHasta, GrafoNodos grafo, Map<Integer,Integer> antecesores){
+		 int distNodoDesde = grafo.getDistance(nodoDesde);
+		 int distNodoHasta = grafo.getDistance(nodoHasta);
+		 Eje eje = new Eje(nodoDesde,nodoHasta);
+		 int pesoEje = grafo.getPeso(eje);
+		 
+		 if(distNodoDesde + pesoEje < distNodoHasta || grafo.INFINITO.equals(distNodoHasta)){
+			 grafo.setDistance(nodoHasta, distNodoDesde + pesoEje );
+			 antecesores.put(nodoHasta, nodoDesde);
+		 }
+	 }
+	 
+    public static class GrafoEjes {
         private Map<Integer, List<Eje>> mapaAdyacencia = new HashMap();
         private Map<Integer, Boolean> nodosVisibles = new HashMap();
         public int cantEjes = 0;
@@ -94,6 +192,38 @@ public class Main {
         	return cantNodos; 
         }
         
+        public int getPeso(Eje eje){
+        	return getPeso(eje.nodo1,eje.nodo2);
+        }
+        
+        public int getPeso(Integer nodo1, Integer nodo2){
+        	List<Eje> ejes = mapaAdyacencia.get(nodo1);
+        	for (Eje eje : ejes) {
+				if(eje.nodo2.equals(nodo2)){
+					return eje.getPeso();
+				}
+			} 
+        	
+        	return 0;
+        }
+        
+        public List<Integer> getVecinos (Integer nodo){
+        	List<Integer> nodosVecinos =  new ArrayList<Integer>();
+        	List<Eje> ejes =  mapaAdyacencia.get(nodo);
+        	for (Eje eje : ejes) {
+        		if(!estaOcultoNodo(eje.nodo2)){
+        			nodosVecinos.add(eje.nodo2);
+        		}
+			}
+        	
+        	return nodosVecinos;
+        }
+        
+        /**
+         * Obtiene todos los nodos de grado impar. 
+         * @complejidadTemporal O(n)
+         * @return lista de nodos
+         */
         public List<Integer> getNodosGradoImpar(){
         	List<Integer> nodosGradoImpar = new ArrayList<Integer>();
         	
@@ -137,6 +267,13 @@ public class Main {
         	agregarEje(eje.nodo1, eje.nodo2,eje.getPeso());
         }
         
+        /**
+         * Agrega un eje con nodos nodo1, nodo2 y peso peso.
+         * @complejidadTemporal O(1)
+         * @param nodo1
+         * @param nodo2
+         * @param peso
+         */
         public void agregarEje(Integer nodo1, Integer nodo2, Integer peso) {
 
         	agregarAAdjacentes(nodo1,nodo2, peso);
@@ -147,6 +284,12 @@ public class Main {
         	cantEjes++;
         }
         
+        /**
+         * Agrega un eje con nodos nodo1, nodo2.
+         * @complejidadTemporal O(1)
+         * @param nodo1
+         * @param nodo2
+         */
         public void agregarEje(Integer nodo1, Integer nodo2) {
         	Integer peso = 0;
         	agregarAAdjacentes(nodo1,nodo2, peso);
@@ -157,17 +300,13 @@ public class Main {
         	cantEjes++;
         }
         
-        public boolean hayEje(Integer nodo1, Integer nodo2){
-        	List<Eje> adyacentes = mapaAdyacencia.get(nodo1);
-        	
-        	for (Eje eje : adyacentes) {
-				if(eje.nodo2.equals(nodo2)){
-					return true;
-				}
-			}
-        	return false;
-        }
-        
+        /**
+         * Agrega un eje con nodos nodo1, nodo2 y peso peso.
+         * @complejidadTemporal O(1)
+         * @param nodo1
+         * @param nodo2
+         * @param peso
+         */
         private void agregarAAdjacentes(Integer nodo1, Integer nodo2, Integer peso){
         	List<Eje> adyacentes = mapaAdyacencia.get(nodo1);
         	//mostrarNodo(nodo1);
@@ -183,9 +322,28 @@ public class Main {
         	adyacentes.add(unEje);
         	mapaAdyacencia.put(nodo1, adyacentes);
         }
+        
+        /**
+         * Indica si existe un eje entre nodo1 y nodo2
+         * @complejidadTemporal O(m)
+         * @param nodo1
+         * @param nodo2
+         * @return
+         */
+        public boolean hayEje(Integer nodo1, Integer nodo2){
+        	List<Eje> adyacentes = mapaAdyacencia.get(nodo1);
+        	
+        	for (Eje eje : adyacentes) {
+        		if(eje.nodo2.equals(nodo2)){
+        			return true;
+        		}
+        	}
+        	return false;
+        }
 
         /**
          * Devuelve todos los ejes de un nodo (no devuelve los ocultos)
+         * @complejidadTemporal O(n-1)
          * @param nodo
          * @return
          */
@@ -227,22 +385,44 @@ public class Main {
         	return !nodosVisibles.get(nodo);
         }
         
+        /**
+         * Oculta un eje
+         * @complejidadTemporal O(n-1)
+         * @param eje
+         */
         public void ocultarEje(Eje eje){
         	Integer nodo1 = eje.nodo1;
         	Integer nodo2 = eje.nodo2;
         	ocultarEje(nodo1,nodo2);
         }
         
+        /**
+         * Oculta un Eje
+         * @complejidadTemporal O(n-1)
+         * @param nodo1
+         * @param nodo2
+         */
         public void ocultarEje(Integer nodo1, Integer nodo2){
         	cambiarEstadoDeUnEje(nodo1,nodo2, false);
         	cambiarEstadoDeUnEje(nodo2,nodo1, false);
         	cantEjes--;
         }
         
+        /**
+         * Muestra un eje
+         * @complejidadTemporal O(n-1)
+         * @param eje
+         */
         public void mostrarEje(Eje eje){
         	mostrarEje(eje.nodo1,eje.nodo2);
         }
         
+        /**
+         * Muestra un eje
+         * @complejidadTemporal O(n-1)
+         * @param nodo1
+         * @param nodo2
+         */
         public void mostrarEje(Integer nodo1, Integer nodo2){
         	cambiarEstadoDeUnEje(nodo1,nodo2, true);
         	cambiarEstadoDeUnEje(nodo2,nodo1, true);
@@ -251,13 +431,14 @@ public class Main {
         
         /**
          * Oculta un eje para los adyacentes del nodo1
+         * @complejidadTemporal O(n-1)
          * @param nodo1
          * @param nodo2
          */
         private void cambiarEstadoDeUnEje(Integer nodo1, Integer nodo2, boolean loQuieroMostrar){
         	List<Eje> adyacentes = mapaAdyacencia.get(nodo1);
         	
-        	for (Eje eje : adyacentes) {
+        	for (Eje eje : adyacentes) { //O(n-1)
     			if(eje.nodo2.equals(nodo2)){
     				
     				if(!eje.visible && loQuieroMostrar){
@@ -273,24 +454,29 @@ public class Main {
 			}        	
         }
         
+        /**
+         * Indica si el grafo es conexo.
+         * @complejidadTemporal  O((n-1)^3)
+         * @return
+         */
         public boolean esConexo(){
         	
-        	Integer nodo = getNodo();
+        	Integer nodo = getNodo(); //O(n)
         	List<Eje> ejesAdy = new ArrayList<Eje>();
-        	List<Eje> adyacentes = ejes(nodo);
+        	List<Eje> adyacentes = ejes(nodo); //O(n-1)
         	
-        	for (Eje eje : adyacentes) {
+        	for (Eje eje : adyacentes) { //O(n-1)
 				ejesAdy.add(eje);
 			}
         	
         	List<Eje> explorando = new ArrayList<Eje>();
         	
         	boolean tieneUnNodo = false;
-        	for (Eje eje : ejesAdy) {
+        	for (Eje eje : ejesAdy) { //O(n-1)
 				explorando.add(eje);
 				tieneUnNodo = true;
 			}
-        	//Caso borde para determinar si recorrimos todos los nodos (ya que el primero quedaba fuera)
+        	//Caso borde para determinar si recorrimos todos los nodos (ya que si habia uno solo quedaba fuera)
         	Eje unEjePrimerNodo;
         	 
         	if(tieneUnNodo || gradoNodo(nodo) == 0){
@@ -305,18 +491,18 @@ public class Main {
         		unEjePrimerNodo = null;
         	}
         	
-        	while(!explorando.isEmpty()){
+        	//Total: O((n-1)^3)
+        	while(!explorando.isEmpty()){ //O(n-1)
         		
         		Eje unEje = explorando.iterator().next();
         		explorando.remove(unEje);
 
-        		for (Eje unEje2 : ejes(unEje.nodo2)) {
-        			if(!ejesAdy.contains(unEje2)){
+        		for (Eje unEje2 : ejes(unEje.nodo2)) { //O(n-1)
+        			if(!ejesAdy.contains(unEje2)){ //O(n-1)
             			ejesAdy.add(unEje2);
             			explorando.addAll(ejes(unEje2.nodo2));
             		}	
 				}
-        	   	
         	}
         	
 
@@ -424,6 +610,35 @@ public class Main {
     	public int hashCode() {
    			return nodo1 + nodo2; 
     	}
-      	
     }
+    
+	public static class GrafoNodos extends GrafoEjes{
+
+		private Integer INFINITO = -1; 
+		private Map<Integer, Boolean> nodosVisitados = new HashMap<Integer,Boolean>();
+		private Map<Integer, Integer> nodosDistancia = new HashMap<Integer,Integer>();
+		
+		public boolean isVisited(Integer nodo) {
+			if(nodosVisitados.get(nodo) == null){
+				nodosVisitados.put(nodo,false);
+			}
+			return nodosVisitados.get(nodo);
+		}
+
+		public void visitarNodo(Integer nodo) {
+			nodosVisitados.put(nodo, true);
+		}
+
+		public void setDistance(Integer nodo, Integer distancia) {
+			nodosDistancia.put(nodo, distancia);
+		}
+
+		public Integer getDistance(Integer nodo) {
+			if(nodosDistancia.get(nodo) == null){
+				nodosDistancia.put(nodo,INFINITO);
+			}
+			return nodosDistancia.get(nodo);
+		}
+		
+	}
 }

@@ -5,16 +5,19 @@ import java.util.List;
 import java.util.Set;
 
 import problema4.Main.Eje;
-import problema4.Main.Grafo;
+import problema4.Main.GrafoEjes;
+import problema4.Main.GrafoNodos;
+
 import org.junit.*;
+
 import static org.junit.Assert.*;
 
 
-public class GrafoTest {
+public class GrafoEjesTest {
 
 	@Test
 	public void testCantNodos(){
-		Grafo grafo = new Main.Grafo();
+		GrafoEjes grafo = new Main.GrafoEjes();
 		grafo.agregarEje(1,2);
 		grafo.agregarEje(2,3);
 		grafo.agregarEje(3,4);
@@ -25,7 +28,7 @@ public class GrafoTest {
 	
 	@Test
 	public void testCantNodosOcultando(){
-		Grafo grafo = new Main.Grafo();
+		GrafoEjes grafo = new Main.GrafoEjes();
 		grafo.agregarEje(1,2);
 		grafo.agregarEje(2,3);
 		
@@ -40,7 +43,7 @@ public class GrafoTest {
 
 	@Test
 	public void testCantEjes(){
-		Grafo grafo = new Main.Grafo();
+		GrafoEjes grafo = new Main.GrafoEjes();
 		assertEquals(0,grafo.cantEjes);
 		grafo.agregarEje(1,2);
 		assertEquals(1,grafo.cantEjes);
@@ -48,7 +51,7 @@ public class GrafoTest {
 	
 	@Test
 	public void testCantEjesMultiGrafo(){
-		Grafo grafo = new Main.Grafo();
+		GrafoEjes grafo = new Main.GrafoEjes();
 		assertEquals(0,grafo.cantEjes);
 		grafo.agregarEje(1,2);
 		grafo.agregarEje(2,1);
@@ -57,7 +60,7 @@ public class GrafoTest {
 	
 	@Test
 	public void testCantEjes2(){
-		Grafo grafo = new Main.Grafo();
+		GrafoEjes grafo = new Main.GrafoEjes();
 		assertEquals(0,grafo.cantEjes);
 		grafo.agregarEje(1,2);
 		grafo.agregarEje(1,3);
@@ -66,7 +69,7 @@ public class GrafoTest {
 	
 	@Test
 	public void testCantEjesOcultando(){
-		Grafo grafo = new Main.Grafo();
+		GrafoEjes grafo = new Main.GrafoEjes();
 		assertEquals(0,grafo.cantEjes);
 		grafo.agregarEje(1,2);
 		assertEquals(1,grafo.cantEjes);
@@ -76,7 +79,7 @@ public class GrafoTest {
 	
 	@Test
 	public void testUnNodo(){
-		Grafo grafo = new Main.Grafo();
+		GrafoEjes grafo = new Main.GrafoEjes();
 		grafo.agregarEje(1,2);
 		Integer nodo = grafo.getNodo();
 		assertEquals(nodo,new Integer(1));
@@ -84,7 +87,7 @@ public class GrafoTest {
 	
 	@Test
 	public void testAgregarEjes(){
-		Grafo grafo = new Main.Grafo();
+		GrafoEjes grafo = new Main.GrafoEjes();
 		grafo.agregarEje(1,2);
 		assertTrue(grafo.hayEje(1,2));
 		assertTrue(grafo.hayEje(2,1));
@@ -92,7 +95,7 @@ public class GrafoTest {
 	
 	@Test
 	public void testAgregarMasEjes(){
-		Grafo grafo = new Grafo();
+		GrafoEjes grafo = new GrafoEjes();
 		grafo.agregarEje(1,2);
 		grafo.agregarEje(2,3);
 		grafo.agregarEje(3,4);
@@ -103,7 +106,7 @@ public class GrafoTest {
 	
 	@Test
 	public void testEjeOculto(){
-		Grafo grafo = new Grafo();
+		GrafoEjes grafo = new GrafoEjes();
 		grafo.agregarEje(1,2);
 		grafo.ocultarEje(1,2);
 		assertEquals("[]",printList(grafo.ejes(1)));
@@ -111,7 +114,7 @@ public class GrafoTest {
 	
 	@Test
 	public void testEjesDeNodo(){
-		Grafo grafo = new Grafo();
+		GrafoEjes grafo = new GrafoEjes();
 		grafo.agregarEje(1,2);
 		grafo.agregarEje(2,3);
 		grafo.agregarEje(3,4);
@@ -119,7 +122,7 @@ public class GrafoTest {
 	}
 	@Test
 	public void testEjesDeNodo2(){
-		Grafo grafo = new Main.Grafo();
+		GrafoEjes grafo = new Main.GrafoEjes();
 		grafo.agregarEje(1,2);
 		grafo.agregarEje(2,3);
 		grafo.agregarEje(3,4);
@@ -131,7 +134,7 @@ public class GrafoTest {
 	
 	@Test
 	public void testEjesOcultos(){
-		Grafo grafo = new Grafo();
+		GrafoEjes grafo = new GrafoEjes();
 		grafo.agregarEje(1,2);
 		grafo.agregarEje(2,3);
 		grafo.agregarEje(3,4);
@@ -151,7 +154,7 @@ public class GrafoTest {
 	
 	@Test
 	public void testEjesOcultosYLuegoMostrados(){
-		Grafo grafo = new Grafo();
+		GrafoEjes grafo = new GrafoEjes();
 		grafo.agregarEje(1,2);
 		grafo.agregarEje(2,3);
 		grafo.agregarEje(3,4);
@@ -178,15 +181,43 @@ public class GrafoTest {
 	
 	@Test
 	public void testEstaOcultoNodo(){
-		Grafo grafo = new Grafo();
+		GrafoEjes grafo = new GrafoEjes();
 		grafo.agregarEje(1,2);
 		grafo.ocultarNodo(1);
 		assertTrue(grafo.estaOcultoNodo(1));
 	}
 	
 	@Test
+	public void testVecinosDeNodo(){
+		GrafoNodos grafo = new Main.GrafoNodos();
+		grafo.agregarEje(1,2);
+		grafo.agregarEje(1,3);
+		grafo.agregarEje(1,4);
+		List<Integer> vecinos = grafo.getVecinos(1);
+		assertEquals(3, vecinos.size());
+		assertTrue(vecinos.contains(2));
+		assertTrue(vecinos.contains(3));
+		assertTrue(vecinos.contains(4));
+		
+	}
+	
+	@Test
+	public void testVecinosDeUnNodoOcultando(){
+		GrafoNodos grafo = new Main.GrafoNodos();
+		grafo.agregarEje(1,2);
+		grafo.agregarEje(1,3);
+		grafo.agregarEje(1,4);
+		grafo.ocultarNodo(3);
+		List<Integer> vecinos = grafo.getVecinos(1);
+		assertEquals(2, vecinos.size());
+		assertTrue(vecinos.contains(2));
+		assertTrue(vecinos.contains(4));
+	}
+	
+	
+	@Test
 	public void testNodoOculto(){
-		Grafo grafo = new Grafo();
+		GrafoEjes grafo = new GrafoEjes();
 		grafo.agregarEje(1,2);
 		grafo.ocultarNodo(2);
 		assertEquals("[]",printList(grafo.ejes(1)));
@@ -195,7 +226,7 @@ public class GrafoTest {
 	
 	@Test
 	public void testGradoDeUnNodo(){
-		Grafo grafo = new Grafo();
+		GrafoEjes grafo = new GrafoEjes();
 		grafo.agregarEje(1,2);
 		assertEquals(1,grafo.gradoNodo(1));
 		assertEquals(1,grafo.gradoNodo(2));
@@ -203,7 +234,7 @@ public class GrafoTest {
 	
 	@Test
 	public void testGradoDeDosNodos(){
-		Grafo grafo = new Grafo();
+		GrafoEjes grafo = new GrafoEjes();
 		grafo.agregarEje(1,2);
 		grafo.agregarEje(1,2);
 		assertEquals(2,grafo.gradoNodo(1));
@@ -212,7 +243,7 @@ public class GrafoTest {
 	
 	@Test
 	public void testGradoDeVariosNodos(){
-		Grafo grafo = new Grafo();
+		GrafoEjes grafo = new GrafoEjes();
 		grafo.agregarEje(1,2);
 		grafo.agregarEje(1,3);
 		grafo.agregarEje(1,4);
@@ -230,7 +261,7 @@ public class GrafoTest {
 	
 	@Test
 	public void testGradoDeUnNodosOculto(){
-		Grafo grafo = new Main.Grafo();
+		GrafoEjes grafo = new Main.GrafoEjes();
 		grafo.agregarEje(1,2);
 		
 		assertEquals(1,grafo.gradoNodo(1));
@@ -251,7 +282,7 @@ public class GrafoTest {
 	
 	@Test
 	public void testGradoDeDosNodosConEjeOculto(){
-		Grafo grafo = new Main.Grafo();
+		GrafoEjes grafo = new Main.GrafoEjes();
 		grafo.agregarEje(1,2);
 		grafo.agregarEje(1,2);
 		assertEquals(2,grafo.gradoNodo(1));
@@ -274,7 +305,7 @@ public class GrafoTest {
 	
 	@Test
 	public void testCeroNodosGradoImpar(){
-		Grafo grafo = new Main.Grafo();
+		GrafoEjes grafo = new Main.GrafoEjes();
 		grafo.agregarEje(1,2);
 		grafo.agregarEje(2,3);
 		grafo.agregarEje(3,4);
@@ -284,14 +315,14 @@ public class GrafoTest {
 	
 	@Test
 	public void testUnNodoGradoImpar(){
-		Grafo grafo = new Main.Grafo();
+		GrafoEjes grafo = new Main.GrafoEjes();
 		grafo.agregarEje(1,1);
 		assertEquals(1, grafo.getNodosGradoImpar().get(0).intValue());
 	}
 	
 	@Test
 	public void testTodosGradoImpar(){
-		Grafo grafo = new Main.Grafo();
+		GrafoEjes grafo = new Main.GrafoEjes();
 		grafo.agregarEje(1,1);
 		grafo.agregarEje(2,2);
 		grafo.agregarEje(3,3);
@@ -305,7 +336,7 @@ public class GrafoTest {
 	
 	@Test
 	public void testUnNodoGradoImparYOtrosTresNodos(){
-		Grafo grafo = new Main.Grafo();
+		GrafoEjes grafo = new Main.GrafoEjes();
 		grafo.agregarEje(1,2);
 		grafo.agregarEje(2,3);
 		grafo.agregarEje(3,4);
@@ -317,7 +348,7 @@ public class GrafoTest {
 	
 	@Test
 	public void testNodosGradoImparConK4(){
-		Grafo grafo = new Main.Grafo();
+		GrafoEjes grafo = new Main.GrafoEjes();
 		grafo.agregarEje(1,2);
 		grafo.agregarEje(1,3);
 		grafo.agregarEje(1,4);
@@ -333,7 +364,7 @@ public class GrafoTest {
 	
 	@Test
 	public void testDosNodosGradoImpar(){
-		Grafo grafo = new Main.Grafo();
+		GrafoEjes grafo = new Main.GrafoEjes();
 		grafo.agregarEje(1,2);
 		assertEquals(2, grafo.getNodosGradoImpar().size());
 	}
@@ -352,8 +383,8 @@ public class GrafoTest {
 		Eje eje1 = new Eje(1,2);
 		Eje eje2 = new Eje(2,2);
 		
-		assertEquals("[2,1]",Grafo.revert(eje1).toString());
-		assertEquals("[2,2]",Grafo.revert(eje2).toString());
+		assertEquals("[2,1]",GrafoEjes.revert(eje1).toString());
+		assertEquals("[2,2]",GrafoEjes.revert(eje2).toString());
 	}
 	
 	@Test
@@ -363,13 +394,13 @@ public class GrafoTest {
 		
 		Eje eje3 = new Eje(1,3);
 		
-		assertTrue(Grafo.mismoEje(eje1, eje2));
-		assertTrue(Grafo.mismoEje(eje2, eje1));
+		assertTrue(GrafoEjes.mismoEje(eje1, eje2));
+		assertTrue(GrafoEjes.mismoEje(eje2, eje1));
 		
-		assertFalse(Grafo.mismoEje(eje1, eje3));
-		assertFalse(Grafo.mismoEje(eje2, eje3));
-		assertFalse(Grafo.mismoEje(eje3, eje1));
-		assertFalse(Grafo.mismoEje(eje3, eje2));
+		assertFalse(GrafoEjes.mismoEje(eje1, eje3));
+		assertFalse(GrafoEjes.mismoEje(eje2, eje3));
+		assertFalse(GrafoEjes.mismoEje(eje3, eje1));
+		assertFalse(GrafoEjes.mismoEje(eje3, eje2));
 	}
 	
 	@Test
@@ -390,7 +421,7 @@ public class GrafoTest {
 	
 	@Test
 	public void testUnNodoConexo(){
-		Grafo grafo = new Main.Grafo();
+		GrafoEjes grafo = new Main.GrafoEjes();
 		grafo.agregarEje(1,1);
 		grafo.ocultarEje(1,1);
 		assertTrue(grafo.esConexo());
@@ -398,14 +429,14 @@ public class GrafoTest {
 	
 	@Test
 	public void testUnEjeUnNodoConexo(){
-		Grafo grafo = new Main.Grafo();
+		GrafoEjes grafo = new Main.GrafoEjes();
 		grafo.agregarEje(1,1);
 		assertTrue(grafo.esConexo());
 	}
 	
 	@Test //Soporta PseudoGrafos
 	public void testDosInConexo(){
-		Grafo grafo = new Main.Grafo();
+		GrafoEjes grafo = new Main.GrafoEjes();
 		grafo.agregarEje(1,1);
 		grafo.agregarEje(2,2);
 		assertFalse(grafo.esConexo());
@@ -413,7 +444,7 @@ public class GrafoTest {
 	
 	@Test
 	public void testDosInConexo2(){
-		Grafo grafo = new Main.Grafo();
+		GrafoEjes grafo = new Main.GrafoEjes();
 		grafo.agregarEje(1,2);
 		grafo.ocultarEje(1,2);
 		assertFalse(grafo.esConexo());
@@ -421,7 +452,7 @@ public class GrafoTest {
 	
 	@Test
 	public void testDosYDosInConexo(){
-		Grafo grafo = new Main.Grafo();
+		GrafoEjes grafo = new Main.GrafoEjes();
 		grafo.agregarEje(1,2);
 		grafo.agregarEje(2,3);
 		
@@ -432,7 +463,7 @@ public class GrafoTest {
 	
 	@Test
 	public void testesCuatroConexo(){
-		Grafo grafo = new Main.Grafo();
+		GrafoEjes grafo = new Main.GrafoEjes();
 		grafo.agregarEje(1,2);
 		grafo.agregarEje(2,3);
 		grafo.agregarEje(3,4);
@@ -441,7 +472,7 @@ public class GrafoTest {
 	
 	@Test
 	public void testOcultandoInConexo(){
-		Grafo grafo = new Main.Grafo();
+		GrafoEjes grafo = new Main.GrafoEjes();
 		grafo.agregarEje(1,2);
 		grafo.agregarEje(2,3);
 		grafo.agregarEje(3,4);
@@ -481,7 +512,7 @@ public class GrafoTest {
 	
 	@Test
 	public void testOcultandoPuenteInConexo(){
-		Grafo grafo = new Main.Grafo();
+		GrafoEjes grafo = new Main.GrafoEjes();
 		grafo.agregarEje(1,2);
 		grafo.agregarEje(2,3);
 		grafo.agregarEje(3,4);
@@ -499,7 +530,7 @@ public class GrafoTest {
 	
 	@Test
 	public void testOcultandoDosPuentesInConexo(){
-		Grafo grafo = new Main.Grafo();
+		GrafoEjes grafo = new Main.GrafoEjes();
 		grafo.agregarEje(1,2);
 		grafo.agregarEje(2,3);
 		grafo.agregarEje(3,4);
