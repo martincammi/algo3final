@@ -9,28 +9,28 @@ public class TestGoldbach {
 	@Test
 	public void goldBach1(){
 		Goldbach goldBach = new Goldbach();
-		assertEquals("",goldBach.conjeturaDeGoldbach2(1));
+		assertEquals("",goldBach.conjeturaDeGoldbach(1));
 		showComplex(goldBach.complex);
 	}
 	
 	@Test
 	public void goldBach2(){
 		Goldbach goldBach = new Goldbach();
-		assertEquals("",goldBach.conjeturaDeGoldbach2(2));
+		assertEquals("",goldBach.conjeturaDeGoldbach(2));
 		showComplex(goldBach.complex);
 	}
 	
 	@Test
 	public void goldBach3(){
 		Goldbach goldBach = new Goldbach();
-		assertEquals("",goldBach.conjeturaDeGoldbach2(3));
+		assertEquals("",goldBach.conjeturaDeGoldbach(3));
 		showComplex(goldBach.complex);
 	}
 	
 	@Test
 	public void goldBach4(){
 		Goldbach goldBach = new Goldbach();
-		assertEquals("2 2",goldBach.conjeturaDeGoldbach2(4));
+		assertEquals("2 2",goldBach.conjeturaDeGoldbach(4));
 		showComplex(goldBach.complex);
 	}
 	
