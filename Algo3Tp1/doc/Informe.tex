@@ -81,31 +81,36 @@
 		
 		Este trabajo se acompaña con los fuentes de la solución que puede importarse en
 		cualquier Eclipse IDE. 
+		
+		Para la ejecución de los tests se ha utilizado JUnit version 4.
 			
 	\subsection{Como ejecutar el TP}
 	
-	Desde cualquier Eclipse, seleccionar File - Import.
-	Seleccionar General - Existing Projects into Workspace - Next
-	Seleccionar el directorio llamado Algo3Tp1.
-	Finish.
+	Desde cualquier Eclipse:
+	\begin{itemize}
+			\item{Seleccionar File $\Rightarrow$ Import.}
+			\item{Sseleccionar General $\Rightarrow$ Existing Projects into Workspace $\Rightarrow$ Next.}
+			\item{Seleccionar el directorio llamado Algo3Tp1.}
+			\item{Finish.}
+		\end{itemize}
 	
 	Desde la vista de \textbf{Package Explorer} bajo el paquete \textbf{src} aparecerán tres paquetes màs y dentro de cada uno de ellos los siguientes archivos de java:
 	
 \begin{itemize}
 	\item problema1
-		\item Tennis.java
-		\item TestTennis.java
+		\subitem Tennis.java
+		\subitem TestTennis.java
 	\item problema2
-		\item Pizza.java
-		\item TestPizza.java
+		\subitem Pizza.java
+		\subitem TestPizza.java
 	\item problema3
-		\item Goldbach.java
-		\item TestGoldbach.java
+		\subitem Goldbach.java
+		\subitem TestGoldbach.java
 \end{itemize}
 
 	Los archivos Tennis.java, Pizza.java y Goldbach.java contienen los algoritmos solución.
 	El resto de los archivos que comienzan con \textbf{Test} son los tests asociados.
-	Para correr los tests basta con hacer botón derecho en cualquiera de ellos y luego Run As - JUnit Test.
+	Para correr los tests basta con hacer botón derecho en cualquiera de ellos y luego Run As $\Rightarrow$ JUnit Test.
 	
 
 \newpage
@@ -208,6 +213,7 @@
 	
 \begin{algorithmic}
 
+	%Para mas referencia ver http://en.wikibooks.org/wiki/LaTeX/Algorithms_and_Pseudocode
 	\FOR {cada n1,n2 candidatos podados}
         \IF {esPrimo(n1) y esPrimo(n2)}
             \STATE retornar n1, n2
@@ -228,10 +234,30 @@
 		
 \end{verbatim}	
 
-	El costo del algoritmo es
+	El costo del algoritmo es de O(n/2) * O(verificarPrimos(n)) donde
+	
+	Sea ci = el número impar i;
+	
+	Sea \verb+c_i+ = el candidato i-ésimo.
+	
+	Si n/2 es par el costo es n+4/4
+	
+	Si n/2 es impar el costo es n+2/4
+	
+	Si n/2 es par: \\
+	verificarPrimos(n) = $\sum_{i = 1}^{n+4/4}{esPrimo(2*i+1)+esPrimo(n-2*i+1)}$
+	
+	Como esPrimo(n) = O($\sqrt(n)$)
+	
+	verificarPrimos(n) = $\sum_{i = 1}^{n+4/4}{\sqrt{(2*i+1)} + \sqrt{(n-(2*i+1))}}$
+	
+	$\sum_{i = 1}^{n+4/4}{\sqrt{(2*i+1)} + \sqrt{(n-(2*i+1))}} < 	\sum_{i = 1}^{n+4/4}{(2*i+1) + n-(2*i+1)} $  
 
 	\subsection{Tests}
 	\subsection{Gráficos}
+	
+	\includegraphics[scale=0.60]{sumandosPrimos100.jpg}
+
 	\subsection{Conclusiones}
 \newpage
 
