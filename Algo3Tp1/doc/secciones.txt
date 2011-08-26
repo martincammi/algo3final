@@ -1,0 +1,19 @@
+% Ejemplos de uso
+\section{Una sección}
+\label{sec:unaSeccion}
+Hola! Soy una Sección
+	\subsection{Una subsección}
+		Y yo soy una subsección!!!
+		\subsubsection{Una subsubsección}
+			Y yo soy una sub-subsección!!!
+			\paragraph{Un párrafo\\}
+				Y yo soy un párrafo, porque no hay mas sub-sub-sub-subsecciones!!!
+
+\section{Otra sección}
+	Como pudimos ver en la sección \ref{sec:unaSeccion}, esto es una demo de una referencia a una sección.	
+	También podemos hacer referencia a la página de la sección:\\[10pt]
+	
+	% Ejemplo de uso de un borde (falta pulir para que no tire un warning!)
+	\begin{borde}{0.98\textwidth}
+		En la página \pageref{sec:unaSeccion}, hay una sección pilla...
+	\end{borde}
