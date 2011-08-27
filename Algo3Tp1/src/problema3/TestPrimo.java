@@ -59,7 +59,6 @@ public class TestPrimo {
 		int[] primos = getPrimerosMilPrimos();
 		
 		for (int i = 0; i < primos.length; i++) {
-			System.out.println(primos[i]) ;
 			assertTrue(goldBach.esPrimo(primos[i]));
 		}
 	}

@@ -82,8 +82,6 @@
 		Este trabajo se acompaña con los fuentes de la solución que puede importarse en
 		cualquier Eclipse IDE. 
 		
-		Para la ejecución de los tests se ha utilizado JUnit version 4.
-			
 	\subsection{Como ejecutar el TP}
 	
 	Desde cualquier Eclipse:
@@ -110,8 +108,6 @@
 
 	Los archivos Tennis.java, Pizza.java y Goldbach.java contienen los algoritmos solución.
 	El resto de los archivos que comienzan con \textbf{Test} son los tests asociados.
-	Para correr los tests basta con hacer botón derecho en cualquiera de ellos y luego Run As $\Rightarrow$ JUnit Test.
-	
 
 \newpage
 
@@ -206,6 +202,13 @@
 	(n/2)-1 + (n/2)+1\\	
 	
 	De esta forma generamos pares de números que sumados dan el par inicial y que han sido previamente filtrados por las podas mencionadas. A continuación se verificará si alguno de ellos es solución. La definición de solución en este problema es para cada par si ambos números son primos.
+	
+	Para el cálculo de si un número es primo verificaremos si el único divisor positivo además del uno es si mismo, para ello se dividirá por todos los menores.
+	
+		\textbf{Poda5:} Un optimización que se ha tenido en cuenta es verificar los divisores solo hasta la raiz cuadrada.
+		
+		\textbf{Poda6:} También, si al recorrer un par de sumandos notamos que ambos son iguales, verificaremos si es primo sólo uno de ellos, ya que es análogo hacerlo con el par idéntico.
+		ej: Si el n considerado es 10 y se está evaluando el par 5 + 5, solo verificaremos si 5 es primo una sola vez.
 	
 	Cabe aclarar que para optimizar el algoritmo la generación de candidatos y la verificación de solución se realizarán simultáneamente. No generaremos todas las soluciones y luego las verificaremos una a una, sino que verificaremos una a una a medida que las vayamos generando.
 	
