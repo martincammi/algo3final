@@ -25,8 +25,7 @@
 			linkcolor=magenta]            % permite cambiar el color de los links
 			{hyperref}                    % Permite jugar con algunas cosas que aparecerán en el PDF final
 
-
-\usepackage{algorithm}
+\usepackage{algorithm}							% Permite tabular un codigo
 \usepackage{algorithmic}
 \input{spanishAlgorithmic} % mi archivo de traducción			
 %\selectlanguage{spanish}
@@ -122,7 +121,7 @@
 	\subsection{Introducción}
 	\subsection{Explicación de la solución}
 	\subsection{Pseudo-código}
-	\subsection{Complejidad}
+	\subsection{Complejidad temporal}
 	\subsection{Tests}
 	\subsection{Gráficos}
 	\subsection{Conclusiones}
@@ -134,7 +133,7 @@
 	\subsection{Introducción}
 	\subsection{Explicación de la solución}
 	\subsection{Pseudo-código}
-	\subsection{Complejidad}
+	\subsection{Complejidad temporal}
 	\subsection{Tests}
 	\subsection{Gráficos}
 	\subsection{Conclusiones}
@@ -149,11 +148,15 @@
 		
 		Todo número par mayor a dos puede ser escrito como suma de dos números primos.\\
 		
-	En el presente trabajo implentaremos un algoritmo que, basado en la Conjetura de Goldbach y dado un número par mayor a dos retorne dos primos que sumados den dicho número.
+	En el presente trabajo implentaremos un algoritmo que, basado en la Conjetura de Goldbach y dado un número par mayor a dos, retorne dos primos que sumados obtengan dicho número.
 	
-	Utilizaremos la técnica de backtraking para generar posibles soluciones e ir al mismo tiempo realizando podas para no recorrer las que no los sean.
+	Utilizaremos la técnica de backtraking para generar posibles soluciones e ir al mismo 
+tiempo realizando podas para no recorrer las que no los sean.
 
+	Se analizará también la complejidad del algoritmo en base al tamaño de la entrada utilizando modelos de complejidad.
 		
+	Finalmente se realizarán gráficas y analizarán peores casos, casos promedios y posibles casos patológicos.
+	
 	\subsection{Explicación de la solución}
 	
 	Como precondición para el algoritmo el número n ingresado deberá ser par. A continuación
@@ -225,42 +228,101 @@
 
 \end{algorithmic}	
 
-	\subsection{Complejidad}
+	\subsection{Modelo elegido}
 	
-	\begin{verbatim}
+		Para el cálculo del orden utilizaremos primeramente el modelo \emph{Uniforme} ya que las operaciones básicas que posee el algoritmo no son significativas ni parecen influir tanto como las iteraciones principales.
+		
+		De todos modos realizaremos también un análisis con el modelo \emph{logarítmico} para observar que si alguna operación básica en particular prepondera sobre otras o puede afectar el algoritmo para alguna entrada en particular
+		
+		Analizaremos también los peores casos y compararemos ambas gráficas con ambos modelos.
 
-	Paso1:    Para cada n1,n2 candidatos O(n/2)
-	Paso2:       Si esPrimo(n1) y esPrimo(n2) entonces O(\sqrt{n1}) + O(\sqrt{n2})
+\newpage		
+
+\subsection{Complejidad temporal}
+	
+	La siguiente complejidad se calcula en base al modelo \emph{Uniforme}. 
+	
+	A continuación se describe el algoritmo donde se ha asignado a cada paso relevante las complejidades correpondientes:
+	
+\begin{verbatim}
+	Paso1:    Para cada n1,n2 candidatos O(n/4)
+	Paso2:       Si esPrimo(n1) y esPrimo(n2) entonces 	O(\sqrt{n1}) + O(\sqrt{n2})
 	Paso3:         retornar n1, n2
 	Paso4:       Fin Si
 	Paso5:    Fin Para 
-		
 \end{verbatim}	
 
-	El costo del algoritmo es de O(n/2) * O(verificarPrimos(n)) donde
+		
+	\textbf{Paso1:} Comenzaremos recorriendo de todos los posibles candidatos solo la mitad, ya que la otra mitad corresponde a soluciones análogas (Poda1) recorreremos entonces n/2 pares de cantidatos. De esa mitad solo interesarán los pares pares ya que si alguno no lo fuese sería primo (el caso de 4 se tratará aparte) de este modo de los n/2 pares recorreremos solo la mitad es decir n/4. La complejidad de este ciclo es de O(n/4).\\
 	
-	Sea ci = el número impar i;
-	
-	Sea \verb+c_i+ = el candidato i-ésimo.
-	
-	Si n/2 es par el costo es n+4/4
-	
-	Si n/2 es impar el costo es n+2/4
-	
-	Si n/2 es par: \\
-	verificarPrimos(n) = $\sum_{i = 1}^{n+4/4}{esPrimo(2*i+1)+esPrimo(n-2*i+1)}$
-	
-	Como esPrimo(n) = O($\sqrt(n)$)
-	
-	verificarPrimos(n) = $\sum_{i = 1}^{n+4/4}{\sqrt{(2*i+1)} + \sqrt{(n-(2*i+1))}}$
-	
-	$\sum_{i = 1}^{n+4/4}{\sqrt{(2*i+1)} + \sqrt{(n-(2*i+1))}} < 	\sum_{i = 1}^{n+4/4}{(2*i+1) + n-(2*i+1)} $  
+	\textbf{Paso2:} Este paso basará su complejidad en la complejidad de \emph{esPrimo}.
+esPrimo dado un entero positivo n recorre todos los valores menores verificando si alguno
+es divisor. Una optimización ha sido recorrer hasta valores hasta la raiz de este modo la complejidad de esPrimo es de $O(\sqrt{n})$ que de todos modos diremos que es acotable por O(n).\\
 
+De esta forma calculamos el costo del algoritmo recorriendo solo los pares impares hasta la mitad. Para ayudar a calcular este orden definamos entonces la función\\ verificarSolución(i,n) como esPrimo(i) $\wedge$ esPrimo(n-i);\\
+
+	\begin{center}
+	$\displaystyle\sum\limits_{i=1}^{n/4}  verificarSolucion(2 \cdot i+1,n)$.\\
+	\end{center}
+	
+	\begin{center}
+	$\displaystyle\sum\limits_{i=1}^{n/4} esPrimo(2 \cdot i+1)+esPrimo(n-(2 \cdot i+1))$.\\
+	\end{center}
+	
+	\begin{center}
+	Como esPrimo(n) es O($\sqrt(n)$) $\subset$ O(n) es acotable por O(n).\\
+	\end{center}
+
+	\begin{center}
+	$\displaystyle\sum\limits_{i=1}^{n/4} (2 \cdot i+1) + n - (2 \cdot i+1)$.\\
+	\end{center}
+	
+	\begin{center}
+	Simplificando los términos $(2 \cdot i+1) $:\\
+	\end{center}
+
+	\begin{center}
+  $\displaystyle\sum\limits_{i=1}^{n/4} n$\\
+	\end{center}
+	
+	\begin{center}
+	$\frac{n}{4} \cdot n = {\frac{n^2}{4}}$ es $O(n^2)$.\\ 
+	\end{center}
+	
+	Ahora bien, para describir la complejidad en función del tamaño de la entrada debemos tener en cuenta la representación del número de entrada n en la computadora.
+	Un número n será representado como $\log n$ bits.
+	
+	Definimos entonces el tamaño de entrada como:\\
+	
+	\begin{center}
+	$T = \log n$\\
+	\end{center}
+	
+	Si respejamos n para describir la complejidad en función de T:
+	
+	\begin{center}
+	$2^T = n$\\
+	\end{center}
+	
+	Como la complejidad de nuestro algoritmo es de $O(n^2)$ aplicamos cuadrado a ambos lados para ver la complejidad en T:
+	
+	\begin{center}
+	$(2^T)^2 = n^2$\\
+	\end{center}
+	
+	\begin{center}
+	$(2^{2T}) = n^2$\\
+	\end{center}
+	
+	La complejidad temporal en base a T es exponencial del orden de $O(2^{2T})$
+	
 	\subsection{Tests}
 	\subsection{Gráficos}
 	
-	\includegraphics[scale=0.60]{sumandosPrimos100.jpg}
-
+	\begin{center}
+	\includegraphics{ComplejidadGoldbachUniforme.jpg}
+	\end{center}
+	
 	\subsection{Conclusiones}
 \newpage
 
