@@ -1,5 +1,7 @@
 \documentclass[11pt, a4paper, spanish]{article}
 
+\usepackage{alltt}
+
 %%%%%%%%%% COMIENZO DEL PREAMBULO %%%%%%%%%%
 
 %Info sobre este documento
@@ -7,12 +9,12 @@
 \title{Trabajo Pr\'actico de Algoritmos y Estucturas de datos III}
 
 %\usepackage{infostyle}                                                  % provee un look & feel similar a un documento Word
-\usepackage[top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry}  % márgenes
-\usepackage[ansinew]{inputenc}                                           % permite que los acentos del estilo áéíóú salgan joya
-\usepackage[spanish, activeacute]{babel}                                 % idioma español, acentos fáciles y deletreo de palabras
+\usepackage[top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry}  % m\'argenes
+\usepackage[ansinew]{inputenc}                                           % permite que los acentos del estilo \'a\'e\'i\'o\'u salgan joya
+\usepackage[spanish, activeacute]{babel}                                 % idioma espaï¿½ol, acentos f\'aciles y deletreo de palabras
 \usepackage{indentfirst}                                                 % permite indentar un parrafo a mano
-\usepackage{caratula}                                                    % incluye caratula estándar
-\usepackage{graphicx}                                                    % permite insertar gráficos
+\usepackage{caratula}                                                    % incluye caratula est\'andar
+\usepackage{graphicx}                                                    % permite insertar gr\'aficos
 \usepackage{color}                                                       % permite el uso de colores en el documento
 \usepackage[pdfcreator={TexLive!, LaTeX2e con TeXnicCenter},
 			pdfauthor={Grupo: "1"},
@@ -23,18 +25,20 @@
 			bookmarksnumbered,            % los bookmarks numerados se ven mejor...
 			colorlinks,                   % links con bellos colores
 			linkcolor=magenta]            % permite cambiar el color de los links
-			{hyperref}                    % Permite jugar con algunas cosas que aparecerán en el PDF final
+			{hyperref}                    % Permite jugar con algunas cosas que aparecer\'an en el PDF final
 
+%RESTAURAR
 \usepackage{algorithm}							% Permite tabular un codigo
 \usepackage{algorithmic}
-\input{spanishAlgorithmic} % mi archivo de traducción			
+%\input{spanishAlgorithmic} % mi archivo de traducci\'on			
+
 %\selectlanguage{spanish}
 
 %\selectlanguage{spanish}
-\linespread{1.3}                    % interlineado equivalente al 1.5 líneas de Word...
+\linespread{1.3}                    % interlineado equivalente al 1.5 l\'ineas de Word...
 \pagestyle{myheadings}              %encabezado personalizable con \markboth{}{}
 \markboth{}{Algoritmos III  - Trabajo Pr\'actico 1 - Cammi, Garbi, Kretschmayer}
-\headsep = 30pt                     % separación entre encabezado y comienzo del párrafo
+\headsep = 30pt                     % separaci\'on entre encabezado y comienzo del p\'arrafo
 
 %\addtolength{\oddsidemargin}{-2cm}	% configuracion IDEAL!!!
 %\addtolength{\textwidth}{4cm}
@@ -71,14 +75,14 @@
 \newpage
 
 
-\section{Ejecución del TP}
+\section{Ejecuci\'on del TP}
 \label{sec:ejecucion}
 
 	\subsection{Lenguaje utilizado}
 		
-		El lenguaje utilizado para el trabajo práctico ha sido \emph{Java}, compilando con la versión 1.5 de la Virtual Machine.
+		El lenguaje utilizado para el trabajo pr\'actico ha sido \emph{Java}, compilando con la versi\'on 1.5 de la Virtual Machine.
 		
-		Este trabajo se acompaña con los fuentes de la solución que puede importarse en
+		Este trabajo se acompaï¿½a con los fuentes de la soluci\'on que puede importarse en
 		cualquier Eclipse IDE. 
 		
 	\subsection{Como ejecutar el TP}
@@ -91,7 +95,7 @@
 			\item{Finish.}
 		\end{itemize}
 	
-	Desde la vista de \textbf{Package Explorer} bajo el paquete \textbf{src} aparecerán tres paquetes màs y dentro de cada uno de ellos los siguientes archivos de java:
+	Desde la vista de \textbf{Package Explorer} bajo el paquete \textbf{src} aparecer\'an tres paquetes mï¿½s y dentro de cada uno de ellos los siguientes archivos de java:
 	
 \begin{itemize}
 	\item problema1
@@ -105,62 +109,383 @@
 		\subitem TestGoldbach.java
 \end{itemize}
 
-	Los archivos Tennis.java, Pizza.java y Goldbach.java contienen los algoritmos solución.
+	Los archivos Tennis.java, Pizza.java y Goldbach.java contienen los algoritmos soluci\'on.
 	El resto de los archivos que comienzan con \textbf{Test} son los tests asociados.
 
 \newpage
 
 % Conviene poner las secciones como diferentes archivos,
 % sobre todo cuando se trabaja en equipo.
-% Es más fácil para sincronizar mediante control de versiones.
-%\input{Introducción}
+% Es m\'as f\'acil para sincronizar mediante control de versiones.
+%\input{Introducci\'on}
 
 % Problema1
-\section{Problema1: Campeonato de Tennis}
-\label{sec:problema1}
-	\subsection{Introducción}
-	\subsection{Explicación de la solución}
-	\subsection{Pseudo-código}
-	\subsection{Complejidad temporal}
+\section{Problema1: Torneo}
+\label{sec:problema3}
+	\subsection{Introducciï¿½n}
+	
+	  Debemos organizar un torneo con cierta cantidad de competidores que la llamaremos n. Si la cantidad de competidores es potencia de 2 o es par, el torneo debe terminar en n - 1 dï¿½as. En cambio si n es impar, el torneo debe terminar en n dï¿½as.
+	  
+		Para ello, implentaremos un algoritmo que utilice la tï¿½cnica de divide y vencerï¿½s. En cada llamada recursiva, el problema se divide la cantidad de jugadores por 2, se calcula los partidos que juegan entre sï¿½ de la primera mitad de ellos, y luego se combinan esos resultados para la otra mitad de los competidores.
+
+	\subsection{Explicaciï¿½n de la soluciï¿½n}
+	
+	Para que un torneo se pueda armar, el nï¿½mero de competidores debe ser mayor o igual a 2. En cambio, en caso de venir menor cantidad de jugadores, el algoritmo no crearï¿½ el torneo, ya que no tiene sentido realizarlo. 
+	
+	Para resolver el problema, utilizamos una matriz, para ir guardando la tabla de como van quedando los partidos entre cada competidor, y en que dï¿½as ï¿½stos competirï¿½n. La matriz tiene como filas la cantidad de jugadores del torneo, y como columnas la cantidad de dï¿½as que demandarï¿½ este. En ambos casos, no utilizamos el ï¿½ndice 0, solo para facilitar la legibilidad del algoritmo.
+	
+	En cada llamada recursiva, el torneo se divide de a mitades, pero nosotros llamamos a recursiï¿½n solo con la primera de ellas, y luego realizamos la etapa de combinaciï¿½n de las subsoluciones, que termina calculando las competiciones para esta mitad de jugadores.
+	
+	Cuando la cantidad de competidores totales (o en cualquier llamada recursiva) es impar, lo que realiza el algoritmo es la de agregar un jugador "`ficticio"', y se generï¿½ el torneo como si este fuese uno real. Para distinguirlo, utilizamos una funciï¿½n que pone a ese jugador como el jugador 0. Luego, es la etapa de combinaciï¿½n la que otorgarï¿½ a ese jugador el oponente en ese dï¿½a, o caso contrario, implicarï¿½a que el jugador ese tiene fecha libre ese dï¿½a, por lo que la matriz final quedarï¿½ en 0.
+	
+	El caso base del algoritmo es cuando quedan 2 jugadores, que los hace competir en el dï¿½a 1 entre si. 
+	
+	\subsection{Pseudo-cï¿½digo}
+	
+\begin{algorithmic}
+
+	%Para mas referencia ver http://en.wikibooks.org/wiki/LaTeX/Algorithms_and_Pseudocode
+	\IF {cantJugadores == 2}
+		\STATE	fixturePartidos[1][1] = 2;								\STATE	//caso base
+		\STATE	fixturePartidos [2][1] = 1;	  						\STATE	//caso base
+	\ELSE
+			\IF {(cantJugadores mod 2)!=0}      					\STATE	//cantidad jugadores impar
+				\STATE	torneo(cantJugadores+1);      					//recursion con jugador ficticio
+				
+				\STATE	colocarJugadorFicticio(cantJugadores);  //pone en cero a ese jugador
+			\ELSE   \STATE	//si cantJugadores es par
+				\STATE	mitadJugadores = cantJugadores / 2; 
+				\STATE	torneo(mitadJugadores);      						// primero el cuadrante sup. izq.  
+				
+				\STATE	boolean esPar = (mitadJugadores mod 2) ==0;
+				\STATE	cuadranteInferiorIzquierdo(mitadJugadores, cantJugadores, esPar);
+				\STATE	cuadranteInferiorDerecho(mitadJugadores, cantJugadores, esPar);
+				\STATE	cuadranteSuperiorDerecho(mitadJugadores, cantJugadores, esPar);
+			\ENDIF
+	 \ENDIF
+	 
+	 \STATE	cuadranteInferiorIzquierdo(mitadJugadores, cantJugadores, esPar)
+	 \IF {esPar}
+			\FOR {cada jugador entre mitadJugadores+1 y cantJugadores}
+				\FOR {cada dia entre 1 y mitadJugadores-1}
+					\STATE	fixturePartidos[jugador][dia] = fixturePartidos[jugador-mitadJugadores][dia] + mitadJugadores;
+				\ENDFOR
+			\ENDFOR
+		\ELSE
+			\FOR {cada jugador entre mitadJugadores + 1 y cantJugadores}
+				\FOR {cada dia entre 1 y mitadJugadores}
+					\IF {fixturePartidos[jugador - mitadJugadores][dia] == 0}
+						\STATE	fixturePartidos[jugador][dia]=0;
+					\ELSE
+						\STATE	fixturePartidos[jugador][dia]= fixturePartidos[jugador-mitadJugadores][dia] + mitadJugadores;
+					\ENDIF
+				\ENDFOR
+			\ENDFOR
+			\STATE	sacarJugadorFicticio(mitadJugadores);
+		\ENDIF
+		
+		
+		\STATE	cuadranteInferiorDerecho(mitadJugadores, cantJugadores, esPar)
+		\IF {esPar}
+			\FOR {cada jugador entre mitadJugadores+1; y cantJugadores}
+				\FOR {cada dia entre mitadJugadores y cantJugadores-1}
+					\IF {jugador>dia}
+						\STATE	fixturePartidos[jugador][dia]=jugador-dia;
+					\ELSE
+						\STATE	fixturePartidos[jugador][dia] = (jugador + mitadJugadores)-dia;
+					\ENDIF
+				\ENDFOR
+			\ENDFOR
+		\ELSE
+			\FOR {cada jugador entre 1 y mitadJugadores}
+				\FOR {cada dia entre mitadJugadores+1; y cantJugadores-1}
+					\IF {jugador+dia <=cantJugadores}
+						\STATE	fixturePartidos[jugador][dia] = jugador+dia;
+					\ELSE
+						\STATE	fixturePartidos[jugador][dia] = jugador + dia - mitadJugadores;
+					\ENDIF
+				\ENDFOR
+			\ENDFOR
+		\ENDIF
+	
+		\STATE	cuadranteSuperiorDerecho(mitadJugadores, cantJugadores, esPar)
+		\IF {esPar}
+			\FOR {cada jugador entre 1 y mitadJugadores}
+				\FOR {cada dia = mitadJugadores; dia <= cantJugadores-1; dia++}
+					\IF {(jugador+dia)<=cantJugadores)}
+						\STATE	fixturePartidos[jugador][dia]=jugador+dia;
+					\ELSE
+						\STATE	fixturePartidos[jugador][dia]=jugador + dia - mitadJugadores;  //NO METER UN FICTICIO
+					\ENDIF
+				\ENDFOR
+			\ENDFOR
+		\ELSE
+			\FOR {cada jugador entre mitadJugadores+1 y cantJugadores}
+				\FOR {cada dia = mitadJugadores+1; dia <= cantJugadores-1; dia++}
+					\IF {jugador>dia}
+						\STATE	fixturePartidos[jugador][dia] = jugador -dia;
+					\ELSE
+						\STATE	fixturePartidos[jugador][dia] = (jugador + mitadJugadores)-dia;
+					\ENDIF
+				\ENDFOR
+			\ENDFOR
+		\ENDIF	
+	
+		\STATE	colocarJugadorFicticio(cantJugadores)
+		\FOR {cada jugador entre 1 y cantJugadores}
+			\FOR {cada dia entre 1 y cantJugadores}
+				\IF {fixturePartidos[jugador][dia] == cantJugadores+1}
+					\STATE	fixturePartidos[jugador][dia]= 0;
+				\ENDIF
+			\ENDFOR
+		\ENDFOR
+		
+		sacarJugadorFicticio(mitadJugadores)
+		\FOR {cada jugador entre 1 y mitadJugadores}
+			\FOR {cada dia entre 1 y mitadJugadores}
+				\IF {fixturePartidos[jugador][dia] == 0}
+					\STATE	fixturePartidos[jugador][dia] = jugador + mitadJugadores; 
+	 				\STATE	fixturePartidos[jugador+mitadJugadores][dia] = jugador;
+				\ENDIF
+			\ENDFOR
+		\ENDFOR
+	 
+\end{algorithmic}	
+
+\subsection{Complejidad}
+	
+\begin{algorithmic}
+
+	\IF {cantJugadores == 2}
+			\STATE	fixturePartidos[1][1] = 2;								//caso base
+			\STATE	fixturePartidos [2][1] = 1;	  						//caso base
+	\ELSE
+			\IF {(cantJugadores mod 2)!=0}      					\STATE	//cantidad jugadores impar
+				\STATE	torneo(cantJugadores+1);      					//recursion con jugador ficticio
+				
+				\STATE	colocarJugadorFicticio(cantJugadores);  //pone en cero a ese jugador
+			\ELSE  \STATE		//si cantJugadores es par
+			
+				\STATE	mitadJugadores = cantJugadores / 2; 
+				\STATE	torneo(mitadJugadores);      						// primero el cuadrante sup. izq.  
+				
+				\STATE	boolean esPar = (mitadJugadores mod 2) ==0;
+				\STATE	cuadranteInferiorIzquierdo(mitadJugadores, cantJugadores, esPar);
+				\STATE	cuadranteInferiorDerecho(mitadJugadores, cantJugadores, esPar);
+				\STATE	cuadranteSuperiorDerecho(mitadJugadores, cantJugadores, esPar);
+			\ENDIF
+	 \ENDIF
+	
+	
+	 \STATE	cuadranteInferiorIzquierdo(mitadJugadores, cantJugadores, esPar)
+	 \IF {esPar}
+			\FOR {cada jugador entre mitadJugadores+1 y cantJugadores}
+				\FOR {cada dia entre 1 y mitadJugadores-1}
+						\STATE	fixturePartidos[jugador][dia] = fixturePartidos[jugador-mitadJugadores][dia] + mitadJugadores;
+				\ENDFOR
+			\ENDFOR
+		\ELSE
+			\FOR {cada jugador entre mitadJugadores + 1 y cantJugadores} 
+				\FOR {cada dia entre 1 y mitadJugadores}
+					\IF {fixturePartidos[jugador - mitadJugadores][dia] == 0} 
+						\STATE	fixturePartidos[jugador][dia]=0;
+					\ELSE
+						\STATE	fixturePartidos[jugador][dia]= fixturePartidos[jugador-mitadJugadores][dia] + mitadJugadores;
+					\ENDIF
+				\ENDFOR
+			\ENDFOR
+			\STATE	sacarJugadorFicticio(mitadJugadores);
+		\ENDIF
+		
+		
+		\STATE	cuadranteInferiorDerecho(mitadJugadores, cantJugadores, esPar)
+		\IF {esPar}
+			\FOR {cada jugador entre mitadJugadores+1; y cantJugadores} 
+				\FOR {cada dia entre mitadJugadores y cantJugadores-1}
+					\IF {jugador>dia} 
+						\STATE	fixturePartidos[jugador][dia]=jugador-dia;
+					\ELSE
+						\STATE	fixturePartidos[jugador][dia] = (jugador + mitadJugadores)-dia;
+					\ENDIF
+				\ENDFOR
+			\ENDFOR
+		\ELSE
+			\FOR {cada jugador entre 1 y mitadJugadores} 
+				\FOR {cada dia entre mitadJugadores+1; y cantJugadores-1}
+					\IF {jugador+dia <=cantJugadores} 
+						\STATE	fixturePartidos[jugador][dia] = jugador+dia;
+					\ELSE
+						\STATE	fixturePartidos[jugador][dia] = jugador + dia - mitadJugadores;
+					\ENDIF
+				\ENDFOR
+			\ENDFOR
+		\ENDIF
+	
+		\STATE	cuadranteSuperiorDerecho(mitadJugadores, cantJugadores, esPar)
+		\IF {esPar}
+			\FOR {cada jugador entre 1 y mitadJugadores} 
+				\FOR {cada dia = mitadJugadores; dia <= cantJugadores-1; dia++}
+					\IF {(jugador+dia)<=cantJugadores} 
+						\STATE	fixturePartidos[jugador][dia]=jugador+dia;
+					\ELSE
+						\STATE	fixturePartidos[jugador][dia]=jugador + dia - mitadJugadores;  //NO METER UN FICTICIO
+					\ENDIF
+				\ENDFOR
+			\ENDFOR
+		\ELSE
+			\FOR {cada jugador entre mitadJugadores+1 y cantJugadores} 
+				\FOR {cada dia = mitadJugadores+1; dia <= cantJugadores-1; dia++}
+					\IF {jugador>dia}
+						\STATE	fixturePartidos[jugador][dia] = jugador -dia;
+					\ELSE
+						\STATE	fixturePartidos[jugador][dia] = (jugador + mitadJugadores)-dia;
+					\ENDIF
+				\ENDFOR
+			\ENDFOR
+		\ENDIF	
+	
+		\STATE	colocarJugadorFicticio(cantJugadores)
+		\FOR {cada jugador entre 1 y cantJugadores}  
+			\FOR {cada dia entre 1 y cantJugadores}
+				\IF {fixturePartidos[jugador][dia] == cantJugadores+1}
+					\STATE	fixturePartidos[jugador][dia]= 0;
+				\ENDIF
+			\ENDFOR
+		\ENDFOR
+		
+		\STATE	sacarJugadorFicticio(mitadJugadores)
+		\FOR {cada jugador entre 1 y mitadJugadores} 
+			\FOR {cada dia entre 1 y mitadJugadores}
+				\IF {fixturePartidos[jugador][dia] == 0} 
+					\STATE	fixturePartidos[jugador][dia] = jugador + mitadJugadores; 
+	 				\STATE	fixturePartidos[jugador+mitadJugadores][dia] = jugador;
+				\ENDIF
+			\ENDFOR
+		\ENDFOR
+	
+			
+\end{algorithmic}	
+
+	El costo del algoritmo es el orden que tarda la combinaciï¿½n mï¿½s el en dividir.
+	
+	Si analizamos la combinaciï¿½n, veamos primero cual es el orden de cuadranteInferiorDerecho. Este recorre n / 2 jugadores, y para cada uno de ellos, chequea n / 2 dias para realizar los cruces en el torneo. El tiempo que se demora es de O ((n / 2) al cuadrado)
+	
+	El anï¿½lisis para cuadranteInferiorIzquierdo, y cuadranteSuperiorDerecho es anï¿½alogo el de cuadranteInferiorDerecho, pero al cuadranteInferiorIzquierdo hay que sumarle el tiempo que se demora en colocar el jugador ficticio, que es de O ((n / 2) al cuadrado), ya que nuevamente, recorre n / 2 jugadores y n/2 dï¿½as. 
+	Por lo que, si sumamos los 3 cuadrantes, mï¿½s colocar el jugador ficticio, el tiempo que se demora es O(n al cuadrado). Notesï¿½ tambiï¿½n, cuando la llamada recursiva tiene cantidad de jugadores impar, debe sacar al jugador ficticio, y el orden de este algoritmo tambiï¿½n es de O (n al cuadrado).
+	
+	Como realizamos siempre la subdivisiï¿½n en 2 veces, la cantidad de subdivisiones que realiza el algoritmo es log(n) veces.
+	
+	Por ï¿½ltimo, se debe dar el resultado (que se guarda en un archivo) de como quedo creado el torneo, por lo que se debe recorrer la matriz ya completa, e ir copiando en el archivo los resultados. Esa iteraciï¿½n queda nuevamente O (n al cuadrado)
+	
+	Por lo que, el algoritmo se demora en total, O((n al cuadro)  * log(n)) + n al cuadrado))
+	
+	Ahora debemos calcular el algoritmo en funciï¿½n del tamaï¿½o de entrada.
+	
+	T = log(n), ya que para representar un nï¿½mero n, se necesitan log(n) bits.
+	
+	Entonces, n = 2 a la T.
+	
+	Entonces, la complejidad del algoritmo en funciï¿½n del tamaï¿½o de entrada es de O( (log 2 a la T) * 2 a la T cuadrado + 2 a la T cuadrado).
+	
 	\subsection{Tests}
-	\subsection{Gráficos}
+	
+	Los test se han realizado hasta 5000 competidores de diferentes formas. En ellos hemos notado que obtuvimos un mejor caso en nuestro algoritmo, que es cuando la cantidad de jugadores es potencia de 2, y otro que pareciera ser el peor caso, cuando la cantidad de competidores es de la forma ((2 a la i) + 1), ya que tiene que agregar y sacar jugadores "`ficticios"' en una o mï¿½s veces.
+	
+	\subsection{Grï¿½ficos}
+	
+	
+
 	\subsection{Conclusiones}
 \newpage
 
 % Problema2
 \section{Problema2: Pizza entre amigos}
 \label{sec:problema2}
-	\subsection{Introducción}
-	\subsection{Explicación de la solución}
-	\subsection{Pseudo-código}
-	\subsection{Complejidad temporal}
+	\subsection{Introducciï¿½n}
+	Se quiere pedir una pizza extra gigante para un grupo de amigos. Cada uno de los amigos tiene su preferencia de elementos que quiere que est\'en en la pizza y elementos que preferir\'ia que no est\'en.
+	Como no se puede satisfacer todas las preferencias de cada uno de los amigos, se pretende buscar una soluci\'on donde al menos una de las preferencias de cada amigo sea satisfecha, o responder que no es posible.
+	\subsection{Explicaciï¿½n de la soluciï¿½n}
+	Antes de explicar la soluciï¿½n elegida, comentaremos algunas decisiones tomadas ad hoc:
+	\begin{itemize}
+		\item En la entrada puede llegar a venir en las preferencias de alguno de los comenzales un ingrediente repetido. Se descartaran las apariciones repetidas de ese ingrediete en caso que la decisi\'on tomada sobre el mismo sea la misma EJ +A+B+A lo tomaremos como +A+B.
+		si alguna de las repeticiones tiene la desici\'on contr\'aria (EJ +A+B-A), entonces asumiremos que este comenzal est\'a satisfecho por defecto ya que cualquier decisi\'on tomada sobre el ingrediente en cuesti\'on lo satisfacer\'a.
+		\item Otro caso ad hoc es cuando en la entrada viene una linea vacia (solo ';'), en este caso asumiremos que no existe una pizza que satisfaga al menos una preferencia de este comenzal ya que este no tiene preferencias.
+	\end{itemize}
+	Fuera de estos casos, asumimos que todos los comenzales tienen al menos una preferencia para la pizza.\\
+	La idea del algoritmo es, usando backtracking, ir recorriendo un arbol de decisiï¿½n donde la altura esta dada por la cantidad de ingredientes posibles + 1 y cada nivel i del arbol se corresponde al iesimo ingrediente cuyos subarboles son de las decisiones de poner o no ese ingrediente en la Pizza.\\
+	En las hojas de este arbol estan todas las posibles combinaciones de pizza, si ya se revisaron todas las posibles combinaciones y ninguna cumpliï¿½ entonces no hay soluciï¿½n para esas preferencias.
+	En cada iteraciï¿½n del algoritmo se van marcando los comenzales que fueron satisfechos con la desiciï¿½n tomada sobre el ingrediente actual, cuando se llega al ï¿½ltimo ingrediente si todos los comenzales estan marcados se devuelve esa pizza, si no se desmarcan y se prueba por otra rama del arbol y se repite el proceso.\\
+	\textbf{Poda1:} Se puede ir chequeando a medida que se va armando la soluciï¿½n parcial si ya todos los comenzales fueron marcados, si pasï¿½ esto se puede terminar antes ya que la soluciï¿½n parcial es la misma que no poner el resto de los ingredientes.\\
+	\textbf{Poda2:} En cada iteraciï¿½n se chequean solo los comenzales que no hayan sido marcados ya en la soluciï¿½n parcial actual, ya que los demas estï¿½n satisfechos y seguiran estandolo cualquiera sea la desiciï¿½n que se tome sobre el resto de la pizza.\\
+	\textbf{Poda3:} Antes de armar el arbol se revisa las preferencias de cada uno de los comenzales para ver cuales son los ingredientes que realmente importan ya que si nadie tiene preferencia (ya sea por que vaya o no en la pizza) sobre algï¿½n ingrediente estï¿½ de mas revisarlo.\\
+	\textbf{Poda4:} Como estamos recorriendo el arbol de decisiï¿½n desde la primera hasta la ï¿½ltima letra (ingrediente) en orden, podemos saber cuando un comenzal no va a poder ser satisfecho con la soluciï¿½n parcial actual comparando el ingrediente actual con el "Mayor" en los que tiene una preferencia el comenzal.\\
+	\textbf{Tip:} Vamos marcando los comenzales que fueron satisfechos junto con que ingrediente fueron satisfechos, por si hay que volver en el arbol se desmarcan solo esos y se prueba otra soluciï¿½n\\
+	\subsection{Pseudo-cï¿½digo}
+	\begin{algorithmic}
+	%Para mas referencia ver http://en.wikibooks.org/wiki/LaTeX/Algorithms_and_Pseudocode
+	\STATE i $\gets$ PrimerIngredienteImportante
+	\STATE backtrack:
+	\STATE poner i en la pizza
+	\STATE marcar comenzales satisfechos
+	\IF {no hay mas comenzales insatisfechos}
+		\STATE \textbf{return} pizza
+		\STATE terminar
+	\ELSE
+		\IF{quedan ingredientes sin mirar}
+			\STATE i $\gets$ siguienteIngrediente
+			\STATE llamar backtrack
+			\STATE i $\gets$ anteriorIngrediente
+		\ENDIF
+		\STATE desmarcar comenzales satisfechos
+		\STATE sacar i de la pizza
+		\STATE marcar comenzales satisfechos
+		\IF {no hay mas comenzales insatisfechos}
+			\STATE \textbf{return} pizza
+			\STATE terminar
+		\ELSE
+			\IF{quedan ingredientes sin mirar}
+				\STATE i $\gets$ siguienteIngrediente
+				\STATE llamar backtrack
+				\STATE i $\gets$ anteriorIngrediente
+			\ENDIF
+		\ENDIF
+	\ENDIF
+	\IF{i == PrimerIngredienteImportante}
+		\STATE terminar sin soluciï¿½n
+	\ELSE
+		\STATE volver a donde se llamï¿½
+	\ENDIF
+	\end{algorithmic}	
+	\subsection{Complejidad}
+	
 	\subsection{Tests}
-	\subsection{Gráficos}
+	\subsection{Grï¿½ficos}
 	\subsection{Conclusiones}
 \newpage
+
 
 % Problema3
 \section{Problema3: Conjetura de Goldbach.}
 \label{sec:problema3}
-	\subsection{Introducción}
+	\subsection{Introducci\'on}
 	
-		En matemática una conjetura es una afirmación que no ha sido demostrada, pero basado en pruebas empíricas parecería ser cierta. En este contexto la Conjetura de Goldbach o Conjetura fuerte de Goldbach intenta expresar una verdad una relación entre pares y primos que no ha sido aún verificada en su totalidad, dicha conjetura enuncia que:\\
+		En matem\'atica una conjetura es una afirmaci\'on que no ha sido demostrada, pero basado en pruebas emp\'iricas parecer\'ia ser cierta. En este contexto la Conjetura de Goldbach o Conjetura fuerte de Goldbach intenta expresar una verdad una relaci\'on entre pares y primos que no ha sido a\'un verificada en su totalidad, dicha conjetura enuncia que:\\
 		
-		Todo número par mayor a dos puede ser escrito como suma de dos números primos.\\
+		Todo n\'umero par mayor a dos puede ser escrito como suma de dos n\'umeros primos.\\
 		
-	En el presente trabajo implentaremos un algoritmo que, basado en la Conjetura de Goldbach y dado un número par mayor a dos, retorne dos primos que sumados obtengan dicho número.
+	En el presente trabajo implentaremos un algoritmo que, basado en la Conjetura de Goldbach y dado un n\'umero par mayor a dos, retorne dos primos que sumados obtengan dicho n\'umero.
 	
-	Utilizaremos la técnica de backtraking para generar posibles soluciones e ir al mismo 
+	Utilizaremos la t\'ecnica de backtraking para generar posibles soluciones e ir al mismo 
 tiempo realizando podas para no recorrer las que no los sean.
 
-	Se analizará también la complejidad del algoritmo en base al tamaño de la entrada utilizando modelos de complejidad.
+	Se analizar\'a tambi\'en la complejidad del algoritmo en base al tamaï¿½o de la entrada utilizando modelos de complejidad.
 		
-	Finalmente se realizarán gráficas y analizarán peores casos, casos promedios y posibles casos patológicos.
+	Finalmente se realizar\'an gr\'aficas y analizar\'an peores casos, casos promedios y posibles casos patol\'ogicos.
 	
-	\subsection{Explicación de la solución}
+	\subsection{Explicaci\'on de la soluci\'on}
 	
-	Como precondición para el algoritmo el número n ingresado deberá ser par. A continuación
-	el algoritmo irá generando pares de números que sumen n y que sean candidatos a solución del siguiente modo:\\
+	Como precondici\'on para el algoritmo el n\'umero n ingresado deber\'a ser par. A continuaci\'on
+	el algoritmo ir\'a generando pares de n\'umeros que sumen n y que sean candidatos a soluci\'on del siguiente modo:\\
 	
 	1 + (n-1),
 	2 + (n-2),
@@ -170,9 +495,9 @@ tiempo realizando podas para no recorrer las que no los sean.
 	(n-2) + 2,
 	(n-1) + 1\\
 	
-	\textbf{Poda1:} Lo primero que notamos es que al llegar a la mitad de pares generados la siguiente mitad será
-	similar a la anterior ya que serán los mismos sumandos pero invertidos con respecto a la suma.
-	Entonces con verificar que sumandos son primos en la primera mitad basta para también cubir los casos de la segunda mitad.
+	\textbf{Poda1:} Lo primero que notamos es que al llegar a la mitad de pares generados la siguiente mitad ser\'a
+	similar a la anterior ya que ser\'an los mismos sumandos pero invertidos con respecto a la suma.
+	Entonces con verificar que sumandos son primos en la primera mitad basta para tambi\'en cubir los casos de la segunda mitad.
 	
 	La primera poda entonces es solo recorrer la primer mitad:\\
 	
@@ -181,13 +506,13 @@ tiempo realizando podas para no recorrer las que no los sean.
 	...
 	(n/2) + (n/2)\\
 	
-	\textbf{Poda2:} También puede verse que el número 1 no es de por si primo así que cualquier suma en que participe no será una solución válida. Podamos entonces la solución del 1.\\
+	\textbf{Poda2:} Tambi\'en puede verse que el n\'umero 1 no es de por si primo as\'i que cualquier suma en que participe no ser\'a una soluci\'on v\'alida. Podamos entonces la soluci\'on del 1.\\
 	
 	2 + (n-2),
 	...
 	(n/2) + (n/2)\\
 	
-	\textbf{Poda3:} Del mismo modo, también podemos observar que cualquier número par, salvo el 2 no será primo ya que al ser par será divisible por 2. Excluimos entonces todas las sumas con pares en ellas salvo la que contenga al 2.\\
+	\textbf{Poda3:} Del mismo modo, tambi\'en podemos observar que cualquier n\'umero par, salvo el 2 no ser\'a primo ya que al ser par ser\'a divisible por 2. Excluimos entonces todas las sumas con pares en ellas salvo la que contenga al 2.\\
 	
 	2 + (n-2),
 	3 + (n-3)
@@ -196,7 +521,7 @@ tiempo realizando podas para no recorrer las que no los sean.
 	...
 	(n/2)-1 + (n/2)+1\\
 	
-	\textbf{Poda4:} El caso del 2 podríamos tratarlo a parte ya que la única suma en la que participa es en la del 4 donde 4 = 2 + 2. No existe otra suma en la que el primo 2 aparezca ya que cualquier par que tenga como un sumando al 2 deberia tener como segundo sumando a otro número par y además primo y el único que cumple esa condición es el 2 caso que acabamos de excluir.\\
+	\textbf{Poda4:} El caso del 2 podr\'iamos tratarlo a parte ya que la \'unica suma en la que participa es en la del 4 donde 4 = 2 + 2. No existe otra suma en la que el primo 2 aparezca ya que cualquier par que tenga como un sumando al 2 deberia tener como segundo sumando a otro n\'umero par y adem\'as primo y el \'unico que cumple esa condici\'on es el 2 caso que acabamos de excluir.\\
 		
 	3 + (n-3)
 	...
@@ -204,19 +529,19 @@ tiempo realizando podas para no recorrer las que no los sean.
 	...
 	(n/2)-1 + (n/2)+1\\	
 	
-	De esta forma generamos pares de números que sumados dan el par inicial y que han sido previamente filtrados por las podas mencionadas. A continuación se verificará si alguno de ellos es solución. La definición de solución en este problema es para cada par si ambos números son primos.
+	De esta forma generamos pares de n\'umeros que sumados dan el par inicial y que han sido previamente filtrados por las podas mencionadas. A continuaci\'on se verificar\'a si alguno de ellos es soluci\'on. La definici\'on de soluci\'on en este problema es para cada par si ambos n\'umeros son primos.
 	
-	Para el cálculo de si un número es primo verificaremos si el único divisor positivo además del uno es si mismo, para ello se dividirá por todos los menores.
+	Para el c\'alculo de si un n\'umero es primo verificaremos si el \'unico divisor positivo adem\'as del uno es si mismo, para ello se dividir\'a por todos los menores.
 	
-		\textbf{Poda5:} Un optimización que se ha tenido en cuenta es verificar los divisores solo hasta la raiz cuadrada.
+		\textbf{Poda5:} Un optimizaci\'on que se ha tenido en cuenta es verificar los divisores solo hasta la raiz cuadrada.
 		
-		\textbf{Poda6:} También, si al recorrer un par de sumandos notamos que ambos son iguales, verificaremos si es primo sólo uno de ellos, ya que es análogo hacerlo con el par idéntico.
-		ej: Si el n considerado es 10 y se está evaluando el par 5 + 5, solo verificaremos si 5 es primo una sola vez.
+		\textbf{Poda6:} Tambi\'en, si al recorrer un par de sumandos notamos que ambos son iguales, verificaremos si es primo s\'olo uno de ellos, ya que es an\'alogo hacerlo con el par id\'entico.
+		ej: Si el n considerado es 10 y se est\'a evaluando el par 5 + 5, solo verificaremos si 5 es primo una sola vez.
 	
-	Cabe aclarar que para optimizar el algoritmo la generación de candidatos y la verificación de solución se realizarán simultáneamente. No generaremos todas las soluciones y luego las verificaremos una a una, sino que verificaremos una a una a medida que las vayamos generando.
+	Cabe aclarar que para optimizar el algoritmo la generaci\'on de candidatos y la verificaci\'on de soluci\'on se realizar\'an simult\'aneamente. No generaremos todas las soluciones y luego las verificaremos una a una, sino que verificaremos una a una a medida que las vayamos generando.
 	
-	\subsection{Pseudo-código}
-	
+	\subsection{Pseudo-c\'odigo}
+
 \begin{algorithmic}
 
 	%Para mas referencia ver http://en.wikibooks.org/wiki/LaTeX/Algorithms_and_Pseudocode
@@ -230,11 +555,11 @@ tiempo realizando podas para no recorrer las que no los sean.
 
 	\subsection{Modelo elegido}
 	
-		Para el cálculo del orden utilizaremos primeramente el modelo \emph{Uniforme} ya que las operaciones básicas que posee el algoritmo no son significativas ni parecen influir tanto como las iteraciones principales.
+		Para el c\'alculo del orden utilizaremos primeramente el modelo \emph{Uniforme} ya que las operaciones b\'asicas que posee el algoritmo no son significativas ni parecen influir tanto como las iteraciones principales.
 		
-		De todos modos realizaremos también un análisis con el modelo \emph{logarítmico} para observar que si alguna operación básica en particular prepondera sobre otras o puede afectar el algoritmo para alguna entrada en particular
+		De todos modos realizaremos tambi\'en un an\'alisis con el modelo \emph{logar\'itmico} para observar que si alguna operaci\'on b\'asica en particular prepondera sobre otras o puede afectar el algoritmo para alguna entrada en particular
 		
-		Analizaremos también los peores casos y compararemos ambas gráficas con ambos modelos.
+		Analizaremos tambi\'en los peores casos y compararemos ambas gr\'aficas con ambos modelos.
 
 \newpage		
 
@@ -242,24 +567,25 @@ tiempo realizando podas para no recorrer las que no los sean.
 	
 	La siguiente complejidad se calcula en base al modelo \emph{Uniforme}. 
 	
-	A continuación se describe el algoritmo donde se ha asignado a cada paso relevante las complejidades correpondientes:
-	
-\begin{verbatim}
+	A continuaci\'on se describe el algoritmo donde se ha asignado a cada paso relevante las complejidades correpondientes:
+
+%RESTAURAR	Aca antes decia verbatim ver si esto anda
+%\begin{alltt}
 	Paso1:    Para cada n1,n2 candidatos O(n/4)
-	Paso2:       Si esPrimo(n1) y esPrimo(n2) entonces 	O(\sqrt{n1}) + O(\sqrt{n2})
+	Paso2:       Si esPrimo(n1) y esPrimo(n2) entonces 	O($\sqrt{n1}$) + O($\sqrt{n2}$)
 	Paso3:         retornar n1, n2
 	Paso4:       Fin Si
 	Paso5:    Fin Para 
-\end{verbatim}	
+%\end{alltt}	
 
 		
-	\textbf{Paso1:} Comenzaremos recorriendo de todos los posibles candidatos solo la mitad, ya que la otra mitad corresponde a soluciones análogas (Poda1) recorreremos entonces n/2 pares de cantidatos. De esa mitad solo interesarán los pares pares ya que si alguno no lo fuese sería primo (el caso de 4 se tratará aparte) de este modo de los n/2 pares recorreremos solo la mitad es decir n/4. La complejidad de este ciclo es de O(n/4).\\
+	\textbf{Paso1:} Comenzaremos recorriendo de todos los posibles candidatos solo la mitad, ya que la otra mitad corresponde a soluciones an\'alogas (Poda1) recorreremos entonces n/2 pares de cantidatos. De esa mitad solo interesar\'an los pares pares ya que si alguno no lo fuese ser\'ia primo (el caso de 4 se tratar\'a aparte) de este modo de los n/2 pares recorreremos solo la mitad es decir n/4. La complejidad de este ciclo es de O(n/4).\\
 	
-	\textbf{Paso2:} Este paso basará su complejidad en la complejidad de \emph{esPrimo}.
+	\textbf{Paso2:} Este paso basar\'a su complejidad en la complejidad de \emph{esPrimo}.
 esPrimo dado un entero positivo n recorre todos los valores menores verificando si alguno
-es divisor. Una optimización ha sido recorrer hasta valores hasta la raiz de este modo la complejidad de esPrimo es de $O(\sqrt{n})$ que de todos modos diremos que es acotable por O(n).\\
+es divisor. Una optimizaci\'on ha sido recorrer hasta valores hasta la raiz de este modo la complejidad de esPrimo es de $O(\sqrt{n})$ que de todos modos diremos que es acotable por O(n).\\
 
-De esta forma calculamos el costo del algoritmo recorriendo solo los pares impares hasta la mitad. Para ayudar a calcular este orden definamos entonces la función\\ verificarSolución(i,n) como esPrimo(i) $\wedge$ esPrimo(n-i);\\
+De esta forma calculamos el costo del algoritmo recorriendo solo los pares impares hasta la mitad. Para ayudar a calcular este orden definamos entonces la funci\'on\\ verificarSoluci\'on(i,n) como esPrimo(i) $\wedge$ esPrimo(n-i);\\
 
 	\begin{center}
 	$\displaystyle\sum\limits_{i=1}^{n/4}  verificarSolucion(2 \cdot i+1,n)$.\\
@@ -278,7 +604,7 @@ De esta forma calculamos el costo del algoritmo recorriendo solo los pares impar
 	\end{center}
 	
 	\begin{center}
-	Simplificando los términos $(2 \cdot i+1) $:\\
+	Simplificando los t\'erminos $(2 \cdot i+1) $:\\
 	\end{center}
 
 	\begin{center}
@@ -289,16 +615,16 @@ De esta forma calculamos el costo del algoritmo recorriendo solo los pares impar
 	$\frac{n}{4} \cdot n = {\frac{n^2}{4}}$ es $O(n^2)$.\\ 
 	\end{center}
 	
-	Ahora bien, para describir la complejidad en función del tamaño de la entrada debemos tener en cuenta la representación del número de entrada n en la computadora.
-	Un número n será representado como $\log n$ bits.
+	Ahora bien, para describir la complejidad en funci\'on del tamaï¿½o de la entrada debemos tener en cuenta la representaci\'on del n\'umero de entrada n en la computadora.
+	Un n\'umero n ser\'a representado como $\log n$ bits.
 	
-	Definimos entonces el tamaño de entrada como:\\
+	Definimos entonces el tamaï¿½o de entrada como:\\
 	
 	\begin{center}
 	$T = \log n$\\
 	\end{center}
 	
-	Si respejamos n para describir la complejidad en función de T:
+	Si respejamos n para describir la complejidad en funci\'on de T:
 	
 	\begin{center}
 	$2^T = n$\\
@@ -317,10 +643,11 @@ De esta forma calculamos el costo del algoritmo recorriendo solo los pares impar
 	La complejidad temporal en base a T es exponencial del orden de $O(2^{2T})$
 	
 	\subsection{Tests}
-	\subsection{Gráficos}
+	\subsection{Gr\'aficos}
 	
 	\begin{center}
-	\includegraphics{ComplejidadGoldbachUniforme.jpg}
+	%RESTAURAR
+	%\includegraphics{ComplejidadGoldbachUniforme.jpg}
 	\end{center}
 	
 	\subsection{Conclusiones}
