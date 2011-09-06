@@ -11,7 +11,7 @@
 %\usepackage{infostyle}                                                  % provee un look & feel similar a un documento Word
 \usepackage[top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry}  % m\'argenes
 \usepackage[ansinew]{inputenc}                                           % permite que los acentos del estilo \'a\'e\'i\'o\'u salgan joya
-\usepackage[spanish, activeacute]{babel}                                 % idioma espaï¿½ol, acentos f\'aciles y deletreo de palabras
+\usepackage[spanish, activeacute]{babel}                                 % idioma espaniol, acentos f\'aciles y deletreo de palabras
 \usepackage{indentfirst}                                                 % permite indentar un parrafo a mano
 \usepackage{caratula}                                                    % incluye caratula est\'andar
 \usepackage{graphicx}                                                    % permite insertar gr\'aficos
@@ -82,35 +82,35 @@
 		
 		El lenguaje utilizado para el trabajo pr\'actico ha sido \emph{Java}, compilando con la versi\'on 1.5 de la Virtual Machine.
 		
-		Este trabajo se acompaï¿½a con los fuentes de la soluci\'on que puede importarse en
-		cualquier Eclipse IDE. 
+		El trabajo se acompa\~{n}a con los fuentes de la soluci\'on que puede importarse en IDE de Eclipse.
+
 		
 	\subsection{Como ejecutar el TP}
 	
-	Desde cualquier Eclipse:
+	\textbf{\underline{Desde l\'inea de comandos}}
+	\begin{itemize}
+			\item{TODO Complete this}
+	\end{itemize}
+
+	\textbf{\underline{Desde el Eclipse}}
 	\begin{itemize}
 			\item{Seleccionar File $\Rightarrow$ Import.}
-			\item{Sseleccionar General $\Rightarrow$ Existing Projects into Workspace $\Rightarrow$ Next.}
+			\item{Seleccionar General $\Rightarrow$ Existing Projects into Workspace $\Rightarrow$ Next.}
 			\item{Seleccionar el directorio llamado Algo3Tp1.}
 			\item{Finish.}
-		\end{itemize}
+	\end{itemize}
 	
-	Desde la vista de \textbf{Package Explorer} bajo el paquete \textbf{src} aparecer\'an tres paquetes mï¿½s y dentro de cada uno de ellos los siguientes archivos de java:
+	Desde la vista de \textbf{Package Explorer} bajo el paquete \textbf{src} aparecer\'an tres paquetes más y dentro de cada uno de ellos los siguientes archivos de java:
 	
+TODO colocar grafico del eclipse
 \begin{itemize}
 	\item problema1
-		\subitem Tennis.java
-		\subitem TestTennis.java
+		\subitem Torneo.java
 	\item problema2
 		\subitem Pizza.java
-		\subitem TestPizza.java
 	\item problema3
 		\subitem Goldbach.java
-		\subitem TestGoldbach.java
 \end{itemize}
-
-	Los archivos Tennis.java, Pizza.java y Goldbach.java contienen los algoritmos soluci\'on.
-	El resto de los archivos que comienzan con \textbf{Test} son los tests asociados.
 
 \newpage
 
@@ -122,25 +122,27 @@
 % Problema1
 \section{Problema1: Torneo}
 \label{sec:problema3}
-	\subsection{Introducciï¿½n}
+	\subsection{Introducci\'on}
 	
-	  Debemos organizar un torneo con cierta cantidad de competidores que la llamaremos n. Si la cantidad de competidores es potencia de 2 o es par, el torneo debe terminar en n - 1 dï¿½as. En cambio si n es impar, el torneo debe terminar en n dï¿½as.
+	  Debemos organizar un torneo con cierta cantidad de competidores que la llamaremos n. Si la cantidad de competidores es potencia de 2 o es par, el torneo debe terminar en n - 1 d\'ias. En cambio si n es impar, el torneo debe terminar en n d\'ias.\\
 	  
-		Para ello, implentaremos un algoritmo que utilice la tï¿½cnica de divide y vencerï¿½s. En cada llamada recursiva, el problema se divide la cantidad de jugadores por 2, se calcula los partidos que juegan entre sï¿½ de la primera mitad de ellos, y luego se combinan esos resultados para la otra mitad de los competidores.
+		Para ello, implentaremos un algoritmo que utilice la t\'ecnica de divide y vencer\'as. En cada llamada recursiva, el problema se divide la cantidad de jugadores por 2, se calcula los partidos que juegan entre s\'i de la primera mitad de ellos, y luego se combinan esos resultados para la otra mitad de los competidores.
 
-	\subsection{Explicaciï¿½n de la soluciï¿½n}
+	\subsection{Explicaci\'on de la soluci\'on}
 	
-	Para que un torneo se pueda armar, el nï¿½mero de competidores debe ser mayor o igual a 2. En cambio, en caso de venir menor cantidad de jugadores, el algoritmo no crearï¿½ el torneo, ya que no tiene sentido realizarlo. 
+	Para que un torneo se pueda armar, el n\'umero de competidores debe ser mayor o igual a 2. En cambio, en caso de venir menor cantidad de jugadores, el algoritmo no crear\'a el torneo, ya que no tiene sentido realizarlo. \\
 	
-	Para resolver el problema, utilizamos una matriz, para ir guardando la tabla de como van quedando los partidos entre cada competidor, y en que dï¿½as ï¿½stos competirï¿½n. La matriz tiene como filas la cantidad de jugadores del torneo, y como columnas la cantidad de dï¿½as que demandarï¿½ este. En ambos casos, no utilizamos el ï¿½ndice 0, solo para facilitar la legibilidad del algoritmo.
+	Para resolver el problema, utilizamos una matriz, para ir guardando la tabla de como van quedando los partidos entre cada competidor, y en que dias \'estos competir\'an. La matriz tiene como filas la cantidad de jugadores del torneo, y como columnas la cantidad de dias que demandar\'a este. En ambos casos, no utilizamos el \'indice 0, solo para facilitar la legibilidad del algoritmo.\\
 	
-	En cada llamada recursiva, el torneo se divide de a mitades, pero nosotros llamamos a recursiï¿½n solo con la primera de ellas, y luego realizamos la etapa de combinaciï¿½n de las subsoluciones, que termina calculando las competiciones para esta mitad de jugadores.
+	En cada llamada recursiva, el torneo se divide de a mitades, pero nosotros llamamos a recursi\'on solo con la primera de ellas, y luego realizamos la etapa de combinaci\'on de las subsoluciones, que termina calculando las competiciones para esta mitad de jugadores.\\
 	
-	Cuando la cantidad de competidores totales (o en cualquier llamada recursiva) es impar, lo que realiza el algoritmo es la de agregar un jugador "`ficticio"', y se generï¿½ el torneo como si este fuese uno real. Para distinguirlo, utilizamos una funciï¿½n que pone a ese jugador como el jugador 0. Luego, es la etapa de combinaciï¿½n la que otorgarï¿½ a ese jugador el oponente en ese dï¿½a, o caso contrario, implicarï¿½a que el jugador ese tiene fecha libre ese dï¿½a, por lo que la matriz final quedarï¿½ en 0.
+	Cuando la cantidad de competidores totales (o en cualquier llamada recursiva) es impar, lo que realiza el algoritmo es la de agregar un jugador "`ficticio"', y se gener\'o el torneo como si este fuese uno real. Para distinguirlo, utilizamos una funci\'on que pone a ese jugador como el jugador 0. Luego, es la etapa de combinaci\'on la que otorgar\'o a ese jugador el oponente en ese d\'ia, o caso contrario, implicar\'ia que el jugador ese tiene fecha libre ese d\'ia, por lo que la matriz final quedar\'a en 0.\\
 	
-	El caso base del algoritmo es cuando quedan 2 jugadores, que los hace competir en el dï¿½a 1 entre si. 
+	El caso base del algoritmo es cuando quedan 2 jugadores, que los hace competir en el d\'ia 1 entre si. 
+
+\newpage
 	
-	\subsection{Pseudo-cï¿½digo}
+\subsection{Pseudo-c\'odigo}
 	
 \begin{algorithmic}
 
@@ -366,100 +368,199 @@
 			
 \end{algorithmic}	
 
-	El costo del algoritmo es el orden que tarda la combinaciï¿½n mï¿½s el en dividir.
+\newpage
+
+	El costo del algoritmo es el orden que tarda la combinaci\'on m\'as el en dividir.
 	
-	Si analizamos la combinaciï¿½n, veamos primero cual es el orden de cuadranteInferiorDerecho. Este recorre n / 2 jugadores, y para cada uno de ellos, chequea n / 2 dias para realizar los cruces en el torneo. El tiempo que se demora es de O ((n / 2) al cuadrado)
+	Si analizamos la combinaci\'on, veamos primero cual es el orden de cuadranteInferiorDerecho. Este recorre n / 2 jugadores, y para cada uno de ellos, chequea n / 2 dias para realizar los cruces en el torneo. El tiempo que se demora es de O ((n / 2) al cuadrado)\\
 	
-	El anï¿½lisis para cuadranteInferiorIzquierdo, y cuadranteSuperiorDerecho es anï¿½alogo el de cuadranteInferiorDerecho, pero al cuadranteInferiorIzquierdo hay que sumarle el tiempo que se demora en colocar el jugador ficticio, que es de O ((n / 2) al cuadrado), ya que nuevamente, recorre n / 2 jugadores y n/2 dï¿½as. 
-	Por lo que, si sumamos los 3 cuadrantes, mï¿½s colocar el jugador ficticio, el tiempo que se demora es O(n al cuadrado). Notesï¿½ tambiï¿½n, cuando la llamada recursiva tiene cantidad de jugadores impar, debe sacar al jugador ficticio, y el orden de este algoritmo tambiï¿½n es de O (n al cuadrado).
+	El an\'alisis para cuadranteInferiorIzquierdo, y cuadranteSuperiorDerecho es an\'aalogo el de cuadranteInferiorDerecho, pero al cuadranteInferiorIzquierdo hay que sumarle el tiempo que se demora en colocar el jugador ficticio, que es de O ((n / 2) al cuadrado), ya que nuevamente, recorre n / 2 jugadores y n/2 d\'ias. 
+
+	Por lo que, si sumamos los 3 cuadrantes, m\'as colocar el jugador ficticio, el tiempo que se demora es O(n al cuadrado). Notes\'e tambi\'en, cuando la llamada recursiva tiene cantidad de jugadores impar, debe sacar al jugador ficticio, y el orden de este algoritmo tambi\'en es de O (n al cuadrado).\\
 	
-	Como realizamos siempre la subdivisiï¿½n en 2 veces, la cantidad de subdivisiones que realiza el algoritmo es log(n) veces.
+	Como realizamos siempre la subdivisi\'on en 2 veces, la cantidad de subdivisiones que realiza el algoritmo es log(n) veces.
 	
-	Por ï¿½ltimo, se debe dar el resultado (que se guarda en un archivo) de como quedo creado el torneo, por lo que se debe recorrer la matriz ya completa, e ir copiando en el archivo los resultados. Esa iteraciï¿½n queda nuevamente O (n al cuadrado)
+	Por \'ultimo, se debe dar el resultado (que se guarda en un archivo) de como quedo creado el torneo, por lo que se debe recorrer la matriz ya completa, e ir copiando en el archivo los resultados. Esa iteraci\'on queda nuevamente O (n al cuadrado) por lo que, el algoritmo se demora en total, O((n al cuadro)  * log(n)) + n al cuadrado))\\
 	
-	Por lo que, el algoritmo se demora en total, O((n al cuadro)  * log(n)) + n al cuadrado))
+	Ahora debemos calcular el algoritmo en funci\'on del tama\~{n}o de entrada.
 	
-	Ahora debemos calcular el algoritmo en funciï¿½n del tamaï¿½o de entrada.
-	
-	T = log(n), ya que para representar un nï¿½mero n, se necesitan log(n) bits.
+	T = log(n), ya que para representar un n\'umero n, se necesitan log(n) bits.
 	
 	Entonces, n = 2 a la T.
 	
-	Entonces, la complejidad del algoritmo en funciï¿½n del tamaï¿½o de entrada es de O( (log 2 a la T) * 2 a la T cuadrado + 2 a la T cuadrado).
+	Entonces, la complejidad del algoritmo en funci\'on del tama\~{n}o de entrada es de O( (log 2 a la T) * 2 a la T cuadrado + 2 a la T cuadrado).
 	
-	\subsection{Tests}
+
+\newpage
+
+\subsection{Tests}
 	
-	Los test se han realizado hasta 5000 competidores de diferentes formas. En ellos hemos notado que obtuvimos un mejor caso en nuestro algoritmo, que es cuando la cantidad de jugadores es potencia de 2, y otro que pareciera ser el peor caso, cuando la cantidad de competidores es de la forma ((2 a la i) + 1), ya que tiene que agregar y sacar jugadores "`ficticios"' en una o mï¿½s veces.
+	Los test se han realizado hasta 5000 competidores de diferentes formas. En ellos hemos notado que obtuvimos un mejor caso en nuestro algoritmo, que es cuando la cantidad de jugadores es potencia de 2, y otro que pareciera ser el peor caso, cuando la cantidad de competidores es de la forma ((2 a la i) + 1), ya que tiene que agregar y sacar jugadores "`ficticios"' en una o m\'as veces.
 	
-	\subsection{Grï¿½ficos}
+\subsection{Gr\'aficos}
 	
 	
 
-	\subsection{Conclusiones}
+\subsection{Conclusiones}
 \newpage
 
 % Problema2
 \section{Problema2: Pizza entre amigos}
 \label{sec:problema2}
-	\subsection{Introducciï¿½n}
+	\subsection{Introducci\'on}
 	Se quiere pedir una pizza extra gigante para un grupo de amigos. Cada uno de los amigos tiene su preferencia de elementos que quiere que est\'en en la pizza y elementos que preferir\'ia que no est\'en.
 	Como no se puede satisfacer todas las preferencias de cada uno de los amigos, se pretende buscar una soluci\'on donde al menos una de las preferencias de cada amigo sea satisfecha, o responder que no es posible.
-	\subsection{Explicaciï¿½n de la soluciï¿½n}
-	Antes de explicar la soluciï¿½n elegida, comentaremos algunas decisiones tomadas ad hoc:
+	\subsection{Explicaci\'on de la soluci\'on}
+	Antes de explicar la soluci\'on elegida, comentaremos algunas decisiones tomadas ad hoc:
 	\begin{itemize}
 		\item En la entrada puede llegar a venir en las preferencias de alguno de los comenzales un ingrediente repetido. Se descartaran las apariciones repetidas de ese ingrediete en caso que la decisi\'on tomada sobre el mismo sea la misma EJ +A+B+A lo tomaremos como +A+B.
 		si alguna de las repeticiones tiene la desici\'on contr\'aria (EJ +A+B-A), entonces asumiremos que este comenzal est\'a satisfecho por defecto ya que cualquier decisi\'on tomada sobre el ingrediente en cuesti\'on lo satisfacer\'a.
 		\item Otro caso ad hoc es cuando en la entrada viene una linea vacia (solo ';'), en este caso asumiremos que no existe una pizza que satisfaga al menos una preferencia de este comenzal ya que este no tiene preferencias.
 	\end{itemize}
-	Fuera de estos casos, asumimos que todos los comenzales tienen al menos una preferencia para la pizza.\\
-	La idea del algoritmo es, usando backtracking, ir recorriendo un arbol de decisiï¿½n donde la altura esta dada por la cantidad de ingredientes posibles + 1 y cada nivel i del arbol se corresponde al iesimo ingrediente cuyos subarboles son de las decisiones de poner o no ese ingrediente en la Pizza.\\
-	En las hojas de este arbol estan todas las posibles combinaciones de pizza, si ya se revisaron todas las posibles combinaciones y ninguna cumpliï¿½ entonces no hay soluciï¿½n para esas preferencias.
-	En cada iteraciï¿½n del algoritmo se van marcando los comenzales que fueron satisfechos con la desiciï¿½n tomada sobre el ingrediente actual, cuando se llega al ï¿½ltimo ingrediente si todos los comenzales estan marcados se devuelve esa pizza, si no se desmarcan y se prueba por otra rama del arbol y se repite el proceso.\\
-	\textbf{Poda1:} Se puede ir chequeando a medida que se va armando la soluciï¿½n parcial si ya todos los comenzales fueron marcados, si pasï¿½ esto se puede terminar antes ya que la soluciï¿½n parcial es la misma que no poner el resto de los ingredientes.\\
-	\textbf{Poda2:} En cada iteraciï¿½n se chequean solo los comenzales que no hayan sido marcados ya en la soluciï¿½n parcial actual, ya que los demas estï¿½n satisfechos y seguiran estandolo cualquiera sea la desiciï¿½n que se tome sobre el resto de la pizza.\\
-	\textbf{Poda3:} Antes de armar el arbol se revisa las preferencias de cada uno de los comenzales para ver cuales son los ingredientes que realmente importan ya que si nadie tiene preferencia (ya sea por que vaya o no en la pizza) sobre algï¿½n ingrediente estï¿½ de mas revisarlo.\\
-	\textbf{Poda4:} Como estamos recorriendo el arbol de decisiï¿½n desde la primera hasta la ï¿½ltima letra (ingrediente) en orden, podemos saber cuando un comenzal no va a poder ser satisfecho con la soluciï¿½n parcial actual comparando el ingrediente actual con el "Mayor" en los que tiene una preferencia el comenzal.\\
-	\textbf{Tip:} Vamos marcando los comenzales que fueron satisfechos junto con que ingrediente fueron satisfechos, por si hay que volver en el arbol se desmarcan solo esos y se prueba otra soluciï¿½n\\
-	\subsection{Pseudo-cï¿½digo}
+
+Fuera de estos casos, asumimos que todos los comenzales tienen al menos una preferencia para la pizza.\\
+	La idea del algoritmo es, usando backtracking, ir recorriendo un arbol de decisi\'on donde la altura esta dada por la cantidad de ingredientes posibles + 1 y cada nivel i del arbol se corresponde al iesimo ingrediente cuyos subarboles son de las decisiones de poner o no ese ingrediente en la Pizza.\\
+	
+En las hojas de este arbol estan todas las posibles combinaciones de pizza, si ya se revisaron todas las posibles combinaciones y ninguna cumpli\'o entonces no hay soluci\'on para esas preferencias.
+	
+En cada iteraci\'on del algoritmo se van marcando los comenzales que fueron satisfechos con la desici\'on tomada sobre el ingrediente actual, cuando se llega al último ingrediente si todos los comenzales estan marcados se devuelve esa pizza, si no se desmarcan y se prueba por otra rama del arbol y se repite el proceso.\\
+
+\textbf{Poda1:} Se puede ir chequeando a medida que se va armando la soluci\'on parcial si ya todos los comenzales fueron marcados, si pas\'o esto se puede terminar antes ya que la soluci\'on parcial es la misma que no poner el resto de los ingredientes.\\
+
+\textbf{Poda2:} En cada iteraci\'on se chequean solo los comenzales que no hayan sido marcados ya en la soluci\'on parcial actual, ya que los demas est\'an satisfechos y seguiran estandolo cualquiera sea la desici\'on que se tome sobre el resto de la pizza.\\
+
+\textbf{Poda3:} Antes de armar el arbol se revisa las preferencias de cada uno de los comenzales para ver cuales son los ingredientes que realmente importan ya que si nadie tiene preferencia (ya sea por que vaya o no en la pizza) sobre algún ingrediente est\'a de mas revisarlo.\\
+
+\textbf{Poda4:} Como estamos recorriendo el arbol de decisi\'on desde la primera hasta la última letra (ingrediente) en orden, podemos saber cuando un comenzal no va a poder ser satisfecho con la soluci\'on parcial actual comparando el ingrediente actual con el "Mayor" en los que tiene una preferencia el comenzal.\\
+
+\textbf{Tip:} Vamos marcando los comenzales que fueron satisfechos junto con que ingrediente fueron satisfechos, por si hay que volver en el arbol se desmarcan solo esos y se prueba otra soluci\'on\\
+	\subsection{Pseudo-c\'odigo}
+	\begin{algorithm}                      % enter the algorithm environment
+	\caption{Pizza}          	       % give the algorithm a caption
+	\label{alg1}  
 	\begin{algorithmic}
 	%Para mas referencia ver http://en.wikibooks.org/wiki/LaTeX/Algorithms_and_Pseudocode
 	\STATE i $\gets$ PrimerIngredienteImportante
-	\STATE backtrack:
-	\STATE poner i en la pizza
-	\STATE marcar comenzales satisfechos
-	\IF {no hay mas comenzales insatisfechos}
-		\STATE \textbf{return} pizza
+	\STATE pizza $\gets$ pizzaVacia
+	\STATE ponerEnLaPizza $\gets$ \TRUE
+	\IF{ backtrack(i, ponerEnLaPizza) }
+		\RETURN pizza
 		\STATE terminar
 	\ELSE
-		\IF{quedan ingredientes sin mirar}
-			\STATE i $\gets$ siguienteIngrediente
-			\STATE llamar backtrack
-			\STATE i $\gets$ anteriorIngrediente
-		\ENDIF
-		\STATE desmarcar comenzales satisfechos
-		\STATE sacar i de la pizza
-		\STATE marcar comenzales satisfechos
-		\IF {no hay mas comenzales insatisfechos}
-			\STATE \textbf{return} pizza
+		\IF{ backtrack(i, !ponerEnLaPizza)}
+			\RETURN pizza
 			\STATE terminar
 		\ELSE
-			\IF{quedan ingredientes sin mirar}
-				\STATE i $\gets$ siguienteIngrediente
-				\STATE llamar backtrack
-				\STATE i $\gets$ anteriorIngrediente
-			\ENDIF
+			\STATE terminar sin soluci\'on
 		\ENDIF
 	\ENDIF
-	\IF{i == PrimerIngredienteImportante}
-		\STATE terminar sin soluciï¿½n
+	\end{algorithmic}
+	\end{algorithm}
+	%%fijate que estas son dos funciones distintas para que queden separadas por un enter por lo menos 
+	\begin{algorithmic}
+	\STATE backtrack(i, ponerEnLaPizza)
+	\IF{ponerEnLaPizza == \TRUE}
+		\STATE poner i en la pizza
+	\ENDIF
+	\STATE marcar comenzales satisfechos 
+	\IF {no hay mas comenzales insatisfechos} 
+		\RETURN \TRUE
 	\ELSE
-		\STATE volver a donde se llamï¿½
+		\IF{quedan ingredientes sin mirar} 
+			\STATE i $\gets$ siguienteIngrediente 
+			\IF{ backtrack(i, ponerEnLaPizza)}
+				\RETURN \TRUE
+			\ELSE
+				\IF{backtrack(i,\TRUE)}
+					\RETURN \TRUE
+				\ELSE
+					\STATE i $\gets$ anteriorIngrediente
+				\ENDIF
+			\ENDIF
+		\ENDIF
+		\STATE desmarcar comenzales satisfechos
+		\IF{ponerEnLaPizza == \TRUE}
+			\STATE sacar i de la pizza
+		\ENDIF
+		\RETURN \FALSE
 	\ENDIF
 	\end{algorithmic}	
+	\subsection{Modelo Elejido}
+	Para calcular la complejidad de este algoritmo utilizaremos el modelo $Uniforme$, ya que por mas que la cantidad de datos de la entrada crezca, las operaciones sobre cada uno de ellos es constante y podemos asumirla en $O(1)$
 	\subsection{Complejidad}
 	
+	$n$ = Cantidad de Ingredientes\\
+	$m$ = Cantidad de Comezales
+	Preguntar si un comenzal prefiere un ingrediente es $O(1)$\\
+	Preguntar si quedan comenzales insatisfechos es $O(1)$\\
+	Armar la soluci\'on es $O(n)$\\
+	Mover un comenzal de una lista a otra es $O(1)$\\
+	   (ya sea vaciando una lista de principio a fin o removiendo del iterador)\\
+	
+	En peor caso el algoritmo recorre todos los nodos del arbol y estos son $2^{n+1} - 1$
+	o sea $O(2^{n})$
+	Por cada vez que recorre un nodo itera sobre todos los comenzales insatisfechos restantes
+	En peor caso esto es $O(m)$
+	
+	Esto deja el algoritmo en una complejidad teorica de $O(2^{n}*m)$\\
+	Considerando que n es acotado por la cantidad de letras en el alfabeto ingles (26) el algoritmo queda dependiendo solo de m o sea $O(m)$
+	
+	Para describir la complejidad en funci\'on el tamaño de entrada debemos considerar que cada comenzal puede llegar a tener hasta 26 preferencias, estos son 52 caracteres por comenzal\\
+	Definimos el tamaño de entrada como:\\
+		$T = log(m*n*2)$\\
+	Sabiendo que n es acotado tomamos:\\
+		$T = log(m)$\\
+	Como la complejidad del algoritmo es $O(m)$ despejamos $n$ en funcion de $T$:\\
+		$m = 2^{T}$\\
 	\subsection{Tests}
-	\subsection{Grï¿½ficos}
+	\textbf{Tipo1:} Un estudio poco profundo nos dir\'ia que los peores casos son aquellos que tiene todas las permutaciones. A estos los llamaremos $Tipo 1$\\
+	Ej.
+	\begin{verbatim}
+	3
+	+A+B+C;
+	+A+B-C;
+	+A-B+C;
+	+A-B-C;
+	-A+B+C;
+	-A+B-C;
+	-A-B+C;
+	-A-B-C;
+	.
+	\end{verbatim}
+	\textbf{Tipo2:}	Evaluando un poco mejor el algoritmo pudimos observar que los peores casos para cada tamaño de entrada los tendr\'a cuando tenga que evaluar en la mayoria de los comenzales en cada ingrediente.\\
+	Sabiendo que el algoritmo primero intenta poner el ingrediente y luego, en caso que no haya solucion prueba no poniendolo lo obligamos a hacer el mayor numero de operaciones por la rama true.\\
+	Tambien tenemos que procurar que no termine hasta haber revisado el último ingrediente asi que ponemos algun comenzal que tenga una preferencia contraria. Si ese comenzal tiene mas de una preferencia entonces se podria satisfacer evitando que se revisen mas ingredientes asi que no le ponemos mas.
+	Los peores casos serian de la forma:
+	\begin{verbatim}
+	3
+	+A+B+C;
+	+A+B+C;
+	 ...
+	+A+B-C;
+	+A-B;
+	-A;
+	.
+	\end{verbatim}
+	\textbf{Tipo3:} Finalmente observamos que los casos de $Tipo 2$ descartaban la decisi\'on de poner un ingrediente casi de inmediato as\'i que intentamos buscando un caso peor aún y nos pusimos la meta de no descartar letras con el podado y ademas que evalue la mayor cantidad posible de comenzales en cada nodo. La soluci\'on fue esta:
+	\begin{verbatim}
+	26
+	+A+B+C+D+E+F+G+H+I+J+K+L+M+N+O+P+Q+R+S+T+U+V+W+X+Y+Z;
+	+Z;
+	+Z;
+	 ...
+	+Z;
+	-Z;
+	.
+	\end{verbatim}	
+	\subsection{Gr\'aficos}
+	%grafico tipo 1
+	%grafico tipo 2
+	%grafico tipo 3
+	Se puede ver en los tres gr\'aficos de peores casos que las mediciones obtenidas concuerdan con la complejidad teorica que habiamos calculado.
+	Tambien se puede observar que las constantes utilizadas para comparar las mediciones con la funci\'on son mucho menores de lo que habiamos calculado en un primer momento como $2^{26}$.
+	Esto puede deberse a que si un comenzal no es marcado en una decisi\'on sobre un ingrediente, puede ser marcado en la contraria achicando el conjunto de comenzales a evaluar.
+	%grafico comparativo
+	En este ultimo gr\'afico se puede comparar las mediciones de los tres tipos de casos juntas. Se puede ver que efectivamente el caso $Tipo 3$ es el peor de todos ya que el primer comenzal hace participar todos los ingredientes y nunca se filtran los comenzales hasta llegar al último ingrediente.
 	\subsection{Conclusiones}
 \newpage
 
@@ -478,7 +579,7 @@
 	Utilizaremos la t\'ecnica de backtraking para generar posibles soluciones e ir al mismo 
 tiempo realizando podas para no recorrer las que no los sean.
 
-	Se analizar\'a tambi\'en la complejidad del algoritmo en base al tamaï¿½o de la entrada utilizando modelos de complejidad.
+	Se analizar\'a tambi\'en la complejidad del algoritmo en base al tama\~{n}o de la entrada utilizando modelos de complejidad.
 		
 	Finalmente se realizar\'an gr\'aficas y analizar\'an peores casos, casos promedios y posibles casos patol\'ogicos.
 	
@@ -615,10 +716,10 @@ De esta forma calculamos el costo del algoritmo recorriendo solo los pares impar
 	$\frac{n}{4} \cdot n = {\frac{n^2}{4}}$ es $O(n^2)$.\\ 
 	\end{center}
 	
-	Ahora bien, para describir la complejidad en funci\'on del tamaï¿½o de la entrada debemos tener en cuenta la representaci\'on del n\'umero de entrada n en la computadora.
+	Ahora bien, para describir la complejidad en funci\'on del tama\~{n}o de la entrada debemos tener en cuenta la representaci\'on del n\'umero de entrada n en la computadora.
 	Un n\'umero n ser\'a representado como $\log n$ bits.
 	
-	Definimos entonces el tamaï¿½o de entrada como:\\
+	Definimos entonces el tama\~{n}o de entrada como:\\
 	
 	\begin{center}
 	$T = \log n$\\
