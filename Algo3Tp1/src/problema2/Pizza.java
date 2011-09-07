@@ -1,227 +1,208 @@
 package problema2;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.Stack;
 
 public final class Pizza {
-
-	public static String SIN_SOLUCION = "No hay Solucion";
-	public long complex;
+	/*simulacion de typedefs de C++*/
+	public class ListaComenzal extends LinkedList<Comenzal>{}
+	public class PilaChar extends Stack<Character>{}
+	public class ListaIngrediente extends LinkedList<Character>{}
+	/*fin typedefs*/
 	
+	public long complex;
+	public int mComenzales;
+	
+	private static final char INGREDIENTE_CENTINELA = (char)0;
+	private boolean hayPosibleSolucion;
+	private ListaComenzal comenzalesInsatisfechos;
+	private ListaComenzal[] comenzalesSatisfechos;//estas podrian tratarse como una cola o una pila
+	private ListaIngrediente ingredientesQueImportan;
+	private PilaChar solucion;
 
-	public class ListaComenzal extends ArrayList<Comenzal> {
-	}
-
-	public class PilaInt extends Stack<Integer> {
-	}
-
-	public int ingredientelimite;
-	public boolean terminoSinSolucion;
-
-	public ListaComenzal comenzalesInsatisfechos;
-	public ListaComenzal[][] comenzalesSatisfechos;// estas podrian tratarse
-													// como una cola
-
-	public char[] ingredientes;
-	public boolean[] importan;// en caso de que ningun Comenzal tenga una
-								// preferencia sobre el ingrediente i // se
-								// llena de false y se van seteando los true a
-								// medida que se lee la entrada y se arma la
-								// preferencia
-	// public int ingredienteActual;
-
-	public PilaInt solucion;
-
-	public Pizza(String data) {
-		this.complex = 1;
-		int nIngredientes = Integer.parseInt(
-				data.substring(0, data.indexOf(10)), 10);
-		this.ingredientelimite = nIngredientes;
-		this.ingredientes = new char[nIngredientes];
+	// En caso de que ningun Comenzal tenga una preferencia sobre el ingrediente i no me interesa evaluarlo para ver si va o no en la pizza
+	// se llena de false y se van seteando los true a medida que se lee la entrada y se arma la preferencia 
+	private boolean[] importan;
+	
+	public Pizza(int nIngredientes){
 		this.importan = new boolean[nIngredientes];
-		this.terminoSinSolucion = false;
-		this.solucion = new PilaInt();
+		this.hayPosibleSolucion = true;
+		this.solucion = new PilaChar();
 		this.comenzalesInsatisfechos = new ListaComenzal();
-		this.comenzalesSatisfechos = new ListaComenzal[2][nIngredientes];
-		for (int i = 0; i < nIngredientes; i++) {
-			this.complex++;
-			this.ingredientes[i] = (char) (65 + i);
+		this.comenzalesSatisfechos = new ListaComenzal[nIngredientes];
+		this.complex=1;
+		this.mComenzales=0;
+		for(int i = 0;i< nIngredientes;i++){
 			this.importan[i] = false;
-			// los comenzales satisfechos los voy guardando en dos listas
-			// distintas para no preguntar dos veces por un mismo ingrediente si
-			// tuve una poda
-			this.comenzalesSatisfechos[0][i] = new ListaComenzal();
-			this.comenzalesSatisfechos[1][i] = new ListaComenzal();
+			//esta lista se va a llenar con los comenzales que en la solucion parcial actual hayan sido satisfechos con el ingrediente i
+			this.comenzalesSatisfechos[i] = new ListaComenzal();
+			this.complex++;
 		}
-		int i = data.indexOf(10) + 1;
-		int j = data.indexOf(59, i);// ';'
-		while (data.charAt(i) != '.') {
-			this.addComenzal(data.substring(i, j));
-			i = j + 2;
-			j = data.indexOf(59, i);
-		}
-
+	}
+	
+	public boolean hayPosibleSolucion(){
+		return this.hayPosibleSolucion;
+	}
+	
+	private int charToInt(char letra) {
+		return ((int)letra) - 65;
 	}
 
-	public void addComenzal(String data) {
-		char[] dat = data.toCharArray();
-
-		if (data.length() > 1) {// hay mas caracteres que solo ';'// con esto
-								// evito crear comenzales sin preferencias y
-								// asumo que se cumplen
-			boolean participa = true;
-			Preferencia[] prefs = new Preferencia[this.ingredientelimite];
-			int maxPref = -1;
-			for (int i = 0; i < data.length() - 1 && participa; i += 2) {
-				this.complex++;
-				Preferencia p = new Preferencia(dat[i + 1], dat[i]);
-				this.importan[(int) dat[i + 1] - 65] = true;
-				if (prefs[(int) dat[i + 1] - 65] == null) {
-					prefs[(int) dat[i + 1] - 65] = p;
-					if ((int) dat[i + 1] - 65 > maxPref)
-						maxPref = (int) dat[i + 1] - 65;
-				} else {
-					// preguntar si hay que evaluar el caso que aparezca mas de
-					// una vez la misma preferencia
+	private char intToChar(int i) {
+		return (char)(i + 65);
+	}
+	
+	public void addComenzal(String preferenciaCompletaComenzal){
+		int cantidadIngredientes = this.importan.length;
+		char[] prefComenzalAux = preferenciaCompletaComenzal.toCharArray();
+		boolean participa = false;
+		if(preferenciaCompletaComenzal.length() > 1){
+			//hay mas caracteres que solo ';'
+			//con esto evito crear comenzales sin preferencias y asumo que no se cumplen ya que como no existen preferencia => no existe preferencia que le haya satisfecho
+			participa = true;
+			Preferencia[] prefs = new Preferencia[cantidadIngredientes];
+			char maxPref = INGREDIENTE_CENTINELA;
+			int i = 0;
+			while( (i < prefComenzalAux.length -1) && (participa) ){
+				Preferencia p = new Preferencia(prefComenzalAux[i+1], prefComenzalAux[i]);
+				char letra = prefComenzalAux[i+1];
+				int nLetra = charToInt(letra);
+				this.importan[nLetra] = true;
+				if(prefs[nLetra] == null){
+					prefs[nLetra] = p;
+					if(letra > maxPref){
+						maxPref = letra;
+					}
+				}else if(!prefs[nLetra].equals(p)){
+				//si la preferencia por el ingrediente es inversa asumo que poniendo o no el ingrediente, el comenzal va a estar satisfecho
+				//asi que ni me gasto en hacerlo participar
 					participa = false;
 				}
+				i+=2;
+				this.complex++;
 			}
-			if (participa)
-				this.comenzalesInsatisfechos.add(new Comenzal(prefs, maxPref));// O(1)
+			if(participa){
+				this.mComenzales++;
+				this.comenzalesInsatisfechos.add(new Comenzal(prefs,maxPref));
+			}
+		}else{
+			this.hayPosibleSolucion=false;
 		}
 	}
-
-	public String resolver() {
-		String resultado = "";
-
-		if (this.backtrack(0, true) && !this.terminoSinSolucion) {
-			resultado = this.convierteSolucion();
-		} else if (this.backtrack(0, false) && !this.terminoSinSolucion) {
-			resultado = this.convierteSolucion();
-		} else {
-			resultado = SIN_SOLUCION;
+	
+	private void terminoCargaComenzales(){
+		this.ingredientesQueImportan = new ListaIngrediente();
+		int cantIngredientes = this.importan.length;
+		for(int i = 0;i<cantIngredientes;i++){
+			if(this.importan[i] == true){
+				this.ingredientesQueImportan.add(intToChar(i));
+			}
+			this.complex++;
 		}
-		return resultado;
 	}
-
-	public String convierteSolucion() {
-		String ret = "";
-		ListIterator<Integer> li = this.solucion.listIterator();
-		while (li.hasNext()){
-			ret += this.ingredientes[li.next()];
+	
+	public String resolver(){
+		String ret ="";
+		this.terminoCargaComenzales();
+		ListIterator<Character> lc = this.ingredientesQueImportan.listIterator();
+		if(lc.hasNext() && this.hayPosibleSolucion()){
+			if(this.backtrack(lc, true)){
+				ret = this.convierteSolucion();
+			}else if(this.backtrack(lc, false)){
+				ret = this.convierteSolucion();
+			}else{
+				ret = "No hay Solución";
+			}
+		}else{
+			ret = "No hay Solución";
 		}
 		return ret;
 	}
-
-	public boolean backtrack(int ingredienteActual, boolean vaEnLaPizza) {
+	
+	public String convierteSolucion(){
+		String ret = "";
+		ListIterator<Character> li = this.solucion.listIterator();
+		while(li.hasNext()){
+			ret += li.next();
+			this.complex++;
+		}
+		return ret;
+	}
+		
+	public boolean backtrack(ListIterator<Character> ingredienteActualIterator,boolean vaEnLaPizza){
+		char ingredienteActual = ingredienteActualIterator.next();
+		Preferencia p = new Preferencia(ingredienteActual, vaEnLaPizza?'+':'-');
+		int ingAct = charToInt(ingredienteActual);
 		boolean termino = false;
 		boolean poda = false;
-		if (vaEnLaPizza)
-			this.solucion.push(ingredienteActual);// si estoy considerando el
-													// caso de que el
-													// ingrediente actual vaya
-													// en la pizza lo agrego a
-													// la solucion
-		ListIterator<Comenzal> insatisfechosIterator = this.comenzalesInsatisfechos
-				.listIterator();
-		// ciclo sobre todos los comenzales que todavia no fueron satisfechos
-		while (insatisfechosIterator.hasNext() && !poda) {
+		if(vaEnLaPizza){//si estoy considerando el caso de que el ingrediente actual vaya en la pizza lo agrego a la solucion
+			this.solucion.push(ingredienteActual);
+		}
+		ListIterator<Comenzal> insatisfechosIterator = this.comenzalesInsatisfechos.listIterator();
+		//ciclo sobre todos los comenzales que todavia no fueron satisfechos
+		while(insatisfechosIterator.hasNext() && !poda){
 			Comenzal i = insatisfechosIterator.next();
-			// se que el iterador está parado en el último ingrediente
-			// revisado y este es menor del actual asi que hay tres opciones:
-			if (ingredienteActual > i.maxPref) {
-				// no tiene mas preferencias => esto significa que no se
-				// pudieron cumplir ninguna de las preferencias del Comenzal
-				// actual con esta solución parcial asi que se corta y se
-				// vuelve a la instancia anterior
+			if(!i.puedeSerSatisfecho(ingredienteActual)){//esto tarda O(1)
 				poda = true;
-				this.complex++;
-			} else {
-				this.complex++;
-				if (i.preferencias[ingredienteActual] != null) {
-					if (i.preferencias[ingredienteActual].prefiere == vaEnLaPizza) {
-						this.comenzalesSatisfechos[vaEnLaPizza ? 1 : 0][ingredienteActual]
-								.add(i);
-						insatisfechosIterator.remove();
-						this.complex++;
+			}else{
+				if(i.prefiere(p)){//esto tarda O(1)
+					this.comenzalesSatisfechos[ingAct].add(i);
+					insatisfechosIterator.remove();
+				}
+			}
+			this.complex++;
+		}
+		if(this.comenzalesSatisfechos[ingAct].isEmpty() && vaEnLaPizza){
+			//si no saque a nadie de insatisfechos y estoy en el caso vaEnLaPizza == true
+			//podo porque si hay solución a partir de este punto va a haber solucion en el llamado false tambien
+			//entonces me evito de hacer la recursion sobre la rama true
+			poda = true;
+		}
+		if(!poda){
+			//si this.comenzalesInsatisfechos esta vacia entonces termino=true
+			if(this.comenzalesInsatisfechos.isEmpty()){
+				termino = true;
+			}else{//chequeo que no se acaben los ingredientes y backtrakeo
+				if(ingredienteActualIterator.hasNext()){
+					termino = this.backtrack(ingredienteActualIterator,true);
+					if(!termino){
+						termino = this.backtrack(ingredienteActualIterator,false);
 					}
 				}
 			}
 		}
-
-		// si estoy en la llamada a backtrack con vaEnLaPizza false es porque
-		// con true falló pero pudo haber marcado algunos como satisfechos
-		// y en esta llamada ya se sabia que no se iban a marcar asi que me
-		// ahorro el chequeo y los agrego como insatisfechos para la llamada
-		// backtrack siguiente
-		// lo unico que mejora esto es no preguntar por la misma letra dos veces
-		// cuando hice PODA y llame a la letra actual con false
-		while (!this.comenzalesSatisfechos[vaEnLaPizza ? 0 : 1][ingredienteActual]
-				.isEmpty()) {
-			this.comenzalesInsatisfechos
-					.add(this.comenzalesSatisfechos[vaEnLaPizza ? 0 : 1][ingredienteActual]
-							.get(0));
-			this.comenzalesSatisfechos[vaEnLaPizza ? 0 : 1][ingredienteActual]
-					.remove(0);
-			this.complex++;
-		}
-
-		if (!poda) {
-			// si this.comenzalesInsatisfechos esta vacia entonces termino=true
-			if (this.comenzalesInsatisfechos.isEmpty()) {
-				termino = true;
-			} else {// chequeo que no se acaben los ingredientes y backtrakeo
-				int siguienteIngrediente = ingredienteActual + 1;
-				while (siguienteIngrediente < this.ingredientelimite
-						&& !this.importan[siguienteIngrediente])
-					siguienteIngrediente++;// esto evita los ingredientes donde
-											// nadie tiene preferencia de por si
-											// o por no y le quita altura al
-											// arbol de backtracking al no
-											// evaluarlo
-				if (siguienteIngrediente != this.ingredientelimite) {
-					termino = this.backtrack(siguienteIngrediente, true);
-					if (!termino)
-						termino = this.backtrack(siguienteIngrediente, false);
-				} else if (!vaEnLaPizza) {
-					this.terminoSinSolucion = true;
-					termino = true;
-				}
+		if(!termino){//si ya termino no me preocupo en restaurar nada y corto
+			while(!this.comenzalesSatisfechos[ingAct].isEmpty()){
+				this.comenzalesInsatisfechos.add(this.comenzalesSatisfechos[ingAct].get(0));
+				this.comenzalesSatisfechos[ingAct].remove(0);
+				this.complex++;
 			}
-		}
-		if (!termino) {// si ya termino no me preocupo en restaurar nada y corto
-		// while(!this.comenzalesSatisfechos[ingredienteActual].isEmpty()){
-		// this.comenzalesInsatisfechos.add(this.comenzalesSatisfechos[ingredienteActual].get(0));
-		// this.comenzalesSatisfechos[ingredienteActual].remove(0);
-		// this.complex++;
-		// }
-			if (vaEnLaPizza)
-				this.solucion.pop();// si vaEnLaPizza == true entonces agregue
-									// el actual al principio de la funcion y si
-									// no termino entonces no hubo solucion
-									// poniendo este ingrediente y hay que
-									// probar sin el
+			if(vaEnLaPizza){
+			//si vaEnLaPizza == true entonces agregue el actual al principio de la funcion y si no termino entonces no hubo solucion poniendo este ingrediente y hay que probar sin el
+				this.solucion.pop();
+			}
+			//se que a la funcion backtrack la llamo si se que hay un siguiente y avanzo el iterador asi que se que hay un elemento anterior
+			ingredienteActualIterator.previous();
 		}
 		return termino;
 	}
 
 	@Override
 	public String toString() {
+		int cantIngredientes = this.importan.length;
 		String ret = "";
-		ret += "" + this.ingredientelimite + "\n";
-		ret += "Insatisfechos: \n";
-		for (Comenzal ig : this.comenzalesInsatisfechos)
-			ret += ig + "\n";
-		for (int j = 0; j < this.ingredientelimite; j++) {
-			ret += "Satisfechos con " + this.ingredientes[j] + ":\n";
-			for (int i = 0; i < 2; i++)
-				for (Comenzal integ : this.comenzalesSatisfechos[i][j])
-					ret += "\t" + integ + "\n";
+		ret +=""+cantIngredientes+"\n";
+		ret +="Insatisfechos: \n";
+		for(Comenzal ig:this.comenzalesInsatisfechos)ret+=ig+"\n";
+		for(int j=0; j< cantIngredientes;j++){
+			ret+="Satisfechos con "+intToChar(j)+":\n";
+			for(Comenzal integ:this.comenzalesSatisfechos[j])ret+="\t"+integ+"\n";
 		}
-		ret += "\ningredientes: ";
-		for (char i : this.ingredientes)
-			ret += i;
-		return ret + "\ncomplex: " + this.complex + "\n";
+		ret+="\ningredientes: ";
+		for(char a = 'A'; a < intToChar(cantIngredientes);a++){
+			ret+=a;
+		}
+		return ret+"\ncomplex: "+this.complex+"\n";
 	}
 }

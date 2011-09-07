@@ -1,6 +1,6 @@
 package problema2;
 
-public class Preferencia implements Comparable<Preferencia> {
+public class Preferencia{
 	public char ingrediente;
 	public boolean prefiere;
 	
@@ -8,20 +8,17 @@ public class Preferencia implements Comparable<Preferencia> {
 		this.ingrediente = ingrediente;
 		this.prefiere = prefiere == '+';
 	}
-	
-	//@Override
-	public int compareTo(Preferencia t) {
-		if(this.ingrediente == t.ingrediente){
-			return 0;
-		}else if(this.ingrediente < t.ingrediente){
-			return -1;
-		}else{
-			return 1;
-		}
+
+	@Override
+	public boolean equals(Object o) {
+		Preferencia p = (Preferencia)o;
+		return this.ingrediente == p.ingrediente && this.prefiere == p.prefiere;
 	}
 
 	@Override
 	public String toString() {
-		return ""+(this.prefiere?'+':'-')+this.ingrediente;
+		return (this.prefiere?"+":"-")+this.ingrediente;
 	}
+	
+	
 }
