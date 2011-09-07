@@ -75,7 +75,7 @@
 \newpage
 
 
-\section{Ejecuci\'on del TP}
+\textbf{Ejecuci\'on del TP}
 \label{sec:ejecucion}
 
 	\subsection{Lenguaje utilizado}
@@ -124,19 +124,19 @@ TODO colocar grafico del eclipse
 \label{sec:problema3}
 	\subsection{Introducci\'on}
 	
-	  Debemos organizar un torneo con cierta cantidad de competidores que la llamaremos n. Si la cantidad de competidores es potencia de 2 o es par, el torneo debe terminar en n - 1 d\'ias. En cambio si n es impar, el torneo debe terminar en n d\'ias.\\
+	  Debemos organizar un torneo que involucre a n competidores. Cada competidor debe jugar exactamente una vez con cada uno de sus oponentes. Adem\'as, cada competidor debe jugar un partido por d\'ia con la sola posible excepci\'on de un d\'ia en el cual no juegue. \\
 	  
-		Para ello, implentaremos un algoritmo que utilice la t\'ecnica de divide y vencer\'as. En cada llamada recursiva, el problema se divide la cantidad de jugadores por 2, se calcula los partidos que juegan entre s\'i de la primera mitad de ellos, y luego se combinan esos resultados para la otra mitad de los competidores.
+		Para ello, implentaremos un algoritmo que utilice la t\'ecnica de divide y vencer\'as. Si la cantidad de competidores es potencia de 2 o es par, el torneo debe terminar en n - 1 d\'ias. En cambio si n es impar, el torneo debe terminar en n d\'ias.
 
 	\subsection{Explicaci\'on de la soluci\'on}
 	
 	Para que un torneo se pueda armar, el n\'umero de competidores debe ser mayor o igual a 2. En cambio, en caso de venir menor cantidad de jugadores, el algoritmo no crear\'a el torneo, ya que no tiene sentido realizarlo. \\
 	
-	Para resolver el problema, utilizamos una matriz, para ir guardando la tabla de como van quedando los partidos entre cada competidor, y en que dias \'estos competir\'an. La matriz tiene como filas la cantidad de jugadores del torneo, y como columnas la cantidad de dias que demandar\'a este. En ambos casos, no utilizamos el \'indice 0, solo para facilitar la legibilidad del algoritmo.\\
+	Para resolver el problema, utilizamos una matriz como estructura de almacenamiento, donde iremos guardando la tabla de los partidos entre cada jugador, y en que dias \'estos competir\'an. La matriz tiene como filas, la cantidad de jugadores del torneo, y como columnas la cantidad de dias que demandar\'a este. En ambos casos, no utilizamos el \'indice 0, solo para facilitar la legibilidad del algoritmo.\\
 	
-	En cada llamada recursiva, el torneo se divide de a mitades, pero nosotros llamamos a recursi\'on solo con la primera de ellas, y luego realizamos la etapa de combinaci\'on de las subsoluciones, que termina calculando las competiciones para esta mitad de jugadores.\\
+	En cada llamada recursiva, el torneo se divide de a mitades, pero nosotros llamamos a recursi\'on solo con la primera de ellas, y luego realizamos la etapa de combinaci\'on, que termina calculando las competiciones para la otra mitad de jugadores.\\
 	
-	Cuando la cantidad de competidores totales (o en cualquier llamada recursiva) es impar, lo que realiza el algoritmo es la de agregar un jugador "`ficticio"', y se gener\'o el torneo como si este fuese uno real. Para distinguirlo, utilizamos una funci\'on que pone a ese jugador como el jugador 0. Luego, es la etapa de combinaci\'on la que otorgar\'o a ese jugador el oponente en ese d\'ia, o caso contrario, implicar\'ia que el jugador ese tiene fecha libre ese d\'ia, por lo que la matriz final quedar\'a en 0.\\
+	Cuando la cantidad de competidores totales (o en cualquier llamada recursiva) es impar, lo que realiza el algoritmo es la de agregar un jugador "`ficticio"', y se genera el torneo como si este fuese uno real. Para distinguirlo, utilizamos una funci\'on que pone a ese jugador como el jugador 0. Luego, es la etapa de combinaci\'on la encargada de asignarle a ese jugador su oponente para ese d\'ia, o caso contrario, implicar\'a que el jugador tiene fecha libre ese d\'ia, por lo que la matriz final quedar\'a en 0.\\
 	
 	El caso base del algoritmo es cuando quedan 2 jugadores, que los hace competir en el d\'ia 1 entre si. 
 
@@ -147,17 +147,18 @@ TODO colocar grafico del eclipse
 \begin{algorithmic}
 
 	%Para mas referencia ver http://en.wikibooks.org/wiki/LaTeX/Algorithms_and_Pseudocode
+	\STATE	crearTorneo(cantJugadores)
 	\IF {cantJugadores == 2}
-		\STATE	fixturePartidos[1][1] = 2;								\STATE	//caso base
-		\STATE	fixturePartidos [2][1] = 1;	  						\STATE	//caso base
+		\STATE	fixturePartidos[1][1] = 2;							
+		\STATE	fixturePartidos [2][1] = 1;	  					
 	\ELSE
-			\IF {(cantJugadores mod 2)!=0}      					\STATE	//cantidad jugadores impar
-				\STATE	torneo(cantJugadores+1);      					//recursion con jugador ficticio
+			\IF {(cantJugadores mod 2)!=0}  \STATE	//cantidad jugadores impar
+				\STATE	torneo(cantJugadores+1);      		
 				
-				\STATE	colocarJugadorFicticio(cantJugadores);  //pone en cero a ese jugador
+				\STATE	colocarJugadorFicticio(cantJugadores);  
 			\ELSE   \STATE	//si cantJugadores es par
 				\STATE	mitadJugadores = cantJugadores / 2; 
-				\STATE	torneo(mitadJugadores);      						// primero el cuadrante sup. izq.  
+				\STATE	torneo(mitadJugadores);  // primero el cuadrante sup. izq.  
 				
 				\STATE	boolean esPar = (mitadJugadores mod 2) ==0;
 				\STATE	cuadranteInferiorIzquierdo(mitadJugadores, cantJugadores, esPar);
@@ -165,119 +166,15 @@ TODO colocar grafico del eclipse
 				\STATE	cuadranteSuperiorDerecho(mitadJugadores, cantJugadores, esPar);
 			\ENDIF
 	 \ENDIF
-	 
-	 \STATE	cuadranteInferiorIzquierdo(mitadJugadores, cantJugadores, esPar)
-	 \IF {esPar}
-			\FOR {cada jugador entre mitadJugadores+1 y cantJugadores}
-				\FOR {cada dia entre 1 y mitadJugadores-1}
-					\STATE	fixturePartidos[jugador][dia] = fixturePartidos[jugador-mitadJugadores][dia] + mitadJugadores;
-				\ENDFOR
-			\ENDFOR
-		\ELSE
-			\FOR {cada jugador entre mitadJugadores + 1 y cantJugadores}
-				\FOR {cada dia entre 1 y mitadJugadores}
-					\IF {fixturePartidos[jugador - mitadJugadores][dia] == 0}
-						\STATE	fixturePartidos[jugador][dia]=0;
-					\ELSE
-						\STATE	fixturePartidos[jugador][dia]= fixturePartidos[jugador-mitadJugadores][dia] + mitadJugadores;
-					\ENDIF
-				\ENDFOR
-			\ENDFOR
-			\STATE	sacarJugadorFicticio(mitadJugadores);
-		\ENDIF
-		
-		
-		\STATE	cuadranteInferiorDerecho(mitadJugadores, cantJugadores, esPar)
-		\IF {esPar}
-			\FOR {cada jugador entre mitadJugadores+1; y cantJugadores}
-				\FOR {cada dia entre mitadJugadores y cantJugadores-1}
-					\IF {jugador>dia}
-						\STATE	fixturePartidos[jugador][dia]=jugador-dia;
-					\ELSE
-						\STATE	fixturePartidos[jugador][dia] = (jugador + mitadJugadores)-dia;
-					\ENDIF
-				\ENDFOR
-			\ENDFOR
-		\ELSE
-			\FOR {cada jugador entre 1 y mitadJugadores}
-				\FOR {cada dia entre mitadJugadores+1; y cantJugadores-1}
-					\IF {jugador+dia <=cantJugadores}
-						\STATE	fixturePartidos[jugador][dia] = jugador+dia;
-					\ELSE
-						\STATE	fixturePartidos[jugador][dia] = jugador + dia - mitadJugadores;
-					\ENDIF
-				\ENDFOR
-			\ENDFOR
-		\ENDIF
-	
-		\STATE	cuadranteSuperiorDerecho(mitadJugadores, cantJugadores, esPar)
-		\IF {esPar}
-			\FOR {cada jugador entre 1 y mitadJugadores}
-				\FOR {cada dia = mitadJugadores; dia <= cantJugadores-1; dia++}
-					\IF {(jugador+dia)<=cantJugadores)}
-						\STATE	fixturePartidos[jugador][dia]=jugador+dia;
-					\ELSE
-						\STATE	fixturePartidos[jugador][dia]=jugador + dia - mitadJugadores;  //NO METER UN FICTICIO
-					\ENDIF
-				\ENDFOR
-			\ENDFOR
-		\ELSE
-			\FOR {cada jugador entre mitadJugadores+1 y cantJugadores}
-				\FOR {cada dia = mitadJugadores+1; dia <= cantJugadores-1; dia++}
-					\IF {jugador>dia}
-						\STATE	fixturePartidos[jugador][dia] = jugador -dia;
-					\ELSE
-						\STATE	fixturePartidos[jugador][dia] = (jugador + mitadJugadores)-dia;
-					\ENDIF
-				\ENDFOR
-			\ENDFOR
-		\ENDIF	
-	
-		\STATE	colocarJugadorFicticio(cantJugadores)
-		\FOR {cada jugador entre 1 y cantJugadores}
-			\FOR {cada dia entre 1 y cantJugadores}
-				\IF {fixturePartidos[jugador][dia] == cantJugadores+1}
-					\STATE	fixturePartidos[jugador][dia]= 0;
-				\ENDIF
-			\ENDFOR
-		\ENDFOR
-		
-		sacarJugadorFicticio(mitadJugadores)
-		\FOR {cada jugador entre 1 y mitadJugadores}
-			\FOR {cada dia entre 1 y mitadJugadores}
-				\IF {fixturePartidos[jugador][dia] == 0}
-					\STATE	fixturePartidos[jugador][dia] = jugador + mitadJugadores; 
-	 				\STATE	fixturePartidos[jugador+mitadJugadores][dia] = jugador;
-				\ENDIF
-			\ENDFOR
-		\ENDFOR
 	 
 \end{algorithmic}	
 
+	\subsection{Modelo Elejido}
+	Para calcular la complejidad de este algoritmo utilizaremos el modelo $Uniforme$, ya que la cantidad de jugadores de un torneo no es significativamente grande, por lo que la cantidad de bits para representar cualquier jugador no deber\'ia ser grande, por lo que consideramos que las operaciones para sumar y restar es constante y podemos asumirla en $O(1)$
+	
 \subsection{Complejidad}
 	
 \begin{algorithmic}
-
-	\IF {cantJugadores == 2}
-			\STATE	fixturePartidos[1][1] = 2;								//caso base
-			\STATE	fixturePartidos [2][1] = 1;	  						//caso base
-	\ELSE
-			\IF {(cantJugadores mod 2)!=0}      					\STATE	//cantidad jugadores impar
-				\STATE	torneo(cantJugadores+1);      					//recursion con jugador ficticio
-				
-				\STATE	colocarJugadorFicticio(cantJugadores);  //pone en cero a ese jugador
-			\ELSE  \STATE		//si cantJugadores es par
-			
-				\STATE	mitadJugadores = cantJugadores / 2; 
-				\STATE	torneo(mitadJugadores);      						// primero el cuadrante sup. izq.  
-				
-				\STATE	boolean esPar = (mitadJugadores mod 2) ==0;
-				\STATE	cuadranteInferiorIzquierdo(mitadJugadores, cantJugadores, esPar);
-				\STATE	cuadranteInferiorDerecho(mitadJugadores, cantJugadores, esPar);
-				\STATE	cuadranteSuperiorDerecho(mitadJugadores, cantJugadores, esPar);
-			\ENDIF
-	 \ENDIF
-	
 	
 	 \STATE	cuadranteInferiorIzquierdo(mitadJugadores, cantJugadores, esPar)
 	 \IF {esPar}
@@ -299,53 +196,6 @@ TODO colocar grafico del eclipse
 			\STATE	sacarJugadorFicticio(mitadJugadores);
 		\ENDIF
 		
-		
-		\STATE	cuadranteInferiorDerecho(mitadJugadores, cantJugadores, esPar)
-		\IF {esPar}
-			\FOR {cada jugador entre mitadJugadores+1; y cantJugadores} 
-				\FOR {cada dia entre mitadJugadores y cantJugadores-1}
-					\IF {jugador>dia} 
-						\STATE	fixturePartidos[jugador][dia]=jugador-dia;
-					\ELSE
-						\STATE	fixturePartidos[jugador][dia] = (jugador + mitadJugadores)-dia;
-					\ENDIF
-				\ENDFOR
-			\ENDFOR
-		\ELSE
-			\FOR {cada jugador entre 1 y mitadJugadores} 
-				\FOR {cada dia entre mitadJugadores+1; y cantJugadores-1}
-					\IF {jugador+dia <=cantJugadores} 
-						\STATE	fixturePartidos[jugador][dia] = jugador+dia;
-					\ELSE
-						\STATE	fixturePartidos[jugador][dia] = jugador + dia - mitadJugadores;
-					\ENDIF
-				\ENDFOR
-			\ENDFOR
-		\ENDIF
-	
-		\STATE	cuadranteSuperiorDerecho(mitadJugadores, cantJugadores, esPar)
-		\IF {esPar}
-			\FOR {cada jugador entre 1 y mitadJugadores} 
-				\FOR {cada dia = mitadJugadores; dia <= cantJugadores-1; dia++}
-					\IF {(jugador+dia)<=cantJugadores} 
-						\STATE	fixturePartidos[jugador][dia]=jugador+dia;
-					\ELSE
-						\STATE	fixturePartidos[jugador][dia]=jugador + dia - mitadJugadores;  //NO METER UN FICTICIO
-					\ENDIF
-				\ENDFOR
-			\ENDFOR
-		\ELSE
-			\FOR {cada jugador entre mitadJugadores+1 y cantJugadores} 
-				\FOR {cada dia = mitadJugadores+1; dia <= cantJugadores-1; dia++}
-					\IF {jugador>dia}
-						\STATE	fixturePartidos[jugador][dia] = jugador -dia;
-					\ELSE
-						\STATE	fixturePartidos[jugador][dia] = (jugador + mitadJugadores)-dia;
-					\ENDIF
-				\ENDFOR
-			\ENDFOR
-		\ENDIF	
-	
 		\STATE	colocarJugadorFicticio(cantJugadores)
 		\FOR {cada jugador entre 1 y cantJugadores}  
 			\FOR {cada dia entre 1 y cantJugadores}
@@ -370,38 +220,42 @@ TODO colocar grafico del eclipse
 
 \newpage
 
-	El costo del algoritmo es el orden que tarda la combinaci\'on m\'as el en dividir.
+	El costo del algoritmo es el orden que tarda la combinaci\'on m\'as el costo de dividir.
 	
-	Si analizamos la combinaci\'on, veamos primero cual es el orden de cuadranteInferiorDerecho. Este recorre n / 2 jugadores, y para cada uno de ellos, chequea n / 2 dias para realizar los cruces en el torneo. El tiempo que se demora es de O ((n / 2) al cuadrado)\\
+	Si analizamos la combinaci\'on, veamos primero cual es el orden de cuadranteInferiorIzquierdo. Este recorre n/2 jugadores, y para cada uno de ellos, chequea n/2 dias para realizar los cruces en el torneo. El tiempo que se demora para hacer esta iteraci\'on es de $O((n/2)^{2}$. Adem\'as, luego de crear los partidos entre estos competidores, si fue llamado con un n\'umero impar, debe sacar los jugadores ficticios, que nuevamente recoore n/2 jugadores, $n/2$ d\'ias. Por lo que, en el peor caso (si n es impar), el algoritmo tiene costo $O(((n)^{2}/2)$.\\  
 	
-	El an\'alisis para cuadranteInferiorIzquierdo, y cuadranteSuperiorDerecho es an\'aalogo el de cuadranteInferiorDerecho, pero al cuadranteInferiorIzquierdo hay que sumarle el tiempo que se demora en colocar el jugador ficticio, que es de O ((n / 2) al cuadrado), ya que nuevamente, recorre n / 2 jugadores y n/2 d\'ias. 
+	El an\'alisis para cuadranteInferiorDerecho, y cuadranteSuperiorDerecho es an\'aalogo el de cuadranteInferiorIzquierdo, pero no debe colocar al jugador ficticio, por lo que el orden de cada uno es de $O((n/2)^{2}$.
 
-	Por lo que, si sumamos los 3 cuadrantes, m\'as colocar el jugador ficticio, el tiempo que se demora es O(n al cuadrado). Notes\'e tambi\'en, cuando la llamada recursiva tiene cantidad de jugadores impar, debe sacar al jugador ficticio, y el orden de este algoritmo tambi\'en es de O (n al cuadrado).\\
+	Por lo que, si sumamos los 3 cuadrantes, m\'as colocar el jugador ficticio, el tiempo que se demora es $O(n^{2})$. Notes\'e tambi\'en, cuando la llamada recursiva tiene cantidad de jugadores impar, debe sacar al jugador ficticio que se agrego previamente, y el orden de este algoritmo tambi\'en es de $O(n^{2})$.\\
 	
-	Como realizamos siempre la subdivisi\'on en 2 veces, la cantidad de subdivisiones que realiza el algoritmo es log(n) veces.
+	Como realizamos siempre la subdivisi\'on en 2 veces, la cantidad de subdivisiones que realiza el algoritmo es $log(n)$ veces.\\
 	
-	Por \'ultimo, se debe dar el resultado (que se guarda en un archivo) de como quedo creado el torneo, por lo que se debe recorrer la matriz ya completa, e ir copiando en el archivo los resultados. Esa iteraci\'on queda nuevamente O (n al cuadrado) por lo que, el algoritmo se demora en total, O((n al cuadro)  * log(n)) + n al cuadrado))\\
+	Por lo tanto, el algoritmo se demora en total, $O((n^{2}) * log(n)) + n^{2}))$.\\
 	
-	Ahora debemos calcular el algoritmo en funci\'on del tama\~{n}o de entrada.
+	Ahora debemos calcular el algoritmo en funci\'on del tama\~{n}o de entrada.\\
 	
-	T = log(n), ya que para representar un n\'umero n, se necesitan log(n) bits.
+	$T = \log n$\\, ya que para representar un n\'umero n, se necesitan $\log n$ bits.
 	
-	Entonces, n = 2 a la T.
+	Entonces, $n = 2^{T}$.
 	
-	Entonces, la complejidad del algoritmo en funci\'on del tama\~{n}o de entrada es de O( (log 2 a la T) * 2 a la T cuadrado + 2 a la T cuadrado).
-	
+	Entonces, la complejidad del algoritmo en funci\'on del tama\~{n}o de entrada es de $O((2^{T} * log 2^{T})$.
 
 \newpage
 
 \subsection{Tests}
 	
-	Los test se han realizado hasta 5000 competidores de diferentes formas. En ellos hemos notado que obtuvimos un mejor caso en nuestro algoritmo, que es cuando la cantidad de jugadores es potencia de 2, y otro que pareciera ser el peor caso, cuando la cantidad de competidores es de la forma ((2 a la i) + 1), ya que tiene que agregar y sacar jugadores "`ficticios"' en una o m\'as veces.
+	Si estudiamos previamente como est\'a formado el algoritmo, podemos preveer que este se comportar\'a mejor con n\'umeros que son potencia de 2, ya que no debe colocar ni sacar jugadores ficticios. Por otro lado, con que m\'as veces realice esta operaci\'on de agregar y sacar jugadores que no forman parte del torneo, el algoritmo a priori, deber\'ia ser m\'as costoso.
+	 Realizaremos distintas mediciones, para conocer si estas previsiones son reales o no. Trataremos de realizar torneos con 3 tipos de datos de entrada.\\
+	 
+	 Tipo 1) Usaremos n\'meros potencia de 2, para ver si efectivamente, el algoritmo presenta un mejor caso para este tipo de torneos.
+	 Tipo 2) Realizaremos torneos con cantidad de jugadores impares, donde este n\'mero sea igual a un n\'mero potencia de 2 sumado 1. Con este tipo de valores ( y m\'as para n\'umeros grandes) trataremos de corroborar si efectivamente es un peor caso o no.
+	 Tipo 33) Por \'ultimo, haremos mediciones con n\'umeros que no pertenezcan a los primeros 2 tipos, para ver como se comporta el algoritmo, y si estamos en presencia de alg\'un mejor o peor caso. 
 	
 \subsection{Gr\'aficos}
 	
-	
-
 \subsection{Conclusiones}
+
+	Hemos podido notar, que el algoritmo se comporta de acuerdo a lo esperado. Los mejores casos del algoritmo es cuando la cantidad de jugadores es potencia de 2, y los peores son cuando la cantidad de jugadores es de la forma $(2^{i}+1)$, con i cualquier n\'umero entero mayor a 1. Por otro lado, los n\'meros restantes se comportan de acuerdo a la cantidad de veces que deban realizar estas operaciones de agregar y sacar ficticios, pero no son ni los mejores, ni los peores casos.
 \newpage
 
 % Problema2
@@ -440,28 +294,25 @@ En cada iteraci\'on del algoritmo se van marcando los comensales que fueron sati
 
 \newpage
 	\subsection{Pseudo-c\'odigo}
-	\begin{algorithm}                      % enter the algorithm environment
-	\caption{EncontrarPizza}               % give the algorithm a caption
-	\label{alg1}  
+	\begin{algorithm}			% enter the algorithm environment
+	\caption{EncontrarPizza}		% give the algorithm a caption
+	\label{alg1}  				% Para mas referencia ver http://en.wikibooks.org/wiki/LaTeX/Algorithms_and_Pseudocode
 	\begin{algorithmic}
-	%Para mas referencia ver http://en.wikibooks.org/wiki/LaTeX/Algorithms_and_Pseudocode
+	
 	\STATE i $\gets$ PrimerIngredienteImportante
 	\STATE pizza $\gets$ pizzaVacia
 	\STATE ponerEnLaPizza $\gets$ \TRUE
 	\IF{ backtrack(i, ponerEnLaPizza) }
 		\RETURN pizza
-		\STATE terminar
 	\ELSE
 		\IF{ backtrack(i, !ponerEnLaPizza)}
 			\RETURN pizza
-			\STATE terminar
 		\ELSE
-			\STATE terminar sin soluci\'on
+			\RETURN sin soluci\'on
 		\ENDIF
 	\ENDIF
 	\end{algorithmic}
 	\end{algorithm}
-	%%fijate que estas son dos funciones distintas para que queden separadas por un enter por lo menos 
 	\begin{algorithmic}
 	\STATE backtrack(i, ponerEnLaPizza)
 	\IF{ponerEnLaPizza == \TRUE}
@@ -491,34 +342,48 @@ En cada iteraci\'on del algoritmo se van marcando los comensales que fueron sati
 	\ENDIF
 	\end{algorithmic}	
 	\subsection{Modelo Elejido}
-	Para calcular la complejidad de este algoritmo utilizaremos el modelo $Uniforme$, ya que por mas que la cantidad de datos de la entrada crezca, las operaciones sobre cada uno de ellos es constante y podemos asumirla en $O(1)$
+	Para calcular la complejidad de este algoritmo utilizaremos el modelo $Uniforme$, ya que por m\'as que la cantidad de datos de la entrada crezca, las operaciones sobre cada uno de ellos es constante y podemos asumirla en $O(1).$
 	\subsection{Complejidad}
-	
+
+	\noindent{Siendo:}\\
 	$n$ = Cantidad de Ingredientes\\
-	$m$ = Cantidad de Comezales
-	Preguntar si un comensal prefiere un ingrediente es $O(1)$\\
-	Preguntar si quedan comensales insatisfechos es $O(1)$\\
-	Armar la soluci\'on es $O(n)$\\
-	Mover un comensal de una lista a otra es $O(1)$\\
+	$m$ = Cantidad de Comezales\\
+
+	\noindent{Las siguientes acciones toman:}
+	\noindent{$O(1)$ Preguntar si un comensal prefiere un ingrediente}\\
+	$O(1)$ Preguntar si quedan comensales insatisfechos\\
+	$O(n)$ Armar la soluci\'on\\
+	$O(1)$ Mover un comensal de una lista a otra\\
 	   (ya sea vaciando una lista de principio a fin o removiendo del iterador)\\
 	
 	En peor caso el algoritmo recorre todos los nodos del arbol y estos son $2^{n+1} - 1$
-	o sea $O(2^{n})$
+	o sea $O(2^{n})$.
 	Por cada vez que recorre un nodo itera sobre todos los comensales insatisfechos restantes
-	En peor caso esto es $O(m)$
+	En peor caso esto es $O(m)$.
 	
-	Esto deja el algoritmo en una complejidad teorica de $O(2^{n}*m)$\\
-	Considerando que n es acotado por la cantidad de letras en el alfabeto ingles (26) el algoritmo queda dependiendo solo de m o sea $O(m)$
+	Esto deja el algoritmo en una complejidad teorica de $O(2^{n}*m)$.\\
+	Considerando que n es acotado por la cantidad de letras en el alfabeto ingles (26) el algoritmo queda dependiendo solo de m o sea $O(m)$.\\
 	
-	Para describir la complejidad en funci\'on el tamaño de entrada debemos considerar que cada comensal puede llegar a tener hasta 26 preferencias, estos son 52 caracteres por comensal\\
-	Definimos el tamaño de entrada como:\\
-		$T = log(m*n*2)$\\
-	Sabiendo que n es acotado tomamos:\\
-		$T = log(m)$\\
-	Como la complejidad del algoritmo es $O(m)$ despejamos $n$ en funcion de $T$:\\
-		$m = 2^{T}$\\
+	Para describir la complejidad en funci\'on el tamaño de entrada debemos considerar que cada comensal puede llegar a tener hasta $26$ preferencias, estos son $52$ caracteres por comensal\\
+
+	Definimos el tamaño de entrada como:
+
+	\begin{center}	
+	$T = log(m*n*2)$\\
+	\end{center}
+
+	Sabiendo que n es acotado tomamos:
+	\begin{center}	
+	$T = log(m)$\\
+	\end{center}
+
+	Como la complejidad del algoritmo es $O(m)$ despejamos $n$ en funcion de $T$:
+	\begin{center}	
+	$m = 2^{T}$\\
+	\end{center}	
+
 	\subsection{Tests}
-	\textbf{Tipo1:} Un estudio poco profundo nos dir\'ia que los peores casos son aquellos que tiene todas las permutaciones. A estos los llamaremos $Tipo 1$\\
+	\textbf{Tipo1:} Un estudio poco profundo nos dir\'ia que los peores casos son aquellos que tiene todas las permutaciones. A estos los llamaremos de $Tipo 1$\\
 	Ej.
 	\begin{verbatim}
 	3
@@ -532,21 +397,23 @@ En cada iteraci\'on del algoritmo se van marcando los comensales que fueron sati
 	-A-B-C;
 	.
 	\end{verbatim}
-	\textbf{Tipo2:}	Evaluando un poco mejor el algoritmo pudimos observar que los peores casos para cada tamaño de entrada los tendr\'a cuando tenga que evaluar en la mayoria de los comensales en cada ingrediente.\\
-	Sabiendo que el algoritmo primero intenta poner el ingrediente y luego, en caso que no haya solucion prueba no poniendolo lo obligamos a hacer el mayor numero de operaciones por la rama true.\\
-	Tambien tenemos que procurar que no termine hasta haber revisado el último ingrediente asi que ponemos algun comensal que tenga una preferencia contraria. Si ese comensal tiene mas de una preferencia entonces se podria satisfacer evitando que se revisen mas ingredientes asi que no le ponemos mas.
-	Los peores casos serian de la forma:
+
+	\textbf{Tipo2:}	Investigando un poco m\'as el algoritmo pudimos observar que los peores casos para cada tamaño de entrada ocurrir\'an cuando tenga que evaluar cada ingrediente en la mayoria de los comensales.\\
+	Sabiendo que el algoritmo primero intenta poner el ingrediente y luego, en caso que no haya soluci\'on prueba no poniendolo lo obligamos a hacer el mayor n\'umero de operaciones por la rama true.\\
+	Tambien tenemos que procurar que no termine hasta haber revisado el \'ultimo ingrediente as\'i que ponemos algun comensal que tenga una preferencia contraria. Si ese comensal tiene m\'as de una preferencia entonces se podr\'ia satisfacer evitando que se revisen m\'as ingredientes as\'i que no le ponemos m\'as.
+	Los peores casos ser\'ian de la forma:
 	\begin{verbatim}
 	3
 	+A+B+C;
 	+A+B+C;
-	 ...
+	...
 	+A+B-C;
 	+A-B;
 	-A;
 	.
 	\end{verbatim}
-	\textbf{Tipo3:} Finalmente observamos que los casos de $Tipo 2$ descartaban la decisi\'on de poner un ingrediente casi de inmediato as\'i que intentamos buscando un caso peor aún y nos pusimos la meta de no descartar letras con el podado y ademas que evalue la mayor cantidad posible de comensales en cada nodo. La soluci\'on fue esta:
+
+	\textbf{Tipo3:} Finalmente observamos que los casos de $Tipo 2$ descartaban la decisi\'on de poner un ingrediente casi de inmediato as\'i que intentamos buscando un caso peor aún y nos pusimos la meta de no descartar letras con el podado y ademas que eval\'ue la mayor cantidad posible de comensales en cada nodo. La soluci\'on fue la siguiente:
 	\begin{verbatim}
 	26
 	+A+B+C+D+E+F+G+H+I+J+K+L+M+N+O+P+Q+R+S+T+U+V+W+X+Y+Z;
@@ -559,25 +426,33 @@ En cada iteraci\'on del algoritmo se van marcando los comensales que fueron sati
 	\end{verbatim}	
 	\subsection{Gr\'aficos}
 	%grafico tipo 1
+		\includegraphics[scale=0.65]{p2/Problema2GraficoTipo1.png}\\
+
+En el gr\'afico aparecen marcadas con X rojas los peores casos para tamaños de entradas desde 8 bits a 15 bits. La funci\'on te\'orica aumentada 70 veces consigue acotar superiormente bastante bien la cantidad de operaciónes que realiza el algoritmo. El problema es exponencial con respecto al tama\~{n}o de la entrada.
+
 	%grafico tipo 2
+		\includegraphics[scale=0.65]{p2/Problema2GraficoTipo2.png}\\
 	%grafico tipo 3
-	Se puede ver en los tres gr\'aficos de peores casos que las mediciones obtenidas concuerdan con la complejidad teorica que habiamos calculado.
-	Tambien se puede observar que las constantes utilizadas para comparar las mediciones con la funci\'on son mucho menores de lo que habiamos calculado en un primer momento como $2^{26}$.
-	Esto puede deberse a que si un comensal no es marcado en una decisi\'on sobre un ingrediente, puede ser marcado en la contraria achicando el conjunto de comensales a evaluar.
-	%grafico comparativo
+		\includegraphics[scale=0.65]{p2/Problema2GraficoTipo3.png}\\
+
+	Los tres gr\'aficos muestran los peores casos en donde las mediciones obtenidas concuerdan con la complejidad teorica que habiamos calculado.
+	Tambi\'en se puede observar que las constantes utilizadas para comparar las mediciones con la funci\'on son mucho menores de lo que habiamos calculado en un primer momento como $2^{26}$.
+	Esto puede deberse a que si un comensal no es marcado en una decisi\'on sobre un ingrediente, puede ser marcado en la contraria achicando el conjunto de comensales a evaluar.\\
+		\includegraphics[scale=0.65]{p2/Problema2GraficoComparacionDeLos3Tipos.png}
 	En este ultimo gr\'afico se puede comparar las mediciones de los tres tipos de casos juntas. Se puede ver que efectivamente el caso $Tipo 3$ es el peor de todos ya que el primer comensal hace participar todos los ingredientes y nunca se filtran los comensales hasta llegar al último ingrediente.
 	\subsection{Conclusiones}
+	Pablito clav\'o un clavito ¿Qu\'e clavito clav\'o Pablito?
 \newpage
 
 
 % Problema3
-\section{Problema3: Conjetura de Goldbach.}
+\section{Problema3: Conjetura de Goldbach}
 \label{sec:problema3}
 	\subsection{Introducci\'on}
 	
-		En matem\'atica una conjetura es una afirmaci\'on que no ha sido demostrada, pero basado en pruebas emp\'iricas parecer\'ia ser cierta. En este contexto la Conjetura de Goldbach o Conjetura fuerte de Goldbach intenta expresar una verdad una relaci\'on entre pares y primos que no ha sido a\'un verificada en su totalidad, dicha conjetura enuncia que:\\
+		En matem\'atica una conjetura es una afirmaci\'on que no ha sido demostrada, pero basado en pruebas emp\'iricas parecer\'ia ser cierta. En este contexto la Conjetura de Goldbach o Conjetura fuerte de Goldbach intenta expresar una verdad una relaci\'on entre pares y primos que no ha sido a\'un verificada en su totalidad y que enuncia que:\\
 		
-		Todo n\'umero par mayor a dos puede ser escrito como suma de dos n\'umeros primos.\\
+		\textit{Todo n\'umero par mayor a dos puede ser escrito como suma de dos n\'umeros primos}.\\
 		
 	En el presente trabajo implentaremos un algoritmo que, basado en la Conjetura de Goldbach y dado un n\'umero par mayor a dos, retorne dos primos que sumados obtengan dicho n\'umero.
 	
@@ -607,63 +482,77 @@ tiempo realizando podas para no recorrer las que no los sean.
 	
 	La primera poda entonces es solo recorrer la primer mitad:\\
 	
+	\begin{center}
 	1 + (n-1),
 	2 + (n-2),
 	...
 	(n/2) + (n/2)\\
+	\end	{center}
 	
 	\textbf{Poda2:} Tambi\'en puede verse que el n\'umero 1 no es de por si primo as\'i que cualquier suma en que participe no ser\'a una soluci\'on v\'alida. Podamos entonces la soluci\'on del 1.\\
 	
+	\begin{center}
 	2 + (n-2),
 	...
 	(n/2) + (n/2)\\
-	
+	\end{center}	
+
 	\textbf{Poda3:} Del mismo modo, tambi\'en podemos observar que cualquier n\'umero par, salvo el 2 no ser\'a primo ya que al ser par ser\'a divisible por 2. Excluimos entonces todas las sumas con pares en ellas salvo la que contenga al 2.\\
 	
+	\begin{center}
 	2 + (n-2),
 	3 + (n-3)
 	...
 	2m+1 (n-(2m+1))
 	...
-	(n/2)-1 + (n/2)+1\\
+	(n/2)-1 + (n/2)+1
+	\end{center}
 	
 	\textbf{Poda4:} El caso del 2 podr\'iamos tratarlo a parte ya que la \'unica suma en la que participa es en la del 4 donde 4 = 2 + 2. No existe otra suma en la que el primo 2 aparezca ya que cualquier par que tenga como un sumando al 2 deberia tener como segundo sumando a otro n\'umero par y adem\'as primo y el \'unico que cumple esa condici\'on es el 2 caso que acabamos de excluir.\\
 		
+	\begin{center}
 	3 + (n-3)
 	...
 	2m+1 (n-(2m+1))
 	...
-	(n/2)-1 + (n/2)+1\\	
+	(n/2)-1 + (n/2)+1
+	\end{center}
 	
 	De esta forma generamos pares de n\'umeros que sumados dan el par inicial y que han sido previamente filtrados por las podas mencionadas. A continuaci\'on se verificar\'a si alguno de ellos es soluci\'on. La definici\'on de soluci\'on en este problema es para cada par si ambos n\'umeros son primos.
 	
-	Para el c\'alculo de si un n\'umero es primo verificaremos si el \'unico divisor positivo adem\'as del uno es si mismo, para ello se dividir\'a por todos los menores.
+	Para el c\'alculo de si un n\'umero es primo verificaremos si el \'unico divisor positivo adem\'as del uno es si mismo, para ello se dividir\'a por todos los menores.\\
 	
-		\textbf{Poda5:} Un optimizaci\'on que se ha tenido en cuenta es verificar los divisores solo hasta la raiz cuadrada.
+		\textbf{Poda5:} Un optimizaci\'on que se ha tenido en cuenta es verificar los divisores solo hasta la raiz cuadrada.\\
 		
 		\textbf{Poda6:} Tambi\'en, si al recorrer un par de sumandos notamos que ambos son iguales, verificaremos si es primo s\'olo uno de ellos, ya que es an\'alogo hacerlo con el par id\'entico.
 		ej: Si el n considerado es 10 y se est\'a evaluando el par 5 + 5, solo verificaremos si 5 es primo una sola vez.
 	
 	Cabe aclarar que para optimizar el algoritmo la generaci\'on de candidatos y la verificaci\'on de soluci\'on se realizar\'an simult\'aneamente. No generaremos todas las soluciones y luego las verificaremos una a una, sino que verificaremos una a una a medida que las vayamos generando.
+
+\newpage
 	
 	\subsection{Pseudo-c\'odigo}
 
-\begin{algorithmic}
+		\begin{algorithm}
+		\caption{Goldbah}
+		\label{alg2}
+		\begin{algorithmic}
 
-	%Para mas referencia ver http://en.wikibooks.org/wiki/LaTeX/Algorithms_and_Pseudocode
-	\FOR {cada n1,n2 candidatos podados}
-        \IF {esPrimo(n1) y esPrimo(n2)}
-            \STATE retornar n1, n2
-        \ENDIF
-	\ENDFOR
+			%Para mas referencia ver http://en.wikibooks.org/wiki/LaTeX/Algorithms_and_Pseudocode
+			\FOR {cada $n_{1}$,$n_{2}$ candidatos podados}
+			\IF {esPrimo($n_{1}$) y esPrimo($n_{2}$)}
+			    \STATE retornar $n_{1}$, $n_{1}$
+			\ENDIF
+			\ENDFOR
 
-\end{algorithmic}	
+		\end{algorithmic}	
+		\end{algorithm}
 
 	\subsection{Modelo elegido}
 	
-		Para el c\'alculo del orden utilizaremos primeramente el modelo \emph{Uniforme} ya que las operaciones b\'asicas que posee el algoritmo no son significativas ni parecen influir tanto como las iteraciones principales.
+		Para el c\'alculo del orden utilizaremos primeramente el modelo \emph{Uniforme} ya que las operaciones b\'asicas que posee el algoritmo no son significativas ni parecen influir tanto como las iteraciones principales.\\
 		
-		De todos modos realizaremos tambi\'en un an\'alisis con el modelo \emph{logar\'itmico} para observar que si alguna operaci\'on b\'asica en particular prepondera sobre otras o puede afectar el algoritmo para alguna entrada en particular
+		De todos modos realizaremos tambi\'en un an\'alisis con el modelo \emph{logar\'itmico} para observar que si alguna operaci\'on b\'asica en particular prepondera sobre otras o puede afectar el algoritmo para alguna entrada en particular\\
 		
 		Analizaremos tambi\'en los peores casos y compararemos ambas gr\'aficas con ambos modelos.
 
@@ -671,25 +560,25 @@ tiempo realizando podas para no recorrer las que no los sean.
 
 \subsection{Complejidad temporal}
 	
-	La siguiente complejidad se calcula en base al modelo \emph{Uniforme}. 
+	La siguiente complejidad se calcula en base al modelo \emph{Uniforme}.\\
 	
 	A continuaci\'on se describe el algoritmo donde se ha asignado a cada paso relevante las complejidades correpondientes:
 
 %RESTAURAR	Aca antes decia verbatim ver si esto anda
-%\begin{alltt}
-	Paso1:    Para cada n1,n2 candidatos O(n/4)
-	Paso2:       Si esPrimo(n1) y esPrimo(n2) entonces 	O($\sqrt{n1}$) + O($\sqrt{n2}$)
+\begin{alltt}
+	Paso1:    Para cada n1,n2 candidatos                    O(n/4)
+	Paso2:       Si esPrimo(n1) y esPrimo(n2)               O(raiz(n1)) + O(raiz(n2))
 	Paso3:         retornar n1, n2
 	Paso4:       Fin Si
 	Paso5:    Fin Para 
-%\end{alltt}	
+\end{alltt}	
 
 		
 	\textbf{Paso1:} Comenzaremos recorriendo de todos los posibles candidatos solo la mitad, ya que la otra mitad corresponde a soluciones an\'alogas (Poda1) recorreremos entonces n/2 pares de cantidatos. De esa mitad solo interesar\'an los pares pares ya que si alguno no lo fuese ser\'ia primo (el caso de 4 se tratar\'a aparte) de este modo de los n/2 pares recorreremos solo la mitad es decir n/4. La complejidad de este ciclo es de O(n/4).\\
 	
 	\textbf{Paso2:} Este paso basar\'a su complejidad en la complejidad de \emph{esPrimo}.
 esPrimo dado un entero positivo n recorre todos los valores menores verificando si alguno
-es divisor. Una optimizaci\'on ha sido recorrer hasta valores hasta la raiz de este modo la complejidad de esPrimo es de $O(\sqrt{n})$ que de todos modos diremos que es acotable por O(n).\\
+es divisor. Una optimizaci\'on ha sido recorrer hasta valores hasta la raiz de este modo la complejidad de esPrimo es de $O(\sqrt{n})$.\\
 
 De esta forma calculamos el costo del algoritmo recorriendo solo los pares impares hasta la mitad. Para ayudar a calcular este orden definamos entonces la funci\'on\\ verificarSoluci\'on(i,n) como esPrimo(i) $\wedge$ esPrimo(n-i);\\
 
@@ -702,29 +591,45 @@ De esta forma calculamos el costo del algoritmo recorriendo solo los pares impar
 	\end{center}
 	
 	\begin{center}
-	Como esPrimo(n) es O($\sqrt(n)$) $\subset$ O(n) es acotable por O(n).\\
+	Como esPrimo(n) es O($\sqrt(n)$).\\
 	\end{center}
 
 	\begin{center}
-	$\displaystyle\sum\limits_{i=1}^{n/4} (2 \cdot i+1) + n - (2 \cdot i+1)$.\\
-	\end{center}
-	
-	\begin{center}
-	Simplificando los t\'erminos $(2 \cdot i+1) $:\\
+	$\displaystyle\sum\limits_{i=1}^{n/4} \sqrt{2 \cdot i+1} + \sqrt{n - (2 \cdot i+1)}$.\\
 	\end{center}
 
 	\begin{center}
-  $\displaystyle\sum\limits_{i=1}^{n/4} n$\\
+	Como $O(\sqrt(2 \cdot i+1)$) y $O(\sqrt{n - (2 \cdot i+1)}$ son acotables por $O(\sqrt{n})$.\\
 	\end{center}
 	
 	\begin{center}
-	$\frac{n}{4} \cdot n = {\frac{n^2}{4}}$ es $O(n^2)$.\\ 
+	Acotando:\\
+	\end{center}
+
+	\begin{center}
+	$\displaystyle\sum\limits_{i=1}^{n/4} \sqrt{n} + \sqrt{n}$\\
+	\end{center}
+
+	\begin{center}
+	$\displaystyle\sum\limits_{i=1}^{n/4} 2\cdot \sqrt{n}$\\
+	\end{center}
+
+	\begin{center}
+	$2\cdot \displaystyle\sum\limits_{i=1}^{n/4} \sqrt{n}$\\
 	\end{center}
 	
+	\begin{center}
+	$2 \cdot \frac{n^2}{4} \cdot \sqrt{n}$\\ 
+	\end{center}
+
+	\begin{center}
+	$\frac{n^{\frac{3}{2}}}{2}$ que es $O(n^{1.5})$\\ 
+	\end{center}
+
 	Ahora bien, para describir la complejidad en funci\'on del tama\~{n}o de la entrada debemos tener en cuenta la representaci\'on del n\'umero de entrada n en la computadora.
 	Un n\'umero n ser\'a representado como $\log n$ bits.
 	
-	Definimos entonces el tama\~{n}o de entrada como:\\
+	Definimos entonces el tama\~{n}o de entrada como:
 	
 	\begin{center}
 	$T = \log n$\\
@@ -736,17 +641,21 @@ De esta forma calculamos el costo del algoritmo recorriendo solo los pares impar
 	$2^T = n$\\
 	\end{center}
 	
-	Como la complejidad de nuestro algoritmo es de $O(n^2)$ aplicamos cuadrado a ambos lados para ver la complejidad en T:
+	Como la complejidad de nuestro algoritmo es de $O(n^{1.5})$ aplicamos cuadrado a ambos lados para ver la complejidad en T:
 	
 	\begin{center}
-	$(2^T)^2 = n^2$\\
+	$(2^T)^{1.5} = n^{1.5}$\\
 	\end{center}
 	
 	\begin{center}
-	$(2^{2T}) = n^2$\\
+	$(2^{1.5T}) = n^{1.5}$\\
+	\end{center}
+
+	\begin{center}
+	$(2^{1.5T})$ es $O(2^{T})$
 	\end{center}
 	
-	La complejidad temporal en base a T es exponencial del orden de $O(2^{2T})$
+	La complejidad temporal en base a T es exponencial del orden de $O(2^{T})$
 	
 	\subsection{Tests}
 	\subsection{Gr\'aficos}
