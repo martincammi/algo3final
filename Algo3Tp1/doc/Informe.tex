@@ -409,34 +409,39 @@ TODO colocar grafico del eclipse
 \label{sec:problema2}
 	\subsection{Introducci\'on}
 	Se quiere pedir una pizza extra gigante para un grupo de amigos. Cada uno de los amigos tiene su preferencia de elementos que quiere que est\'en en la pizza y elementos que preferir\'ia que no est\'en.
-	Como no se puede satisfacer todas las preferencias de cada uno de los amigos, se pretende buscar una soluci\'on donde al menos una de las preferencias de cada amigo sea satisfecha, o responder que no es posible.
+	Como quiz\'as no sea posible satisfacer todas las preferencias de cada uno de los amigos, se pretende buscar una soluci\'on donde al menos una de las preferencias de cada amigo sea satisfecha ó, de no encontrarse una soluci\'on, responder que no es posible.
 	\subsection{Explicaci\'on de la soluci\'on}
 	Antes de explicar la soluci\'on elegida, comentaremos algunas decisiones tomadas ad hoc:
 	\begin{itemize}
-		\item En la entrada puede llegar a venir en las preferencias de alguno de los comenzales un ingrediente repetido. Se descartaran las apariciones repetidas de ese ingrediete en caso que la decisi\'on tomada sobre el mismo sea la misma EJ +A+B+A lo tomaremos como +A+B.
-		si alguna de las repeticiones tiene la desici\'on contr\'aria (EJ +A+B-A), entonces asumiremos que este comenzal est\'a satisfecho por defecto ya que cualquier decisi\'on tomada sobre el ingrediente en cuesti\'on lo satisfacer\'a.
-		\item Otro caso ad hoc es cuando en la entrada viene una linea vacia (solo ';'), en este caso asumiremos que no existe una pizza que satisfaga al menos una preferencia de este comenzal ya que este no tiene preferencias.
+		\item En la entrada puede llegar a venir en las preferencias de alguno de los comensales un ingrediente repetido. Se descartaran las apariciones repetidas de ese ingrediete en caso que la decisi\'on tomada sobre el mismo sea la misma. Por ejemplo las instancia +A+B+A será equivalente a la instancia +A+B.
+		Si alguna de las repeticiones tiene la decisi\'on contraria por ejemplo en el caso de +A+B-A, entonces asumiremos que este comensal est\'a satisfecho ya que cualquier decisi\'on tomada sobre el ingrediente en cuesti\'on lo satisfacer\'a.
+		\item Otro caso ad hoc es cuando en la entrada viene una linea vacia (solo ';'), en este caso asumiremos que no existe una pizza que satisfaga al menos una preferencia de este comensal ya que este no tiene preferencias.
 	\end{itemize}
 
-Fuera de estos casos, asumimos que todos los comenzales tienen al menos una preferencia para la pizza.\\
+Fuera de estos casos, asumimos que todos los comensales tienen al menos una preferencia para la pizza.\\
+
 	La idea del algoritmo es, usando backtracking, ir recorriendo un arbol de decisi\'on donde la altura esta dada por la cantidad de ingredientes posibles + 1 y cada nivel i del arbol se corresponde al iesimo ingrediente cuyos subarboles son de las decisiones de poner o no ese ingrediente en la Pizza.\\
 	
+	\textbf{TODO Grafico de esto}\\
+
 En las hojas de este arbol estan todas las posibles combinaciones de pizza, si ya se revisaron todas las posibles combinaciones y ninguna cumpli\'o entonces no hay soluci\'on para esas preferencias.
 	
-En cada iteraci\'on del algoritmo se van marcando los comenzales que fueron satisfechos con la desici\'on tomada sobre el ingrediente actual, cuando se llega al último ingrediente si todos los comenzales estan marcados se devuelve esa pizza, si no se desmarcan y se prueba por otra rama del arbol y se repite el proceso.\\
+En cada iteraci\'on del algoritmo se van marcando los comensales que fueron satisfechos con la desici\'on tomada sobre el ingrediente actual, cuando se llega al último ingrediente si todos los comensales estan marcados se devuelve esa pizza, si no se desmarcan y se prueba por otra rama del arbol y se repite el proceso.\\
 
-\textbf{Poda1:} Se puede ir chequeando a medida que se va armando la soluci\'on parcial si ya todos los comenzales fueron marcados, si pas\'o esto se puede terminar antes ya que la soluci\'on parcial es la misma que no poner el resto de los ingredientes.\\
+\textbf{Poda1:} Se puede ir chequeando a medida que se va armando la soluci\'on parcial si ya todos los comensales fueron marcados, si pas\'o esto se puede terminar antes ya que la soluci\'on parcial es la misma que no poner el resto de los ingredientes.\\
 
-\textbf{Poda2:} En cada iteraci\'on se chequean solo los comenzales que no hayan sido marcados ya en la soluci\'on parcial actual, ya que los demas est\'an satisfechos y seguiran estandolo cualquiera sea la desici\'on que se tome sobre el resto de la pizza.\\
+\textbf{Poda2:} En cada iteraci\'on se chequean solo los comensales que no hayan sido marcados ya en la soluci\'on parcial actual, ya que los demas est\'an satisfechos y seguir\'an est\'andolo cualquiera sea la desici\'on que se tome sobre el resto de la pizza.\\
 
-\textbf{Poda3:} Antes de armar el arbol se revisa las preferencias de cada uno de los comenzales para ver cuales son los ingredientes que realmente importan ya que si nadie tiene preferencia (ya sea por que vaya o no en la pizza) sobre algún ingrediente est\'a de mas revisarlo.\\
+\textbf{Poda3:} Antes de armar el \'arbol se revisan las preferencias de cada uno de los comensales para ver cuales son los ingredientes que realmente importan ya que si nadie tiene preferencia (ya sea por que vaya o no en la pizza) sobre algún ingrediente obviaremos revisarlo.\\
 
-\textbf{Poda4:} Como estamos recorriendo el arbol de decisi\'on desde la primera hasta la última letra (ingrediente) en orden, podemos saber cuando un comenzal no va a poder ser satisfecho con la soluci\'on parcial actual comparando el ingrediente actual con el "Mayor" en los que tiene una preferencia el comenzal.\\
+\textbf{Poda4:} Como estamos recorriendo el \'arbol de decisi\'on desde la primera hasta la última letra (ingrediente) en orden, podemos saber cuando un comensal no va a poder ser satisfecho con la soluci\'on parcial actual comparando el ingrediente actual con el "Mayor" en los que tiene una preferencia el comensal.\\
 
-\textbf{Tip:} Vamos marcando los comenzales que fueron satisfechos junto con que ingrediente fueron satisfechos, por si hay que volver en el arbol se desmarcan solo esos y se prueba otra soluci\'on\\
+\textbf{Tip:} Vamos marcando junto con los comensales que fueron satisfechos que ingrediente los satisfiso para que, si hay que retroceder en el \'arbol, se desmarquen solo esos y se continúe probando con otra soluci\'on.\\
+
+\newpage
 	\subsection{Pseudo-c\'odigo}
 	\begin{algorithm}                      % enter the algorithm environment
-	\caption{Pizza}          	       % give the algorithm a caption
+	\caption{EncontrarPizza}               % give the algorithm a caption
 	\label{alg1}  
 	\begin{algorithmic}
 	%Para mas referencia ver http://en.wikibooks.org/wiki/LaTeX/Algorithms_and_Pseudocode
@@ -462,8 +467,8 @@ En cada iteraci\'on del algoritmo se van marcando los comenzales que fueron sati
 	\IF{ponerEnLaPizza == \TRUE}
 		\STATE poner i en la pizza
 	\ENDIF
-	\STATE marcar comenzales satisfechos 
-	\IF {no hay mas comenzales insatisfechos} 
+	\STATE marcar comensales satisfechos 
+	\IF {no hay mas comensales insatisfechos} 
 		\RETURN \TRUE
 	\ELSE
 		\IF{quedan ingredientes sin mirar} 
@@ -478,7 +483,7 @@ En cada iteraci\'on del algoritmo se van marcando los comenzales que fueron sati
 				\ENDIF
 			\ENDIF
 		\ENDIF
-		\STATE desmarcar comenzales satisfechos
+		\STATE desmarcar comensales satisfechos
 		\IF{ponerEnLaPizza == \TRUE}
 			\STATE sacar i de la pizza
 		\ENDIF
@@ -491,21 +496,21 @@ En cada iteraci\'on del algoritmo se van marcando los comenzales que fueron sati
 	
 	$n$ = Cantidad de Ingredientes\\
 	$m$ = Cantidad de Comezales
-	Preguntar si un comenzal prefiere un ingrediente es $O(1)$\\
-	Preguntar si quedan comenzales insatisfechos es $O(1)$\\
+	Preguntar si un comensal prefiere un ingrediente es $O(1)$\\
+	Preguntar si quedan comensales insatisfechos es $O(1)$\\
 	Armar la soluci\'on es $O(n)$\\
-	Mover un comenzal de una lista a otra es $O(1)$\\
+	Mover un comensal de una lista a otra es $O(1)$\\
 	   (ya sea vaciando una lista de principio a fin o removiendo del iterador)\\
 	
 	En peor caso el algoritmo recorre todos los nodos del arbol y estos son $2^{n+1} - 1$
 	o sea $O(2^{n})$
-	Por cada vez que recorre un nodo itera sobre todos los comenzales insatisfechos restantes
+	Por cada vez que recorre un nodo itera sobre todos los comensales insatisfechos restantes
 	En peor caso esto es $O(m)$
 	
 	Esto deja el algoritmo en una complejidad teorica de $O(2^{n}*m)$\\
 	Considerando que n es acotado por la cantidad de letras en el alfabeto ingles (26) el algoritmo queda dependiendo solo de m o sea $O(m)$
 	
-	Para describir la complejidad en funci\'on el tamaño de entrada debemos considerar que cada comenzal puede llegar a tener hasta 26 preferencias, estos son 52 caracteres por comenzal\\
+	Para describir la complejidad en funci\'on el tamaño de entrada debemos considerar que cada comensal puede llegar a tener hasta 26 preferencias, estos son 52 caracteres por comensal\\
 	Definimos el tamaño de entrada como:\\
 		$T = log(m*n*2)$\\
 	Sabiendo que n es acotado tomamos:\\
@@ -527,9 +532,9 @@ En cada iteraci\'on del algoritmo se van marcando los comenzales que fueron sati
 	-A-B-C;
 	.
 	\end{verbatim}
-	\textbf{Tipo2:}	Evaluando un poco mejor el algoritmo pudimos observar que los peores casos para cada tamaño de entrada los tendr\'a cuando tenga que evaluar en la mayoria de los comenzales en cada ingrediente.\\
+	\textbf{Tipo2:}	Evaluando un poco mejor el algoritmo pudimos observar que los peores casos para cada tamaño de entrada los tendr\'a cuando tenga que evaluar en la mayoria de los comensales en cada ingrediente.\\
 	Sabiendo que el algoritmo primero intenta poner el ingrediente y luego, en caso que no haya solucion prueba no poniendolo lo obligamos a hacer el mayor numero de operaciones por la rama true.\\
-	Tambien tenemos que procurar que no termine hasta haber revisado el último ingrediente asi que ponemos algun comenzal que tenga una preferencia contraria. Si ese comenzal tiene mas de una preferencia entonces se podria satisfacer evitando que se revisen mas ingredientes asi que no le ponemos mas.
+	Tambien tenemos que procurar que no termine hasta haber revisado el último ingrediente asi que ponemos algun comensal que tenga una preferencia contraria. Si ese comensal tiene mas de una preferencia entonces se podria satisfacer evitando que se revisen mas ingredientes asi que no le ponemos mas.
 	Los peores casos serian de la forma:
 	\begin{verbatim}
 	3
@@ -541,7 +546,7 @@ En cada iteraci\'on del algoritmo se van marcando los comenzales que fueron sati
 	-A;
 	.
 	\end{verbatim}
-	\textbf{Tipo3:} Finalmente observamos que los casos de $Tipo 2$ descartaban la decisi\'on de poner un ingrediente casi de inmediato as\'i que intentamos buscando un caso peor aún y nos pusimos la meta de no descartar letras con el podado y ademas que evalue la mayor cantidad posible de comenzales en cada nodo. La soluci\'on fue esta:
+	\textbf{Tipo3:} Finalmente observamos que los casos de $Tipo 2$ descartaban la decisi\'on de poner un ingrediente casi de inmediato as\'i que intentamos buscando un caso peor aún y nos pusimos la meta de no descartar letras con el podado y ademas que evalue la mayor cantidad posible de comensales en cada nodo. La soluci\'on fue esta:
 	\begin{verbatim}
 	26
 	+A+B+C+D+E+F+G+H+I+J+K+L+M+N+O+P+Q+R+S+T+U+V+W+X+Y+Z;
@@ -558,9 +563,9 @@ En cada iteraci\'on del algoritmo se van marcando los comenzales que fueron sati
 	%grafico tipo 3
 	Se puede ver en los tres gr\'aficos de peores casos que las mediciones obtenidas concuerdan con la complejidad teorica que habiamos calculado.
 	Tambien se puede observar que las constantes utilizadas para comparar las mediciones con la funci\'on son mucho menores de lo que habiamos calculado en un primer momento como $2^{26}$.
-	Esto puede deberse a que si un comenzal no es marcado en una decisi\'on sobre un ingrediente, puede ser marcado en la contraria achicando el conjunto de comenzales a evaluar.
+	Esto puede deberse a que si un comensal no es marcado en una decisi\'on sobre un ingrediente, puede ser marcado en la contraria achicando el conjunto de comensales a evaluar.
 	%grafico comparativo
-	En este ultimo gr\'afico se puede comparar las mediciones de los tres tipos de casos juntas. Se puede ver que efectivamente el caso $Tipo 3$ es el peor de todos ya que el primer comenzal hace participar todos los ingredientes y nunca se filtran los comenzales hasta llegar al último ingrediente.
+	En este ultimo gr\'afico se puede comparar las mediciones de los tres tipos de casos juntas. Se puede ver que efectivamente el caso $Tipo 3$ es el peor de todos ya que el primer comensal hace participar todos los ingredientes y nunca se filtran los comensales hasta llegar al último ingrediente.
 	\subsection{Conclusiones}
 \newpage
 
