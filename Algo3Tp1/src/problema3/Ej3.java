@@ -1,13 +1,47 @@
 package problema3;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+import utils.FileManagerProblema3;
 import utils.Modelo;
 
 
-public class Goldbach {
+public class Ej3 {
 	
-	public static int VACIO = 0;
 	public static String SIN_SOLUCION = "";
 	public Modelo model = new Modelo();
+	
+	
+
+	public static void main(String[] args) {
+		
+		try{
+			FileManagerProblema3 fm = new FileManagerProblema3();
+			fm.abrirArchivo();
+			
+			Ej3 goldBach = new Ej3();
+			String solucion;
+			
+			int numeroPar = fm.getInstancia();
+			while(numeroPar != 0){
+				
+				solucion = goldBach.conjeturaDeGoldbach(numeroPar);
+				fm.guardarSalida(solucion);
+				numeroPar = fm.getInstancia();
+			}
+			
+			fm.escribirSalida();
+			fm.cerrarArchivo();
+		
+		}catch (FileNotFoundException e) {
+			System.out.println("No se puede abrir el archivo in");
+		} catch (IOException e) {
+			System.out.println("Error manipulando el archivo");
+		} catch (NumberFormatException nfe) {
+			System.out.println("Error en el formato del archivo");
+		}	
+	}
 	
 	/**
 	 * Determina si la conjetura de Goldbach es cierta para un numero positivos dado.

@@ -6,55 +6,55 @@ public class TestPrimo {
 	
 	@Test
 	public void esPrimo1(){
-		Goldbach goldBach = new Goldbach();
+		Ej3 goldBach = new Ej3();
 		assertFalse(goldBach.esPrimo(1));
 	}
 	
 	@Test
 	public void esPrimo2(){
-		Goldbach goldBach = new Goldbach();
+		Ej3 goldBach = new Ej3();
 		assertTrue(goldBach.esPrimo(2));
 	}
 	
 	@Test
 	public void esPrimo3(){
-		Goldbach goldBach = new Goldbach();
+		Ej3 goldBach = new Ej3();
 		assertTrue(goldBach.esPrimo(3));
 	}
 	
 	@Test
 	public void esPrimo4(){
-		Goldbach goldBach = new Goldbach();
+		Ej3 goldBach = new Ej3();
 		assertFalse(goldBach.esPrimo(4));
 	}
 	
 	@Test
 	public void esPrimo5(){
-		Goldbach goldBach = new Goldbach();
+		Ej3 goldBach = new Ej3();
 		assertTrue(goldBach.esPrimo(5));
 	}
 	
 	@Test
 	public void esPrimo97(){
-		Goldbach goldBach = new Goldbach();
+		Ej3 goldBach = new Ej3();
 		assertTrue(goldBach.esPrimo(97));
 	}
 	
 	@Test
 	public void esPrimo100(){
-		Goldbach goldBach = new Goldbach();
+		Ej3 goldBach = new Ej3();
 		assertFalse(goldBach.esPrimo(100));
 	}
 	
 	@Test
 	public void esPrimo101(){
-		Goldbach goldBach = new Goldbach();
+		Ej3 goldBach = new Ej3();
 		assertTrue(goldBach.esPrimo(101));
 	}
 	
 	@Test
 	public void primeros1000Primos(){
-		Goldbach goldBach = new Goldbach();
+		Ej3 goldBach = new Ej3();
 		
 		int[] primos = getPrimerosMilPrimos();
 		

@@ -20,7 +20,7 @@ public class GoldBachHelper {
 	 * @return
 	 */
 	public static List<Integer> conjeturaDeGoldbachList(int n){
-		Goldbach goldbach  = new Goldbach();
+		Ej3 goldbach  = new Ej3();
 		List<Integer> list = new ArrayList<Integer>();
 		
 		if(n % 2 != 0 || n == 2 || n == 0 ){ //Poda3: Exluir los pares 
@@ -106,7 +106,7 @@ public class GoldBachHelper {
 	public static void conjeturaDeGarbi(int desde, int hasta){
 		
 		boolean cumplio = false;
-		Goldbach goldbach = new Goldbach();
+		Ej3 goldbach = new Ej3();
 		
 		if(desde % 2 != 0){
 			desde++;
@@ -120,7 +120,7 @@ public class GoldBachHelper {
 				for (Integer primo : list) {
 					if(goldbach.esPrimo(i-primo)){
 						cumplio = true;
-						break;//Al menos uno cumplió ser sumando primo de n
+						break;//Al menos uno cumpliï¿½ ser sumando primo de n
 					}	
 				}
 				
