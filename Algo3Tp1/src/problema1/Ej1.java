@@ -1,4 +1,5 @@
 package problema1;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -13,31 +14,31 @@ public class Ej1 {
 	private static BufferedReader br;
 	/*Datos de entrada*/
 	private static int jugadoresTorneo;
-	private static int fixturePartidos[][];
 	/*Fin de datos de entrada*/
+	private static int fixturePartidos[][]; //guardo la matriz con el fixture
 	private static int QtyOps; //guardo la cantidad de operaciones
 	
-	//abre el archivo
+	//abre el archivo de entrada
 	private static  void abrirInstancias()	throws FileNotFoundException {
 		fr = new FileReader("Tp1Ej1.in");
 		br = new BufferedReader(fr);
 	}
 
-//	//cierra el archivo
+//	//cierra el archivo de entrada
 	private static  void cerrarInstancias() throws IOException {
 		fr.close();
 	}
 	
-	//escribe el resultado en el archivo out. Primero la cantidad de instancias, y luego los pares de soluciones
+	//escribe el resultado en el archivo out. Primero la cantidad de jugadores del torneo, y luego la cantidad de operaciones
 	public static void escribirEnLog() throws IOException {
 		FileWriter fw = new FileWriter("Tp1Ej1.log", true);
 		BufferedWriter bw = new BufferedWriter(fw);
-		bw.write(jugadoresTorneo + "," + QtyOps + "\n");
+		bw.write(jugadoresTorneo + "\t" + QtyOps + "\n");
 		bw.close();
 	}
 	
+	//escribe el fixture en el archivo de salida
 	public static void escribirSalida(int cantJugadores, int diasTorneo) throws IOException {
-		//FIXME LE PUSE PARENTESIS Y COSAS PARA LEER MEJOR. NO ENTREGAR ASI
 		FileWriter fw = new FileWriter("Tp1Ej1.out", true);
 		BufferedWriter bw = new BufferedWriter(fw);
 		String linea;
@@ -45,32 +46,37 @@ public class Ej1 {
 		
 		for (int dia = 1; dia < diasTorneo; dia ++)
 		{
-			linea = "Dia " + dia + " - ";
+			linea = "Dia " + dia + " ";
 			for (int jugador = 1; jugador <= cantJugadores; jugador++)
 			{
-				if (!linea.contains("(" + jugador + " , " + fixturePartidos[jugador][dia] + ") ") && !linea.contains("(" + fixturePartidos[jugador][dia] + " , " + jugador + ")"))
-				{ 
-					linea = linea + "(" + jugador + " , " + fixturePartidos[jugador][dia] + ") ";
+				if (!linea.contains((jugador + "" + fixturePartidos[jugador][dia])) && !linea.contains(""+fixturePartidos[jugador][dia]+ "" + jugador))
+				{
+					if (fixturePartidos[jugador][dia] != 0)
+					{
+						linea = linea + jugador + fixturePartidos[jugador][dia] + " ";
+					}
 				}
 				
 			}
 			bw.write(linea + "\n");
-			bw.write("\n");  //ESPACIO EN BLANCO
 		}
 		
 		bw.close();
 	}
 	
+	//borra el archivo de salida
 	public static  void limpiarSalida() throws IOException {
 		File f = new File("Tp1Ej1.out");
 		f.delete();
 	}
 	
+	//borra el archivo de log, donde guardo la cantidad de jugadores del torneo y la cantidad de operaciones que le demanda realizarlo
 	public static  void limpiarLog() throws IOException {
 		File f = new File("Tp1Ej1.log");
 		f.delete();
 	}
 	
+	//Si hay alguna instancia, devuelve true con la cantidad de jugadores del torneo. Devuelve false si llego al fin de archivo (Con un punto) 
 	private static  boolean hayMasInstancias() throws IOException
 	{
 		String line = br.readLine();
@@ -83,6 +89,7 @@ public class Ej1 {
 		return true;
 	}
 	
+	//Cuando la mitad de jugadores de alguna iteraci�n da impar, debe agregar un jugador "ficticio", que es asociado en esta funci�n con el valor 0.
 	private static void colocarJugadorFicticio(int cantJugadores)
 	{		 
 		for (int jugador = 1; jugador <= cantJugadores; jugador++)  
@@ -93,25 +100,29 @@ public class Ej1 {
 				{
 					fixturePartidos[jugador][dia]= 0;
 				}
+				QtyOps++;
 			}
 		}
 	}
 	
+	//Esta funci�n es la encargada de agarrar todos los jugadores ficticios, y asignarle su oponente.
 	private static void sacarJugadorFicticio(int mitadJugadores)
 	{
 		for (int jugador = 1; jugador <= mitadJugadores; jugador++) 
 		{
 			for (int dia = 1; dia <= mitadJugadores; dia++)
 			{
-				if (fixturePartidos[jugador][dia] == 0) //APARECE JUGAdor ficticio
+				if (fixturePartidos[jugador][dia] == 0) //Si aparece un jugador ficticio
 				{
 					fixturePartidos[jugador][dia] = jugador + mitadJugadores; 
 	 				fixturePartidos[jugador+mitadJugadores][dia] = jugador;
 				}
+				QtyOps++;
 			} 
 		} 
 	}
 	
+	//Calcula el fixture del cuadrante inferior izquierdo
 	private static void cuadranteInferiorIzquierdo(int mitadJugadores, int cantJugadores, boolean esPar)
 	{
 		if (esPar)
@@ -120,7 +131,8 @@ public class Ej1 {
 			{
 				for (int dia = 1; dia <= mitadJugadores-1; dia++)
 				{
-						fixturePartidos[jugador][dia] = fixturePartidos[jugador-mitadJugadores][dia] + mitadJugadores; 
+						fixturePartidos[jugador][dia] = fixturePartidos[jugador-mitadJugadores][dia] + mitadJugadores;
+						QtyOps++;
 				} 
 			}
 		}
@@ -138,12 +150,14 @@ public class Ej1 {
 					{	
 						fixturePartidos[jugador][dia]= fixturePartidos[jugador-mitadJugadores][dia] + mitadJugadores;
 					}
+					QtyOps++;
 				} 
 			} 
 			sacarJugadorFicticio(mitadJugadores);
 		}
 	}
 	
+	//Calcula el fixture del cuadrante inferior derecho
 	private static void cuadranteInferiorDerecho(int mitadJugadores, int cantJugadores, boolean esPar)
 	{
 		if (esPar)
@@ -160,6 +174,7 @@ public class Ej1 {
 					{	
 						fixturePartidos[jugador][dia] = (jugador + mitadJugadores)-dia;
 					}
+					QtyOps++;
 				} 
 			}
 		}
@@ -177,17 +192,18 @@ public class Ej1 {
 					{
 						fixturePartidos[jugador][dia] = jugador + dia - mitadJugadores;
 					}
-					
+					QtyOps++;
 				} 
 			}
 		}
 	}
 	
+	//Calcula el fixture del cuadrante superior derecho
 	private static void cuadranteSuperiorDerecho(int mitadJugadores, int cantJugadores, boolean esPar)
 	{
 		if (esPar)
 		{
-			for (int jugador = 1; jugador<= mitadJugadores; jugador++) //cuadrante superior derecho
+			for (int jugador = 1; jugador<= mitadJugadores; jugador++) 
 			{
 				for (int dia = mitadJugadores; dia <= cantJugadores-1; dia++)
 				{
@@ -197,8 +213,9 @@ public class Ej1 {
 					}
 					else
 					{	
-						fixturePartidos[jugador][dia]=jugador + dia - mitadJugadores;
+						fixturePartidos[jugador][dia]=jugador + dia - mitadJugadores;  
 					}
+					QtyOps++;
 				} 
 			}
 		}
@@ -216,13 +233,14 @@ public class Ej1 {
 					{
 						fixturePartidos[jugador][dia] = (jugador + mitadJugadores)-dia;
 					}
-					
+					QtyOps++;
 				} 
 			}
 		}
 	}
 	
-	private static void torneo(int cantJugadores)
+	//crea el torneo usando divide y vencer�s
+	private static void crearTorneo(int cantJugadores)
 	{
 		int mitadJugadores;
 		
@@ -230,20 +248,22 @@ public class Ej1 {
 		{
 			fixturePartidos[1][1] = 2;		//caso base
 			fixturePartidos [2][1] = 1;
+			QtyOps++;
 		}
 		else
 		{
 			if ((cantJugadores%2)!=0)      //si la cantJugadores impar
 			{
-				torneo(cantJugadores+1);
+				QtyOps++;
+				crearTorneo(cantJugadores+1);
 				
 				colocarJugadorFicticio(cantJugadores);
 			}
 			else   //si cantJugadores es par
 			{
 				mitadJugadores = cantJugadores / 2; 
-				
-				torneo(mitadJugadores);      // primero el cuadrante sup. izq.  
+				QtyOps++;
+				crearTorneo(mitadJugadores);        
 				
 				boolean esPar = (mitadJugadores%2) ==0;
 				cuadranteInferiorIzquierdo(mitadJugadores, cantJugadores, esPar);
@@ -255,39 +275,40 @@ public class Ej1 {
 	
 	public static void main(String[] args) {
 		int dias = 0;
+		int cantJugadores;
 		try { 
 			abrirInstancias();
 			limpiarSalida();
 			limpiarLog();
-			
+		
 			while(hayMasInstancias())
-			{
-				QtyOps = 0;
-				if (jugadoresTorneo%2!=0)  //SI ES IMPAR LA CANTIDAD DE JUGADORES, EL ARREGLO ES DE TAMA�O jugadoresTorneo -1
-					{ dias = jugadoresTorneo + 1; }					
-				else
-					{ dias = jugadoresTorneo; }		
-					
-				fixturePartidos = new int[jugadoresTorneo+1][dias];
-				torneo(jugadoresTorneo);
-				
-				escribirSalida(jugadoresTorneo, dias);
-				escribirEnLog();  //FALTA AGREGAR LA CANTIDAD DE OPERACIONES
-				
-				//ESTO ES PARA VER MEJOR NOSOTROS; NO HAY QUE ENTREGARLO
-				for (int fila = 1; fila <= jugadoresTorneo; fila++)
+			{	
+				if (jugadoresTorneo >= 2)
 				{
-					System.out.println("Solucion Fila " + fila);
-					for (int columna = 1; columna < dias; columna++)
+					QtyOps = 0;
+					if (jugadoresTorneo%2!=0)  //SI ES IMPAR LA CANTIDAD DE JUGADORES, EL ARREGLO ES DE TAMA�O jugadoresTorneo -1
+					{ 
+						cantJugadores = jugadoresTorneo + 2; 
+						dias = jugadoresTorneo + 1; 
+					}					
+					else
 					{
-						System.out.println(fixturePartidos[fila][columna]);
-					}
+						cantJugadores = jugadoresTorneo + 1;
+						dias = jugadoresTorneo;
+					}		
+					
+					QtyOps++;
+					
+					fixturePartidos = new int[cantJugadores][dias];
+					crearTorneo(jugadoresTorneo);
+					
+					escribirSalida(jugadoresTorneo, dias);
+					escribirEnLog();  
 				}
-				//ESTO ES PARA VER MEJOR NOSOTROS; NO HAY QUE ENTREGARLO
-				
 			}
 			
 		    cerrarInstancias();
+		    System.out.println("Los torneos se han creado satisfactoriamente.");
 		}
 		catch (FileNotFoundException e) {
 			System.out.println("No se puede abrir el archivo in");
