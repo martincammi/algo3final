@@ -6,7 +6,7 @@ import java.util.Stack;
 
 public final class Pizza {
 	/*simulacion de typedefs de C++*/
-	public class ListaComenzal extends LinkedList<Comenzal>{}
+	public class ListaComenzal extends LinkedList<Comensal>{}
 	public class PilaChar extends Stack<Character>{}
 	public class ListaIngrediente extends LinkedList<Character>{}
 	/*fin typedefs*/
@@ -84,7 +84,7 @@ public final class Pizza {
 			}
 			if(participa){
 				this.mComenzales++;
-				this.comenzalesInsatisfechos.add(new Comenzal(prefs,maxPref));
+				this.comenzalesInsatisfechos.add(new Comensal(prefs,maxPref));
 			}
 		}else{
 			this.hayPosibleSolucion=false;
@@ -139,10 +139,10 @@ public final class Pizza {
 		if(vaEnLaPizza){//si estoy considerando el caso de que el ingrediente actual vaya en la pizza lo agrego a la solucion
 			this.solucion.push(ingredienteActual);
 		}
-		ListIterator<Comenzal> insatisfechosIterator = this.comenzalesInsatisfechos.listIterator();
+		ListIterator<Comensal> insatisfechosIterator = this.comenzalesInsatisfechos.listIterator();
 		//ciclo sobre todos los comenzales que todavia no fueron satisfechos
 		while(insatisfechosIterator.hasNext() && !poda){
-			Comenzal i = insatisfechosIterator.next();
+			Comensal i = insatisfechosIterator.next();
 			if(!i.puedeSerSatisfecho(ingredienteActual)){//esto tarda O(1)
 				poda = true;
 			}else{
@@ -194,10 +194,10 @@ public final class Pizza {
 		String ret = "";
 		ret +=""+cantIngredientes+"\n";
 		ret +="Insatisfechos: \n";
-		for(Comenzal ig:this.comenzalesInsatisfechos)ret+=ig+"\n";
+		for(Comensal ig:this.comenzalesInsatisfechos)ret+=ig+"\n";
 		for(int j=0; j< cantIngredientes;j++){
 			ret+="Satisfechos con "+intToChar(j)+":\n";
-			for(Comenzal integ:this.comenzalesSatisfechos[j])ret+="\t"+integ+"\n";
+			for(Comensal integ:this.comenzalesSatisfechos[j])ret+="\t"+integ+"\n";
 		}
 		ret+="\ningredientes: ";
 		for(char a = 'A'; a < intToChar(cantIngredientes);a++){

@@ -1,10 +1,10 @@
 package problema2;
 
-public class Comenzal {
+public class Comensal {
 	Preferencia[] preferencias;
 	char maxPref;
 	
-	public Comenzal(Preferencia[] prefs,char maxPref){
+	public Comensal(Preferencia[] prefs,char maxPref){
 		this.preferencias = prefs;
 		this.maxPref = maxPref;
 	}
