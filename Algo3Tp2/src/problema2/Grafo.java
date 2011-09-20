@@ -6,16 +6,13 @@ public class Grafo {
 	
 	public static int NO_HAY_MAS_ADYACENTES = -1;  
 	
-	private int cantNodos;
+	protected int cantNodos;
 	protected int cantEjes;
-	private int raiz;
 
 	private ArrayList[] adyacencias; //Guarda dado un nodo sus adyacencias.
 	private int[] proximoAdyacente; //Puntero a un nodo adyacente de un nodo dado.
-	private boolean[] marcado; //Indica si un vertice esta marcado.
+	protected boolean[] marcado; //Indica si un vertice esta marcado.
 	private boolean[][] ejes; //Indica que ejes que estan en el arbol generador.
-	private int[] etiquetas; //Etiqueta a los nodos.
-	
 	
 	public Grafo(int n){
 		cantNodos = n;
@@ -67,10 +64,6 @@ public class Grafo {
 		return adyacencias[nodo].size();
 	}
 	
-	public boolean esRaiz(int nodo){
-		return (nodo == getRaiz());
-	}
-	
 	//TODO REFACTOR: hacer mas legible
 	/**
 	 * Devuelve los adyacentes de un nodo en orden, devuelve el próximo adyacente. 
@@ -95,15 +88,10 @@ public class Grafo {
 	 * @return
 	 */
 	private int cantAdyacentes(int nodo){
+		if(adyacencias[nodo] == null){
+			return 0;
+		}
 		return adyacencias[nodo].size();
-	}
-	
-	public void setRaiz(int nodo){
-		raiz = nodo;
-	}
-	
-	public int getRaiz(){
-		return raiz;
 	}
 	
 	public boolean estaMarcado(int nodo){
@@ -130,31 +118,19 @@ public class Grafo {
 		ejes[nodo1][nodo2] = false;
 	}
 
-	public void marcarYEtiquetarNodo(int nodo, int etiqueta){
-		marcado[nodo] = true;
-		etiquetas[nodo] = etiqueta;
-	}
-	
-	public void etiquetarNodo(int nodo, int etiqueta){
-		etiquetas[nodo] = etiqueta;
-	}
-	
-	public int etiqueta(int nodo){
-		return etiquetas[nodo];
-	}
-	
-	public boolean estaEtiquetado(int nodo){
-		return etiquetas[nodo] != Etiquetador.ETIQUETA_NULA;
-	}
-	
 	public void mostrarEjesMarcados(){
+		System.out.println(getEjesMarcados());
+	}
+	
+	public String getEjesMarcados(){
+		String res = "";
 		for (int i = 0; i < ejes.length; i++) {
 			for (int j = 0; j < ejes.length; j++) {
 				if(ejes[i][j]){
-					System.out.print("(" + i + "," + j + ")");
+					res = res + "(" + i + "," + j + ")";
 				}
 			}
 		}
-		System.out.println("");
+		return res;
 	}
 }

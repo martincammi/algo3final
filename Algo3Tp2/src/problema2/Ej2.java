@@ -8,10 +8,15 @@ public class Ej2 {
 	public void encontrarAristasPuente(Grafo grafo){
 		
 		Arbol arbol;
-		//PASO1: Elijo la Raiz
-		//PASO2: Armo el ArbolGenerador y lo etiqueto en preorder.
-		arbol = construirArbolGeneradorYEtiquetar(grafo);
-		//PASO3: Calula los hijos de cada nodo
+		//PASO1: Buscar Arbol Generador
+		arbol = construirArbolGenerador(grafo);
+		//PASO2: Elegir Raiz
+		int raiz = arbol.getRaiz();
+		//PASO3: Preorder
+		etiquetarEnPreorder(arbol);
+		arbol.getPreorder();
+		//PASO4: Calula los hijos de cada nodo
+		
 		//calcularHijos(arbol);
 		
 		
@@ -20,13 +25,13 @@ public class Ej2 {
 	/**
 	 * Construye el arbol generador con DFS
 	 */
-	public Arbol construirArbolGeneradorYEtiquetar(Grafo grafo){
+	public Arbol construirArbolGenerador(Grafo grafo){
 		Arbol arbol = new Arbol(grafo.getCantNodos());
-		int raiz = grafo.getNodo();
-		grafo.setRaiz(raiz);
+		int inicial = grafo.getNodo();
+		arbol.setRaiz(inicial);
 		
-		grafo.marcarYEtiquetarNodo(raiz, Etiquetador.getEtiqueta());
-		recorrerYMarcarConDFS(grafo, arbol, raiz);
+		grafo.marcarNodo(inicial);
+		recorrerYMarcarConDFS(grafo, arbol, inicial);
 		
 		return arbol;
 	}
@@ -37,7 +42,7 @@ public class Ej2 {
 		
 		while(adyacente != grafo.NO_HAY_MAS_ADYACENTES){
 			if(!grafo.estaMarcado(adyacente)){
-				grafo.marcarYEtiquetarNodo(adyacente, Etiquetador.getEtiqueta());
+				grafo.marcarNodo(adyacente);
 				grafo.marcarEje(nodo, adyacente);	
 				arbol.agregarEje(nodo, adyacente);
 
@@ -47,12 +52,33 @@ public class Ej2 {
 		}
 	}
 	
+	public void etiquetarEnPreorder(Arbol arbol){
+		
+		int raiz = arbol.getRaiz();
+		arbol.etiquetarNodo(raiz, Etiquetador.getEtiqueta());
+		arbol.marcarNodo(raiz);
+		recorrerYEtiquetar(arbol, raiz);
+	}
+	
+	public void recorrerYEtiquetar(Arbol arbol, int nodo){
+		
+		int adyacente = arbol.proximoAdyacente(nodo);
+		
+		while(adyacente != arbol.NO_HAY_MAS_ADYACENTES){
+			if(!arbol.estaMarcado(adyacente)){
+				arbol.etiquetarNodo(adyacente, Etiquetador.getEtiqueta());
+				arbol.marcarNodo(adyacente);
+
+				recorrerYEtiquetar(arbol, adyacente);
+			}
+			adyacente = arbol.proximoAdyacente(nodo);
+		}
+	}
+	
 	public void calcularHijos(Arbol arbol){
 		
-		for (int i = 0; i < arbol.getHojas().size(); i++) {
-			Integer hijo = (Integer)arbol.getHojas().get(i);
-			recorrerYCalularHijos(arbol, hijo);
-		}
+		int nodoInicial = arbol.cantNodos-1; 		
+		recorrerYCalularHijos(arbol, nodoInicial);
 	}
 	
 	public void recorrerYCalularHijos(Arbol arbol, int nodo){
@@ -68,5 +94,7 @@ public class Ej2 {
 			}
 			adyacente = arbol.proximoAdyacente(nodo);
 		}
+		
+		arbol.addHijo(1);
 	}
 }
