@@ -1,10 +1,12 @@
 package problema2;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Arbol extends Grafo {
 
-	private int cantHijos[]; //cantidad de hijos de un nodo (se incluye a si mismo)
+	private Map<Integer,Integer> cantHijos; //cantidad de hijos de un nodo (se incluye a si mismo)
 	private ArrayList hojas; //lista de nodos hoja.
 	private int[] preorder;
 	private int[] etiquetas; //Etiqueta a los nodos.
@@ -15,6 +17,7 @@ public class Arbol extends Grafo {
 		hojas = new ArrayList();
 		preorder = new int[cantNodos];
 		etiquetas = new int[cantNodos];
+		cantHijos = new HashMap<Integer,Integer>();
 	}
 	
 	public Arbol(int[] paresAdyacencias){
@@ -22,6 +25,11 @@ public class Arbol extends Grafo {
 		hojas = new ArrayList();
 		preorder = new int[cantNodos];
 		etiquetas = new int[cantNodos];
+		cantHijos = new HashMap<Integer,Integer>();
+	}
+	
+	public void agregarHoja(int hoja){
+		hojas.add(hoja);
 	}
 	
 	public int crearRaiz(){
@@ -69,8 +77,22 @@ public class Arbol extends Grafo {
 		return hojas;
 	}
 	
-	public void addHijo(int nodo){
-		cantHijos[nodo]++;
+	public void sumarHijos(int nodo, int suma){
+		
+		if(cantHijos.get(nodo) == null){
+			cantHijos.put(nodo,new Integer(0)); 
+		}
+		
+		Integer antiguoValor = cantHijos.get(nodo); 
+		Integer nuevoValor = antiguoValor + suma;
+		cantHijos.put(nodo, nuevoValor);
+	}
+	
+	public int cantHijos(int nodo){
+		if(cantHijos.get(nodo) == null){
+			cantHijos.put(nodo, new Integer(0));
+		}
+		return cantHijos.get(nodo); 
 	}
 	
 	public void getPreorder(){
@@ -78,6 +100,19 @@ public class Arbol extends Grafo {
 			System.out.print(etiquetas[i] + ",");
 		}
 		System.out.println();
+	}
+	
+	public void showHojas(){
+		for (int i = 0; i < hojas.size(); i++) {
+			System.out.print(hojas.get(i) + ",");
+		}
+		System.out.println();
+	}
+	
+	public void showCantHijos(){
+		for (int i = 0; i < cantHijos.size(); i++) {
+			System.out.println(i+") -> " + cantHijos.get(i));
+		}
 	}
 	
 }

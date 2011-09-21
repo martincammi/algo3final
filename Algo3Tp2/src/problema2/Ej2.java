@@ -10,6 +10,7 @@ public class Ej2 {
 		Arbol arbol;
 		//PASO1: Buscar Arbol Generador
 		arbol = construirArbolGenerador(grafo);
+		arbol.showHojas();
 		//PASO2: Elegir Raiz
 		int raiz = arbol.getRaiz();
 		//PASO3: Preorder
@@ -39,16 +40,22 @@ public class Ej2 {
 	public void recorrerYMarcarConDFS(Grafo grafo, Arbol arbol, int nodo){
 		
 		int adyacente = grafo.proximoAdyacente(nodo);
+		boolean esHoja = true;
 		
 		while(adyacente != grafo.NO_HAY_MAS_ADYACENTES){
 			if(!grafo.estaMarcado(adyacente)){
+				esHoja = false;
 				grafo.marcarNodo(adyacente);
 				grafo.marcarEje(nodo, adyacente);	
-				arbol.agregarEje(nodo, adyacente);
+				//arbol.agregarEje(nodo, adyacente);
+				arbol.agregarEje(adyacente, nodo);
 
 				recorrerYMarcarConDFS(grafo, arbol, adyacente);
 			}
 			adyacente = grafo.proximoAdyacente(nodo);
+		}
+		if(esHoja){
+			arbol.agregarHoja(nodo);
 		}
 	}
 	
@@ -77,24 +84,43 @@ public class Ej2 {
 	
 	public void calcularHijos(Arbol arbol){
 		
-		int nodoInicial = arbol.cantNodos-1; 		
-		recorrerYCalularHijos(arbol, nodoInicial);
+		ArrayList hojas = arbol.getHojas();
+		for (int i = 0; i < hojas.size(); i++) {
+			Integer unaHoja = (Integer)hojas.get(i);
+			recorrerYCalularHijos(arbol, unaHoja);
+		}
+		arbol.sumarHijos(arbol.getRaiz(), 1); // A la raiz le faltará uno
 	}
 	
 	public void recorrerYCalularHijos(Arbol arbol, int nodo){
 		
-		int adyacente = arbol.proximoAdyacente(nodo);
-		
-		while(adyacente != arbol.NO_HAY_MAS_ADYACENTES){
-			if(arbol.etiqueta(adyacente) < arbol.etiqueta(nodo)){ //Es el nodo padre
-				//arbol.hijos[adyacente]++ 
-				//FALTA: contar la cantidad de hijos
-				//SIN TERMINAR!
-				recorrerYCalularHijos(arbol, adyacente);
-			}
-			adyacente = arbol.proximoAdyacente(nodo);
+		boolean recienMeSumo = false;
+		if(arbol.cantHijos(nodo) == 1){ // Si es padre visitado por 1ra vez (ya un hijo se agregó)
+			arbol.sumarHijos(nodo,1);
+			recienMeSumo = true;
 		}
 		
-		arbol.addHijo(1);
+		if(arbol.cantHijos(nodo) == 0){// Si es hoja
+			arbol.sumarHijos(nodo,1);
+		}
+
+		int padre = arbol.proximoAdyacente(nodo);
+		boolean esRaiz = padre == arbol.NO_HAY_MAS_ADYACENTES;
+		
+		if(!esRaiz){
+			
+			if(recienMeSumo){
+				arbol.sumarHijos(padre,arbol.cantHijos(nodo)); //Sumo lo que tengo al padre.
+			}else{
+				arbol.sumarHijos(padre,1);	
+			}
+			
+			recorrerYCalularHijos(arbol, padre);
+			padre = arbol.proximoAdyacente(nodo);
+		}else{
+			
+		}
+		arbol.sumarHijos(padre,1);
 	}
+	
 }
