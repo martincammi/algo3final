@@ -1,6 +1,8 @@
 package problema2;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Grafo {
 	
@@ -10,9 +12,10 @@ public class Grafo {
 	protected int cantEjes;
 
 	private ArrayList[] adyacencias; //Guarda dado un nodo sus adyacencias.
+	public Map ejesFueraDelArbol; //Guarda dado un nodo sus adyacencias.
 	private int[] proximoAdyacente; //Puntero a un nodo adyacente de un nodo dado.
 	protected boolean[] marcado; //Indica si un vertice esta marcado.
-	private boolean[][] ejes; //Indica que ejes que estan en el arbol generador.
+	private int[][] ejes; //Indica que ejes que estan en el arbol generador. //0 vacio. 1. arbol  2. grafo
 	protected int[] etiquetas; //Etiqueta a los nodos.
 	public int lower[];
 	public int higher[];
@@ -20,9 +23,10 @@ public class Grafo {
 	public Grafo(int n){
 		cantNodos = n;
 		adyacencias = new ArrayList[cantNodos];
+		ejesFueraDelArbol = new HashMap();
 		proximoAdyacente = new int[cantNodos];
 		marcado = new boolean[cantNodos];
-		ejes = new boolean[cantNodos][cantNodos];
+		ejes = new int[cantNodos][cantNodos];
 		etiquetas = new int[cantNodos];
 		lower = new int[cantNodos];
 		higher = new int[cantNodos];
@@ -33,9 +37,10 @@ public class Grafo {
 		cantEjes = paresAdyacencias[1];
 		
 		adyacencias = new ArrayList[cantNodos];
+		ejesFueraDelArbol = new HashMap();
 		proximoAdyacente = new int[cantNodos];
 		marcado = new boolean[cantNodos];
-		ejes = new boolean[cantNodos][cantNodos];
+		ejes = new int[cantNodos][cantNodos];
 		etiquetas = new int[cantNodos];
 		lower = new int[cantNodos];
 		higher = new int[cantNodos];
@@ -119,8 +124,12 @@ public class Grafo {
 		marcado[nodo] = false;
 	}
 	
-	public boolean estaMarcadoEje(int nodo1, int nodo2){
-		return ejes[nodo1][nodo2];
+	public boolean estaMarcadoEjeArbol(int nodo1, int nodo2){
+		return ejes[nodo1][nodo2] == 1;
+	}
+	
+	public boolean estaMarcadoEjeGrafo(int nodo1, int nodo2){
+		return ejes[nodo1][nodo2] == 2;
 	}
 	
 	public void etiquetarNodo(int nodo, int etiqueta){
@@ -145,11 +154,11 @@ public class Grafo {
 	}
 	
 	public void marcarEje(int nodo1, int nodo2){
-		ejes[nodo1][nodo2] = true;
+		ejes[nodo1][nodo2] = 1;
 	}
 	
 	public void desMarcarEje(int nodo1, int nodo2){
-		ejes[nodo1][nodo2] = false;
+		ejes[nodo1][nodo2] = 0;
 	}
 
 	public void mostrarEjesMarcados(){
@@ -160,7 +169,7 @@ public class Grafo {
 		String res = "";
 		for (int i = 0; i < ejes.length; i++) {
 			for (int j = 0; j < ejes.length; j++) {
-				if(ejes[i][j]){
+				if(ejes[i][j] == 1){
 					res = res + "(" + i + "," + j + ")";
 				}
 			}

@@ -52,7 +52,9 @@ public class Ej2 {
 				//arbol.marcarEje(nodo, adyacente);
 
 				recorrerYMarcarConDFS(grafo, arbol, adyacente);
-			}
+			}//else{
+				//grafo.ejesFueraDelArbol.put(nodo, adyacente);
+			//}
 			adyacente = grafo.proximoAdyacente(nodo);
 		}
 		if(esHoja){
@@ -80,15 +82,21 @@ public class Ej2 {
 				
 				recorrerYEtiquetar(arbol, adyacente); //Y seguimos etiquetando!
 				lowerValues.add(arbol.lower[adyacente]); //L(w) | v -> w
-			}else if (!arbol.estaMarcadoEje(adyacente, nodo)){ 
-				lowerValues.add(arbol.etiqueta(adyacente)); // w | v -- w
 			}
+			
+			
 			
 			arbol.sumarHijos(nodo, arbol.cantHijos(adyacente)); //Sumo los que acumulo mi hijo
 			adyacente = arbol.proximoAdyacente(nodo);
 		}
+		
+		// ejes w | v -- w
+		//for (int i = 0; i < arbol.ejesFueraDelArbol.size(); i++) {
+		//	lowerValues.add(arbol.etiqueta(adyacente)); // w | v -- w
+		//}
+		
 		lowerValues.add(nodo);
-		arbol.lower[nodo] = minimoSinCero(lowerValues);
+		//arbol.lower[nodo] = minimoSinCero(lowerValues);
 		arbol.sumarHijos(nodo, 1); //Sumo el correspondiente al nodo
 	}
 	
@@ -151,22 +159,19 @@ public class Ej2 {
 	
 	public void recorrerCalcularLowOrder(Arbol arbol, Grafo grafo, int nodo){
 		
-		ArrayList<Integer> adyacentes = arbol.adyacentes(nodo);
-		int lowerEtiqArbol = 0;
-		int lowerEtiqGrafo = 0;
+		ArrayList<Integer> adyacentes = grafo.adyacentes(nodo);
+		ArrayList lowerValues = new ArrayList();
 		
 		//while(adyacente != arbol.NO_HAY_MAS_ADYACENTES){
 		for (Integer adyacente : adyacentes) {
-			recorrerCalcularLowOrder(arbol, arbol, adyacente); //Y seguimos etiquetando!
-
-			if(grafo.estaMarcadoEje(nodo, adyacente)){ //Es arista del árbol
-				lowerEtiqArbol = arbol.lower[adyacente]; //L(w) | v -> w
-			}else{
-				lowerEtiqGrafo = arbol.etiqueta(adyacente); //w | v -> w
+			if(grafo.estaMarcadoEjeArbol(nodo, adyacente)){ //Es arista del árbol
+				lowerValues.add(arbol.lower[adyacente]); //L(w) | v -> w
+			}else if (grafo.estaMarcadoEjeGrafo(nodo, adyacente)){
+				lowerValues.add(arbol.etiqueta(adyacente)); //w | v -> w
 			}
-			
+			recorrerCalcularLowOrder(arbol, grafo, adyacente); //Y seguimos recorriendo!			
 			adyacente = arbol.proximoAdyacente(nodo);
 		}
-		arbol.lower[nodo] = minimoSinCero(nodo,lowerEtiqArbol,lowerEtiqGrafo);
+		arbol.lower[nodo] = minimoSinCero(lowerValues);
 	}
 }

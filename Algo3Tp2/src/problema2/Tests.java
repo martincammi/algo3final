@@ -111,11 +111,11 @@ public class Tests {
 		Grafo grafo = new Grafo(listaDeEntrada);
 		Ej2 ej2 = new Ej2();
 		Arbol arbol = ej2.construirArbolGenerador(grafo);
-		ej2.etiquetarEnPreorder(arbol);
+		//ej2.etiquetarEnPreorder(arbol);
 
+		ej2.calcularLowOrder(arbol,grafo);
 		arbol.showLower();
 		String res = arbol.getTheHojas();
 		assertEquals("0,0,0,3,3,3,", res);
-		//ej2.calcularLowOrder(arbol,grafo);
 	}
 }
