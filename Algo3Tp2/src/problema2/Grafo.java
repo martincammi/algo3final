@@ -13,6 +13,9 @@ public class Grafo {
 	private int[] proximoAdyacente; //Puntero a un nodo adyacente de un nodo dado.
 	protected boolean[] marcado; //Indica si un vertice esta marcado.
 	private boolean[][] ejes; //Indica que ejes que estan en el arbol generador.
+	protected int[] etiquetas; //Etiqueta a los nodos.
+	public int lower[];
+	public int higher[];
 	
 	public Grafo(int n){
 		cantNodos = n;
@@ -20,6 +23,9 @@ public class Grafo {
 		proximoAdyacente = new int[cantNodos];
 		marcado = new boolean[cantNodos];
 		ejes = new boolean[cantNodos][cantNodos];
+		etiquetas = new int[cantNodos];
+		lower = new int[cantNodos];
+		higher = new int[cantNodos];
 	}
 	
 	public Grafo(int[] paresAdyacencias){
@@ -30,6 +36,9 @@ public class Grafo {
 		proximoAdyacente = new int[cantNodos];
 		marcado = new boolean[cantNodos];
 		ejes = new boolean[cantNodos][cantNodos];
+		etiquetas = new int[cantNodos];
+		lower = new int[cantNodos];
+		higher = new int[cantNodos];
 		
 		for (int i = 2; i < paresAdyacencias.length; i=i+2) {
 			
@@ -94,6 +103,10 @@ public class Grafo {
 		return adyacencias[nodo].size();
 	}
 	
+	public ArrayList adyacentes(int nodo){
+		return adyacencias[nodo];
+	}
+	
 	public boolean estaMarcado(int nodo){
 		return marcado[nodo];
 	}
@@ -106,8 +119,29 @@ public class Grafo {
 		marcado[nodo] = false;
 	}
 	
-	public boolean estaMarcado(int nodo1, int nodo2){
+	public boolean estaMarcadoEje(int nodo1, int nodo2){
 		return ejes[nodo1][nodo2];
+	}
+	
+	public void etiquetarNodo(int nodo, int etiqueta){
+		etiquetas[nodo] = etiqueta;
+	}
+
+	/**
+	 * Devuelve la etiqueta del nodo
+	 * @param nodo
+	 * @return
+	 */
+	public int etiqueta(int nodo){
+		return etiquetas[nodo];
+	}
+	
+	public boolean estaEtiquetado(int nodo){
+		return etiquetas[nodo] != Etiquetador.ETIQUETA_NULA;
+	}
+	
+	public void marcarYEtiquetarNodo(int nodo, int etiqueta){
+		marcado[nodo] = true;		etiquetas[nodo] = etiqueta;
 	}
 	
 	public void marcarEje(int nodo1, int nodo2){
@@ -133,4 +167,26 @@ public class Grafo {
 		}
 		return res;
 	}
+	
+	public void showGrafo(){
+		for (int i = 0; i < adyacencias.length; i++) {
+			ArrayList<Integer> adyacentes = adyacencias[i];
+			for (Integer adyacente : adyacentes) {
+				System.out.print(i + "," + adyacente + ", ");
+			}
+		}
+	}
+	
+	public void showLower(){
+		System.out.println(getLower());
+	}
+	
+	public String getLower(){
+		String res = "";
+		for (int i = 0; i < lower.length; i++) {
+			res =res + (lower[i] + ",");
+		}
+		return res;
+	}
+	
 }

@@ -44,7 +44,9 @@ public class Tests {
 		Ej2 ej2 = new Ej2();
 		Arbol arbol = ej2.construirArbolGenerador(grafo);
 		ej2.etiquetarEnPreorder(arbol);
-		arbol.getPreorder();
+		arbol.showPreorder();
+		String res = arbol.getPreorder();
+		assertEquals("1,2,3,4,5,", res);
 	}
 	
 	@Test
@@ -53,7 +55,8 @@ public class Tests {
 		Grafo grafo = new Grafo(listaDeEntrada);
 		Ej2 ej2 = new Ej2();
 		Arbol arbol = ej2.construirArbolGenerador(grafo);
-		arbol.showHojas();
+		String res = arbol.getTheHojas();
+		assertEquals("1,2,", res);
 	}
 	
 	@Test
@@ -63,6 +66,8 @@ public class Tests {
 		Ej2 ej2 = new Ej2();
 		Arbol arbol = ej2.construirArbolGenerador(grafo);
 		arbol.showHojas();
+		String res = arbol.getTheHojas();
+		assertEquals("2,5,", res);
 	}
 	
 	@Test
@@ -72,6 +77,8 @@ public class Tests {
 		Ej2 ej2 = new Ej2();
 		Arbol arbol = ej2.construirArbolGenerador(grafo);
 		arbol.showHojas();
+		String res = arbol.getTheHojas();
+		assertEquals("2,3,5,6,", res);
 	}
 	
 	@Test
@@ -80,8 +87,10 @@ public class Tests {
 		Grafo grafo = new Grafo(listaDeEntrada);
 		Ej2 ej2 = new Ej2();
 		Arbol arbol = ej2.construirArbolGenerador(grafo);
-		ej2.calcularHijos(arbol);
+		ej2.etiquetarEnPreorder(arbol);
 		arbol.showCantHijos();
+		String res = arbol.getCantHijos();
+		assertEquals("0,7 | 1,3 | 2,1 | 3,1 | 4,3 | 5,1 | 6,1 | ", res);
 	}
 	
 	@Test
@@ -90,7 +99,23 @@ public class Tests {
 		Grafo grafo = new Grafo(listaDeEntrada);
 		Ej2 ej2 = new Ej2();
 		Arbol arbol = ej2.construirArbolGenerador(grafo);
-		ej2.calcularHijos(arbol);
+		ej2.etiquetarEnPreorder(arbol);
 		arbol.showCantHijos();
+		String res = arbol.getCantHijos();
+		assertEquals("0,15 | 1,7 | 2,3 | 3,1 | 4,1 | 5,3 | 6,1 | 7,1 | 8,7 | 9,3 | 10,1 | 11,1 | 12,3 | 13,1 | 14,1 | ", res);
+	}
+	
+	@Test
+	public void testLower(){
+		int[] listaDeEntrada = {6, 7, 0,1, 0,2, 1,2, 2,3, 3,4, 3,5, 4,5};
+		Grafo grafo = new Grafo(listaDeEntrada);
+		Ej2 ej2 = new Ej2();
+		Arbol arbol = ej2.construirArbolGenerador(grafo);
+		ej2.etiquetarEnPreorder(arbol);
+
+		arbol.showLower();
+		String res = arbol.getTheHojas();
+		assertEquals("0,0,0,3,3,3,", res);
+		//ej2.calcularLowOrder(arbol,grafo);
 	}
 }

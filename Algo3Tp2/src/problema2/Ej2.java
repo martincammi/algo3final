@@ -47,8 +47,9 @@ public class Ej2 {
 				esHoja = false;
 				grafo.marcarNodo(adyacente);
 				grafo.marcarEje(nodo, adyacente);	
-				//arbol.agregarEje(nodo, adyacente);
-				arbol.agregarEje(adyacente, nodo);
+				arbol.agregarEje(nodo, adyacente);
+				//arbol.agregarEje(adyacente, nodo);
+				//arbol.marcarEje(nodo, adyacente);
 
 				recorrerYMarcarConDFS(grafo, arbol, adyacente);
 			}
@@ -70,57 +71,102 @@ public class Ej2 {
 	public void recorrerYEtiquetar(Arbol arbol, int nodo){
 		
 		int adyacente = arbol.proximoAdyacente(nodo);
+		ArrayList lowerValues = new ArrayList();
 		
 		while(adyacente != arbol.NO_HAY_MAS_ADYACENTES){
-			if(!arbol.estaMarcado(adyacente)){
+			if(!arbol.estaMarcado(adyacente)){ //v -> w
 				arbol.etiquetarNodo(adyacente, Etiquetador.getEtiqueta());
 				arbol.marcarNodo(adyacente);
-
-				recorrerYEtiquetar(arbol, adyacente);
+				
+				recorrerYEtiquetar(arbol, adyacente); //Y seguimos etiquetando!
+				lowerValues.add(arbol.lower[adyacente]); //L(w) | v -> w
+			}else if (!arbol.estaMarcadoEje(adyacente, nodo)){ 
+				lowerValues.add(arbol.etiqueta(adyacente)); // w | v -- w
 			}
+			
+			arbol.sumarHijos(nodo, arbol.cantHijos(adyacente)); //Sumo los que acumulo mi hijo
 			adyacente = arbol.proximoAdyacente(nodo);
 		}
+		lowerValues.add(nodo);
+		arbol.lower[nodo] = minimoSinCero(lowerValues);
+		arbol.sumarHijos(nodo, 1); //Sumo el correspondiente al nodo
 	}
 	
-	public void calcularHijos(Arbol arbol){
+	
+	public int minimoSinCero(ArrayList<Integer> values){
 		
-		ArrayList hojas = arbol.getHojas();
-		for (int i = 0; i < hojas.size(); i++) {
-			Integer unaHoja = (Integer)hojas.get(i);
-			recorrerYCalularHijos(arbol, unaHoja);
+		if(values.size() == 1){
+			return values.get(0);
 		}
-		arbol.sumarHijos(arbol.getRaiz(), 1); // A la raiz le faltará uno
+		
+		int minimo = values.get(0);
+		for (Integer value: values) {
+			if (value < minimo){
+				minimo = value;
+			}
+		}
+		return minimo;
 	}
 	
-	public void recorrerYCalularHijos(Arbol arbol, int nodo){
+	/**
+	 * Calcula el minimo entre a, b, c sin tener en cuenta al cero como posible minimo 
+	 * @param a
+	 * @param b
+	 * @param c
+	 * @return
+	 */
+	public int minimoSinCero(int a, int b, int c){
 		
-		boolean recienMeSumo = false;
-		if(arbol.cantHijos(nodo) == 1){ // Si es padre visitado por 1ra vez (ya un hijo se agregó)
-			arbol.sumarHijos(nodo,1);
-			recienMeSumo = true;
+		if(b == 0 && c == 0){
+			return a;
 		}
 		
-		if(arbol.cantHijos(nodo) == 0){// Si es hoja
-			arbol.sumarHijos(nodo,1);
+		if(b == 0){
+			return minimo(a,c);
 		}
+		
+		if(c == 0){
+			return minimo(a,b);
+		}
+		
+		
+		int min1 = minimo(a,b);
+		int min2 = minimo(b,c);
+		return minimo(min1, min2);
+	}
+	
+	public int minimo(int a, int b){
+		if(a < b){
+			return a;
+		}else{
+			return b;
+		}
+	}
+	
+	public void calcularLowOrder(Arbol arbol, Grafo grafo){
+		
+		int raiz = arbol.getRaiz();
+		recorrerCalcularLowOrder(arbol, grafo, raiz);
+	}
+	
+	public void recorrerCalcularLowOrder(Arbol arbol, Grafo grafo, int nodo){
+		
+		ArrayList<Integer> adyacentes = arbol.adyacentes(nodo);
+		int lowerEtiqArbol = 0;
+		int lowerEtiqGrafo = 0;
+		
+		//while(adyacente != arbol.NO_HAY_MAS_ADYACENTES){
+		for (Integer adyacente : adyacentes) {
+			recorrerCalcularLowOrder(arbol, arbol, adyacente); //Y seguimos etiquetando!
 
-		int padre = arbol.proximoAdyacente(nodo);
-		boolean esRaiz = padre == arbol.NO_HAY_MAS_ADYACENTES;
-		
-		if(!esRaiz){
-			
-			if(recienMeSumo){
-				arbol.sumarHijos(padre,arbol.cantHijos(nodo)); //Sumo lo que tengo al padre.
+			if(grafo.estaMarcadoEje(nodo, adyacente)){ //Es arista del árbol
+				lowerEtiqArbol = arbol.lower[adyacente]; //L(w) | v -> w
 			}else{
-				arbol.sumarHijos(padre,1);	
+				lowerEtiqGrafo = arbol.etiqueta(adyacente); //w | v -> w
 			}
 			
-			recorrerYCalularHijos(arbol, padre);
-			padre = arbol.proximoAdyacente(nodo);
-		}else{
-			
+			adyacente = arbol.proximoAdyacente(nodo);
 		}
-		arbol.sumarHijos(padre,1);
+		arbol.lower[nodo] = minimoSinCero(nodo,lowerEtiqArbol,lowerEtiqGrafo);
 	}
-	
 }
