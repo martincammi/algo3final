@@ -330,6 +330,43 @@ y finalmente este orden pertenece a:\\
 		$O( l \cdot a)$
 \end{center}
 
+
+Ahora bien, para describir la complejidad en funci\'on del tama\~{n}o de la entrada debemos tener en cuenta la representaci\'on del n\'umero de entrada n en la computadora.
+	Un n\'umero n ser\'a representado como $\log n$ bits.\\
+	
+	Definimos entonces el tama\~{n}o de entrada como:
+	
+	\begin{center}
+ 	$T$ = log(a) + log( l) + $\displaystyle\sum_{i=0}^{l*a}(h_{i}+r_{i})$\\
+	\end{center}
+	
+	Donde $h_{i}$ es la altura y $r_{i}$ es el rango del elemento i en la grilla. Si quitamos la sumatoria del lado derecho, T pasar\'a a ser m\'as grande que el miembro derecho pues $\displaystyle\sum_{i=0}^{l*a}(h_{i}+r_{i}) >= 0$
+	
+	\begin{center}
+	$T => log(a) + log(l)$
+	\end{center}
+	O similarmente:
+
+	\begin{center}
+	$log(a) + log(l) <= T$
+	\end{center}
+	Por propiedad de logaritmos:
+
+	\begin{center}
+	$log(a \cdot l) <= T$
+	\end{center}
+	Aplico ${2}^{x}$ a ambos lados:
+
+	\begin{center}
+	$a \cdot l <= {2}^{T}$
+	\end{center}
+	
+	Finalmente entonces la complejidad temporal en base a T es exponencial del orden de:
+
+	\begin{center}
+	 $O(2^{T})$
+	\end{center}
+
 \newpage
 
 
@@ -440,7 +477,7 @@ En el ejemplo siguiente se marca con aristas las recursiones realizadas de un pr
 		\item Por \'ultimo, en los casos que tenemos al menos un comensal, los iremos agregando en una lista de comensales insatisfechos ordenados por cantidad de preferencias, de mayor a menor. Por ejemplo, si el comensal 1 tiene una preferencia, y el comensal 2 y 3 tiene dos, agregaremos a la lista primero al comensal 2 y 3, y luego al primer comensal. 
 		
 	\end{itemize}
-	La idea del algoritmo es la siguiente: Nosotros siempre tendremos comensales con una o 2 preferencias.
+	La idea del algoritmo es la siguiente: Nosotros siempre tendremos comensales con 1 o 2 preferencias.
 	Tenemos una lista de todos los comensales insatisfechos, y en las primeras posiciones de \'esta, est\'an todos los comensales con dos preferencias (si es que los hay), y luego los dem\'as comensales con 1 preferencia (tambi\'en, si los hay). Empezaremos recorriendo los comensales de atr\'as hacia adelante (lo hicimos as\'i para poder sacarlos de la lista en orden constante). Por lo tanto, primero calculamos los comensales a los que debemos satisfacerle la preferencia si o si (los que tengan 1 sola preferencia).
 	Lo que haremos para cada comensal es:
 	
@@ -459,19 +496,23 @@ En el ejemplo siguiente se marca con aristas las recursiones realizadas de un pr
 		
 		\end{itemize}
 		
-		Si todos los comensales quedan satisfechos, entonces devuelvo la soluci\'on, caso contrario, tomo el pr\'oximo comensal.
+		Si todos los comensales quedan satisfechos, entonces devuelvo la soluci\'on, caso contrario, tomo el pr\'oximo comensal de la lista de insatisfechos.
 				
-		\item En cambio, si el comensal tiene 2 preferencias (ya seguro habr\'e calculado a todos los comensales con una sola, si los hab\'ia), entonces fuerzo la primera preferencia para que suceda, agrego la preferencia como soluci\'on parcial, saco al comensal de la lista de comensales y realizo la validaci\'on 1 con el ingrediente (por ejemplo, +A). Si luego de sacar a todos los comensales con la validaci\'on, me quedan todos satisfechos, entonces devuelvo la soluci\'on, caso contrario, tomo el pr\'oximo comensal. Si pude satisfacer a todos forzando la primer preferencia, devuelvo la soluc\'on y el algoritmo termina aca.
-		En cambio, si no pude llegar a una soluci\'on con la primer preferencia (ten\'ia 2), realizo los mismos pasos que antes, pero ahora forzando a la preferencia 2.
+		\item En cambio, si el comensal tiene 2 preferencias (ya seguro habr\'e calculado a todos los comensales con una sola, si los hab\'ia), entonces fuerzo la primera preferencia para que suceda, agrego la preferencia como soluci\'on parcial, saco al comensal de la lista de comensales y realizo la validaci\'on 1 con el ingrediente (por ejemplo, +A). Si luego de sacar a todos los comensales con la validaci\'on, me quedan todos satisfechos, entonces devuelvo la soluci\'on, caso contrario, tomo el pr\'oximo comensal de la lista de insatisfechos. Si pude satisfacer a todos forzando la primer preferencia, devuelvo la soluc\'on y el algoritmo termina con esa soluci\'on.
+		En cambio, si no pude llegar a una soluci\'on forzando la primer preferencia (ten\'ia 2), entonces debo realizar los mismos pasos que cuando forzamos la primer preferencia, pero ahora con la segunda.
 		
-		El algoritmo termina cuando todos los comensales quedan satisfechos, o bien cuando no se podr\'a satisfacer a alg\'un comensal.\\
+		El algoritmo termina cuando todos los comensales quedan satisfechos, o bien cuando no se podr\'a satisfacer a alg\'un comensal (que retorna que no es posible).\\
 		
-		\textbf {Ejemplo pr\'actico}
-		Para verlo con un ejemplo sencillo, vamos con un ejemplo pr\'actico: Si en el archivo de entrada me vienen estos 5 comensales con las siguientes preferencias, para n=5(n es cantidad de ingredientes):\\
-		\textbf{Comensal 1}(+A), \textbf{Comensal 2}(+A+B), \textbf{Comensal 3}(+D -C), \textbf{Comensal 4}(+D +E), \textbf{Comensal 5}(-A +E).\\
+		\textbf {Ejemplo pr\'actico:}
+		Para verlo con un ejemplo sencillo, vamos con un ejemplo pr\'actico: Si en el archivo de entrada me vienen 5 comensales con las siguientes preferencias, para n=5 (n es cantidad de ingredientes):\\
+		\textbf{Comensal 1}(+A)\\ 
+		\textbf{Comensal 2}(+A+B)\\
+		\textbf{Comensal 3}(+D -C)\\
+		\textbf{Comensal 4}(+D +E)\\
+		\textbf{Comensal 5}(-A +E).\\
 		
 		Al leer el archivo, se agrega al comensal con una sola preferencia al final de la lista (el comensal 1, con +A). Entonces, al ejecutar el algoritmo, agrega a la soluci\'on parcial la preferencia +A y fuerza que esto suceda. Chequea entre los otros comensales si hay alguna que tenga +A (en este caso, el comensal 2) y lo saca de la lista de insatisfechos.
-		Tambi\'en chequea si hay un comensal con la preferencia opuesta, y en este caso el comensal 5 tiene -A, por lo que debe forzar +E para que satisfaga alguna de sus preferencias, y agrega el +E a la soluci\'on parcial, y realiza nuevamente la validaci\'on con el +E a ver si satisface a otro comensal. En este caso, el comensal 4 se satisface con el +E, por lo que lo saca de la lista de insatisfechos, y ya no tiene m\'as comensales que sacar con esta validaci\'on, por lo que itera al pr\'oximo comensal insatisfecho (en este caso, me queda uno solo, el comensal 3), por lo que cumpliendo cualquiera de preferencias, el algoritmo tiene soluci\'on (Si tomo +D, me devuelve ABCDE, o si tomo el -C me devuelve ABDE).
+		Tambi\'en chequea si hay un comensal con la preferencia opuesta, y en este caso el comensal 5 tiene -A, por lo que debe forzar +E para que satisfaga alguna de sus preferencias, y agrega el +E a la soluci\'on parcial, y realiza nuevamente la validaci\'on con el +E a ver si satisface a otro comensal. En este caso, el comensal 4 se satisface con el +E, por lo que lo saca de la lista de insatisfechos, y ya no tiene m\'as comensales que sacar con esta validaci\'on, por lo que itera al pr\'oximo comensal insatisfecho (en este caso, me queda uno solo, el comensal 3), por lo que, siguiendo el algoritmo, tomar\'a la primer preferencia (el +D) y retornar\'a la pizza ABCDE.
 		
 	 \end{itemize}
 	
@@ -486,23 +527,27 @@ En el ejemplo siguiente se marca con aristas las recursiones realizadas de un pr
 	\STATE solucionParcial $\gets$ vacioString
 	\WHILE {!listaComensalesInsatisfechos.isEmpty() y pizzaTieneSolucion}
 		\STATE ultComensal $\gets$ listaComensales.size() - 1; 
-		\STATE preferenciaForzada $\gets$ preferencia1Comensal
+		\STATE preferenciaForzada $\gets$ preferencia1DelComensal
 		\IF {Se puedeAgregarASolucionParcial(preferenciaForzada)}
 			\STATE listaIngredientesChequear.add(preferenciaforzada)
 			\STATE	listaComensalesInsatisfechos.remove(ultComensal)			
 			\STATE solucionParcial $\gets$ solucionParcial + preferenciaForzada
 		\ELSE
-			\STATE No hay solucion para el algoritmo al forzar esta preferencia
+			\STATE solucionParcial $\gets$ No Es Posible
+			\STATE pizzaTieneSolucion $\gets$ \FALSE
 		\ENDIF
 		
 		\WHILE {!listaIngredientesChequear.isEmpty() y !listaComensalesInsatisfechos.isEmpty()\\ y pizzaTieneSolucion}
 			\FOR {j = listaComensales.size() - 1 hasta j = 0}
-				\IF {Alguna Preferencia Comensal J = DameElIngrediente(listaIngredientesChequear.get(0)) }
+					\IF {preferencia1DelComensalJ = Preferencia(listaIngredientesChequear.get(0)) o  \\
+							 preferencia2DelComensalJ = Preferencia(listaIngredientesChequear.get(0))}
 					\STATE listaComensalesInsatisfechos.remove(ultComensal)    /*ya esta satisfecho*/
 				\ELSE
-					\IF {Alguna Preferencia Comensal J = preferenciaOpuesta(listaIngredientesChequear.get(0))}
-						\IF {tiene 1 sola preferencia}
-							\STATE No hay solucion para el algoritmo al forzar esta preferencia
+					\IF {preferencia1DelComensalJ = preferenciaOpuesta(listaIngredientesChequear.get(0)) o
+							 preferencia2DelComensalJ = preferenciaOpuesta(listaIngredientesChequear.get(0))}
+						\IF {ComensalJTieneUnaSolaPreferencia}
+							\STATE solucionParcial $\gets$ No Es Posible
+							\STATE pizzaTieneSolucion $\gets$ \FALSE
 						\ELSE
 							\STATE solucionParcial $\gets$ solucionParcial + OtraPreferenciaNoEsLaOpuesta
 							\STATE listaIngredientesChequear.add(OtraPreferenciaNoEsLaOpuesta)
@@ -518,7 +563,6 @@ En el ejemplo siguiente se marca con aristas las recursiones realizadas de un pr
 	
 	Para calcular la complejidad de este algoritmo utilizaremos el modelo $Uniforme$, ya que por mas que la cantidad de datos de la entrada crezca, las operaciones sobre cada uno de ellos es constante y podemos asumirla en $O(1)$
 	\subsection{Complejidad}
-	
 	$n$ = Cantidad de Ingredientes\\
 	$m$ = Cantidad de Comensales\\
 	$prefs$ = Nro Total de preferencias\\
@@ -526,13 +570,12 @@ En el ejemplo siguiente se marca con aristas las recursiones realizadas de un pr
 	Preguntar si quedan comensales insatisfechos es $O(1)$\\
 	Mover un comensal de una lista a otra es $O(1)$\\
 		
-	El algoritmo, realiza para cada comensal (m veces) si puede o no agregar la preferencia a la soluci\'on parcial, agrega esa preferencia a una lista de preferencias a chequear EN O(1), y vuelve a iterar por todos los comensales que a\'un quedan insatisfechos con esta preferencia a chequear si se satisface para los dem\'as comensales. A lo sumo, chequear\'a los otros m-1 comensales, que son los que est\'an insatisfechos en la primera iteraci\'on. Entonces, en el peor caso, para los m comensales validar\'a si puede o o agregar a los otros m-1. Pero si no llega a una soluci\'on con el primer ingrediente, realiza exactamente el mismo algoritmo para la segunda preferencia.
+	El algoritmo, realiza para cada comensal (m veces) si puede o no agregar la preferencia a la soluci\'on parcial, agrega esa preferencia a una lista de preferencias a chequear en O(1), y vuelve a iterar por todos los comensales que a\'un quedan insatisfechos con esta preferencia a chequear si se satisface para los dem\'as comensales. A lo sumo, chequear\'a los otros m-1 comensales, que son los que est\'an insatisfechos en la primera iteraci\'on. Entonces, en el peor caso, para los m comensales validar\'a si puede o o agregar a los otros m-1. Pero si no llega a una soluci\'on con el primer ingrediente, realiza exactamente el mismo algoritmo para la segunda preferencia.
 	
 	Entonces, en el peor caso, lo que puede pasar es que, tenga un algoritmo que deba recorrer la lista el orden del algoritmo es $O(2*m^{2})$
 	
-	Esto deja el algoritmo en una complejidad teorica de $O(m^{2})$\\
+	Esto deja el algoritmo en una complejidad te\'orica de $O(m^{2})$\\
 	
-	Podemos decir entonces que el tamaño de entrada cumple\\
 	Las preferencias pueden estar dispersas de maneras variadas entre los comensales, ya que pueden haber muchos comensales con 1 o 2 preferencias cada uno.
 	En este caso, $prefs$ $\geq$ $m$ ya que no tiene sentido tener comensales sin preferencias porque el algoritmo terminar\'ia ni bien se termina de leer la entrada. \\
 	Por otra parte necesitamos una cota inferior para $T$; Sabemos que el ingrediente mas chico tiene tamaño de entrada $1$ asi que se cumple $T \geq \sum_{i = 1}^{prefs}{1} = prefs$.\\
@@ -540,7 +583,7 @@ En el ejemplo siguiente se marca con aristas las recursiones realizadas de un pr
 	
 	\subsection{Tests}
 	\textbf{Tipo1:} El algoritmo tiene bien marcado cuales vendr\'an a ser sus mejores casos. A los ya triviales, como que venga un comensal vac\'io o que hayan 2 comensales con preferencias opuestas (que devuelven que no es posible), vamos a concentrarnos en los que al menos recorren una vez todos los comensales, que son los que pueden llegar a dar una soluci\'on posible.
-	Viendo estos casos, pudimos notar que en el mejor caso, el algoritmo puede ser lineal en la cantidad de comensales, ya que en la primera iteraci\'on, por ejemplo, puede tomar un ingrediente (el +A en el ejemplo), y luego recorrer\'a a todos los dem\'as comensales preguntando si el +A los satisface, que en el ejemplo es cierto. 
+	Realizando varios tests, pudimos notar que en el mejor caso, el algoritmo puede ser lineal en la cantidad de comensales, ya que en la primera iteraci\'on, por ejemplo, puede tomar un ingrediente (el +A en el ejemplo), y luego recorrer\'a a todos los dem\'as comensales preguntando si el +A los satisface, que en el ejemplo es cierto. 
 	
 	A estos los llamaremos $Tipo 1$\\
 	Ej.
@@ -555,7 +598,7 @@ En el ejemplo siguiente se marca con aristas las recursiones realizadas de un pr
 	+A+H;
 	.
 	\end{verbatim}
-	\textbf{Tipo2:}	Con respecto al peor caso, nos pusimos a analizar lo que cre\'iaamos, ser\'an los 2 posibles peores casos, donde en cada iteraci\'on se satisfaga a un solo comensal. En el ejemplo, en la primera iteraci\'on se sacar\'a el +A (comensal 1), en la segunda el +B (comensal 2) y as\'i sucesivamente.
+	\textbf{Tipo2:}	Con respecto al peor caso, nos pusimos a analizar lo que cre\'iaamos, ser\'an los 2 posibles peores casos, donde en cada iteraci\'on se satisfaga a un solo comensal. En el ejemplo, en la primera iteraci\'on se sacar\'a el comensal 1 (+A), en la segunda el comensal 2 (+B) y as\'i sucesivamente.
 	\begin{verbatim}
 	8
 	+A+B;
@@ -567,7 +610,7 @@ En el ejemplo siguiente se marca con aristas las recursiones realizadas de un pr
 	+G+H;
 	.
 	\end{verbatim}
-	\textbf{Tipo3:} El pr\'oximo caso que analizamos, es el tener el primer comensal con una cierta preferencia (-F en este caso), y debe chequear todos los comensales hasta darse cuenta que hay otro con +F (preferencia opuesta) que lo fuerza a elegir la preferencia +A). Luego, en la pr\'oxima iteraci\'on sucede lo mismo con el +B, que lo fuerza al tener el +C y as\'i sucsivamente. En cada iteraci\'on saca 1 solo comensal, y este esta a lo \'ultimo de la lista de comensales insatisfechos.
+	\textbf{Tipo3:} El pr\'oximo caso que analizamos, es el tener el primer comensal con una cierta preferencia (-F en este caso), y debe chequear todos los comensales (porque es el \'ultimo de la lista de comensales insatisfechos) hasta darse cuenta que hay otro con +F (preferencia opuesta) que lo fuerza a elegir la preferencia +A). Luego, en la pr\'oxima iteraci\'on sucede lo mismo con el +B, que lo fuerza al tener el +C y as\'i sucsivamente. En cada iteraci\'on saca 1 solo comensal, y este esta a lo \'ultimo de la lista de comensales insatisfechos.
 	\begin{verbatim}
 	8
 	-F+G;
@@ -579,7 +622,7 @@ En el ejemplo siguiente se marca con aristas las recursiones realizadas de un pr
 	+A+F;
 	.
 	\end{verbatim}
-	\textbf{Tipo4:} No contentos con las mediciones obtenidas notamos que por mas que el $Tipo 3$ parece el peor caso, notamos que hay un caso peor a\'un, que es cuando realiza algo similar que el anterior, pero llega a un momento que forzando ingredientes, no puede llegar a una soluci\'on y debe realizar nuevamente todos los c\'alculos, pero con el Ingrediente 2 del comensal 1. La estructura es:
+	\textbf{Tipo4:} No contentos con las mediciones obtenidas notamos que, por mas que el $Tipo 3$ parec\'ia el peor caso, pod\'ia haber un caso peor a\'un, que es cuando realiza algo similar que el anterior, pero llega a un momento que forzando ingredientes, no puede llegar a una soluci\'on y debe realizar nuevamente todos los c\'alculos, pero con el Ingrediente 2 del comensal 1. Primero toma el comensal 1 con el -F, y en la primera iteraci\'on, tiene 2 comensales con la preferencia opuesta, y debe forzar el -E y el +A (comensales 5 y 6). Cuando calcula todos los comensales que se satisfacen con -E, termina forzando ingredientes hasta llegar a forzar -A (comensal 2). Termina de calcular las preferencias forzadas, y luego calcula el comensal 7, que tiene la preferencia +A para hacer cumplir, lo que hace que la soluci\'on no sea posible, y deba rehacer todo el algoritmo, pero esta vez forzando la preferencia 2 del comensal 1. La estructura es:
 	\begin{verbatim}
 	8
 	-F+G;
@@ -596,25 +639,42 @@ En el ejemplo siguiente se marca con aristas las recursiones realizadas de un pr
 	%grafico tipo 2
 	%grafico tipo 3
 	%grafico tipo 4
-	Se puede ver en los tres gr\'aficos de peores casos que las mediciones obtenidas concuerdan con la complejidad teorica que habiamos calculado.
 	
 	Explicaci\'on del gr\'afico de $Tipo 1$
 	En este gr\'afico, se puede ver el mejor caso propuesto, donde el orden de complejidad es lineal a la cantidad de comensales. Esto tiene sentido, ya que todos comparten la misma preferencia, y en la primera iteraci\'on ya sacamos a todos de la lista de insatisfechos.
+	
+	\begin{center}
+		\includegraphics[scale=0.65]{p2/MedicionesTipo1.png}
+	\end{center}
 	
 	
 	Explicaci\'on del gr\'afico de $Tipo 2$
 	Aca, podemos ver que los valores se acercan mucho al orden que planteamos, ya que en cada iteraci\'on solo sacamos de a un comensal, pero como termina siempre calculando con el primer ingrediente de todos, no se acerca tanto a la par\'abola te\'orica del orden de complejidad como quer\'iamos.
 	
+		\begin{center}
+			\includegraphics[scale=0.65]{p2/MedicionesTipo2.png}
+		\end{center}
+	
 	Explicaci\'on del gr\'afico de $Tipo 3$
 	Los valores se acercan m\'as a\'un al orden que expusimos, tambi\'en sacamos solo de a un comensal por iteraci\'on, pero como ya no solo agarra el primer ingrediente, sino que debe ir forzando ingredientes en cada iteraci\'on, los ordenes de complejidad son mayores a los del $Tipo 2$.
+	
+		\begin{center}
+			\includegraphics[scale=0.65]{p2/MedicionesTipo3.png}
+		\end{center}
 	
 	Explicaci\'on del gr\'afico de $Tipo 4$
 	Aca planteamos el peor caso del alg\'oritmo, donde en la primer iteraci\'on, me quedan 2 comensales con la preferencia opuesta, por lo que debo forzar una preferencia. Al forzar la primera de los 2, puedo sacar a todos los comensales de los satisfechos menos a 1, y cuando quiero satisfacer a este \'ultimo, veo que no puedo satisfacerlo, por lo que debo realizar todo el algoritmo de nuevo, para la preferencia 2 del comensal 1. 
 	
-	En este ultimo gr\'afico se puede comparar las mediciones de los tres tipos de casos juntas. Se puede ver que efectivamente el caso $Tipo 3$ es el peor de todos ya que el primer comensal hace participar todos los ingredientes y nunca se filtran los comensales hasta llegar al \'ultimo ingrediente.
+		\begin{center}
+			\includegraphics[scale=0.65]{p2/MedicionesTipo4.png}
+		\end{center}
+	
 	\subsection{Conclusiones}
-	Luego de estudiar bastante el problema, vemos que el algoritmo se acuerda bastante similar a lo que esperabamos. Hay un mejor caso lineal, que es cuando todos los comensales coinciden en una preferencia, y por otro lado, pudimos notar que hay varios casos pat\'ol\'ogicos, pero que los ordenes de complejidad no difieren demasiado entre sí, que son muy similares al del $O(2*m^{2})$.
-	Los ordenes de complejidad mejoraron al ordenar la lista de comensales por cantidad de preferencias (primero calculo los que tienen 1 preferencia), ya que si en la entrada, nos ven\'ian comensales con ua solo ingrediente, esto nos permit\'ia realizar el algoritmo m\'as r\'apido y en caso de no llegar a una respuesta posible, ya sab\'iamos que no se pod\'ia ir  $\neq$ o $\not=$
+	Luego de estudiar bastante el problema, vemos que el algoritmo se comporta bastante similar a lo que esperabamos. Hay un mejor caso lineal, que es cuando todos los comensales coinciden en una preferencia, y por otro lado, pudimos notar que hay varios casos pat\'ol\'ogicos, pero que los ordenes de complejidad no difieren demasiado entre sí, que son muy similares al del $O(m^{2})$.
+	Los ordenes de complejidad mejoraron al ordenar la lista de comensales por cantidad de preferencias (primero calculo los que tienen 1 preferencia), ya que si en la entrada, nos ven\'ian comensales con ua solo ingrediente, esto nos permit\'ia forzar ingredientes y poder encontrar m\'as facilmente las entradas en donde las pizzas no eran posibles.\\ 
+	Por otro lado, notamos que, si vienen muchos comensales como entrada del algoritmo, el orden de complejidad no era cuadr\'atico (el te\'orico), sino que era menor. Esto se debe ya que hay solo 26 posibles ingredientes posibles y en caso de haber m\'as de 26 comensales, seguro los ingredientes de ellos se repiten y el algoritmo no se comporta tan mal como con menos cantidad de comensales.
+	
+	
 	
 \newpage
 
