@@ -1,20 +1,20 @@
 package utils;
 
-
 public class Grafo {
 	public static long complex = 0;
 	public long T = 0;
-	public int cantNodos;
+	protected int cantNodos;
 	protected int cantAristas; //No orientadadas
 	protected int cantArcos;  //Orientadas
-	public ListaInt[] adyacenciasNoOr; //Guarda dado un nodo sus adyacencias no orientadas.
-	public ListaInt[] adyacenciasOr; //Guarda dado un nodo sus adyacencias orientadas.
+	protected ListaInt[] adyacenciasNoOr; //Guarda dado un nodo sus adyacencias no orientadas.
+	protected ListaInt[] adyacenciasOr; //Guarda dado un nodo sus adyacencias orientadas.
 	protected int[][] pesosEjes;
 	protected ListaInt[] adyacenciasVisitados;
-	private int[] din;
+	protected int din[];
 	private int[] dout;
 	private int[][] pesoCaminoMinimo;
 	
+	int INFINITO = 100; //Temporal probando
 	/**
 	 * @param cantNodos: cantidad de vértices
 	 * @param cantAristas: cantidad de ejes no orientados
@@ -26,6 +26,9 @@ public class Grafo {
 		this.cantNodos = cantNodos;
 		this.cantAristas = cantAristas;
 		this.cantArcos = cantArcos;
+		sumarBits(cantNodos);
+		sumarBits(cantAristas);
+		sumarBits(cantArcos);
 		adyacenciasNoOr = new ListaInt[cantNodos];
 		adyacenciasOr = new ListaInt[cantNodos];
 		adyacenciasVisitados = new ListaInt[cantNodos];
@@ -33,18 +36,40 @@ public class Grafo {
 		pesoCaminoMinimo = new int [cantNodos][cantNodos];
 		din = new int[cantNodos];
 		dout = new int[cantNodos];
+		
+		for(int i = 0;i<cantNodos;++i){
+			adyacenciasNoOr[i] = new ListaInt();
+			adyacenciasOr[i] = new ListaInt();
+			adyacenciasVisitados[i] = new ListaInt();
+			din[i]=0;
+			for(int j = 0;j<cantNodos;++j){
+				pesosEjes[i][j]= INFINITO;//CAMBIAR POR INFINITO
+			}
+		}
 	}
 	
 	/**
 	 * Suma al tamaño de la entrada en bits.
 	 * @param n
 	 */
-	private void sumarBits(int n){
+	public final void sumarBits(int n){
 		T+= cantBits(n);
 	}
 	
+	public void orientarAristas(int semilla){
+
+		for(int nodo1 = 0; nodo1 < cantNodos;++nodo1){
+			int Ndout	= adyacenciasOr[nodo1].size();
+			int Ndin	= din[nodo1];
+			int Nd		= adyacenciasNoOr[nodo1].size();
+			if(Nd == 1 && (int)Math.abs(Ndin - Ndout) == 1){//hay una unica direccion posible para la arista no dirigida
+				int nodo2 = adyacenciasNoOr[nodo1].get(0);
+			}
+		}
+	}
+	
 	/**
-	 * Constructor para la entrada de la cátedra
+	 * Constructor para la entrada de la cátedra (no borrar uso para pruebas: Martin)
 	 * @param paresAdyacencias
 	 */
 	public Grafo(String[] paresAdyacencias){
@@ -78,10 +103,8 @@ public class Grafo {
 			sumarBits(par2);
 			sumarBits(peso);
 			
-			agregarAdyacenciaNOr(par1, par2);
-			agregarAdyacenciaNOr(par2, par1);
-			pesosEjes[par1][par2] = peso;
-			pesosEjes[par2][par1] = peso;
+			agregarAdyacencia(par1, par2, peso, false);
+			agregarAdyacencia(par2, par1, peso, false);
 			
 			complex++;
 		}
@@ -96,10 +119,9 @@ public class Grafo {
 			sumarBits(par2);
 			sumarBits(peso);
 			
-			agregarAdyacenciaOr(par1, par2);
+			agregarAdyacencia(par1, par2, peso, true);
 			dout[par1]++;
 			din[par2]++;
-			pesosEjes[par1][par2] = peso;
 			
 			complex++;
 		}
@@ -110,7 +132,6 @@ public class Grafo {
 		return pesoCaminoMinimo[nodo1][nodo2];
 	}
 	
-	int INFINITO = 100; //Temporal probando
 	public void calcularDantzig(){
 		
 		for (int i = 0; i < cantNodos; i++) {
@@ -171,18 +192,15 @@ public class Grafo {
 		return todasDirigidas;
 	}
 	
-	protected final void agregarAdyacenciaNOr(int par1, int par2) {
-		if(adyacenciasNoOr[par1] == null){
-			adyacenciasNoOr[par1] = new ListaInt();
+	public final void agregarAdyacencia(int par1, int par2, int peso, boolean dirigido) {
+		if(dirigido){
+			adyacenciasOr[par1].add(par2);
+			din[par2]++;
+		}else{
+			adyacenciasNoOr[par1].add(par2);
 		}
-		adyacenciasNoOr[par1].add(par2);
-	}
-	
-	protected final void agregarAdyacenciaOr(int par1, int par2) {
-		if(adyacenciasOr[par1] == null){
-			adyacenciasOr[par1] = new ListaInt();
-		}
-		adyacenciasOr[par1].add(par2);
+		pesosEjes[par1][par2] = peso;
+		
 	}
 	
 	public ListaInt adyacentesNoOr(int nodo){
