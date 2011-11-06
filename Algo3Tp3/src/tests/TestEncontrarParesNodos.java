@@ -1,10 +1,11 @@
 package tests;
-import grasp.CarteroGrasp;
 
 import java.util.List;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+
+import algorithms.CarteroGrasp;
 
 import utils.GeneradorGrafos;
 import utils.Grafo;

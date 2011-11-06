@@ -3,11 +3,11 @@ package utils;
 public class Grafo {
 	public static long complex = 0;
 	public long T = 0;
-	protected int cantNodos;
+	public int cantNodos;
 	protected int cantAristas; //No orientadadas
 	protected int cantArcos;  //Orientadas
 	protected ListaInt[] adyacenciasNoOr; //Guarda dado un nodo sus adyacencias no orientadas.
-	protected ListaInt[] adyacenciasOr; //Guarda dado un nodo sus adyacencias orientadas.
+	public ListaInt[] adyacenciasOr; //Guarda dado un nodo sus adyacencias orientadas.
 	protected int[][] pesosEjes;
 	protected ListaInt[] adyacenciasVisitados;
 	protected int din[];
