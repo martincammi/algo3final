@@ -3,7 +3,10 @@ package grasp;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CarteroChino {
+import utils.Grafo;
+import utils.ListaInt;
+
+public class CarteroGrasp {
 
 	private Grafo grafo;
 	
@@ -12,7 +15,7 @@ public class CarteroChino {
 		
 		Grafo grafo = new Grafo(params);
 		
-		CarteroChino cartero = new CarteroChino(grafo);
+		CarteroGrasp cartero = new CarteroGrasp(grafo);
 		List<int[]> pares = cartero.encontrarParesNodos();
 		
 		for (int[] par : pares) {
@@ -55,7 +58,7 @@ public class CarteroChino {
 		
 	}
 	
-	public CarteroChino(Grafo grafo){
+	public CarteroGrasp(Grafo grafo){
 		this.grafo = grafo;
 	}
 	

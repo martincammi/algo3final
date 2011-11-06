@@ -1,6 +1,9 @@
-package grasp;
+package tests;
 
 import org.junit.Test;
+
+import utils.GeneradorGrafos;
+import utils.Grafo;
 
 public class TestGrafo {
 

@@ -1,4 +1,5 @@
-package grasp;
+package utils;
+
 
 public class GeneradorGrafos {
 

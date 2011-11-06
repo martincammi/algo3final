@@ -3,7 +3,9 @@ package contructiva;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CarteroChino {
+import utils.Grafo;
+
+public class CarteroConstructiva {
 
 	private Grafo grafo;
 	
@@ -25,11 +27,11 @@ public class CarteroChino {
 							};
 		Grafo grafo = new Grafo(params);
 		
-		CarteroChino cartero = new CarteroChino(grafo);
+		CarteroConstructiva cartero = new CarteroConstructiva(grafo);
 		cartero.encontrarCamino(); 
 	}
 	
-	public CarteroChino(Grafo grafo){
+	public CarteroConstructiva(Grafo grafo){
 		this.grafo = grafo;
 	}
 	

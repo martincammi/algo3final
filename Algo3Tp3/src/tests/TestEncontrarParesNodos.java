@@ -1,15 +1,20 @@
-package grasp;
+package tests;
+import grasp.CarteroGrasp;
+
 import java.util.List;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+
+import utils.GeneradorGrafos;
+import utils.Grafo;
 
 public class TestEncontrarParesNodos {
 
 	@Test
 	public void testGrafoSumidero(){
 		Grafo grafo = GeneradorGrafos.generarGrafoOrSumidero();
-		CarteroChino cartero = new CarteroChino(grafo);
+		CarteroGrasp cartero = new CarteroGrasp(grafo);
 		System.out.println("Grafo de " + grafo.cantNodos);
 		List<int[]> pares = cartero.encontrarParesNodos();
 		
