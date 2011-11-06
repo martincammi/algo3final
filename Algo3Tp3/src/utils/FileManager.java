@@ -71,7 +71,7 @@ public class FileManager {
 			String[] lineaArray;
 			int nodo1, nodo2, peso = 0;
 			for (int i = 0; i < m1; ++i){  //LEE LAS PRIMERAS m1 LINEAS. ARISTAS SIN DIRECCION
-				lineaArray = br.readLine().split(",");  //LEO LA LINEA, y LA PASO A ARRAY CON SPLIT
+				lineaArray = br.readLine().split(" ");  //LEO LA LINEA, y LA PASO A ARRAY CON SPLIT
 				nodo1 = Integer.parseInt(lineaArray[0].trim());
 				nodo2 = Integer.parseInt(lineaArray[1].trim());
 				peso  = Integer.parseInt(lineaArray[2].trim());
@@ -83,7 +83,7 @@ public class FileManager {
 				Grafo.complex++;
 			}
 			for (int i = 0; i < m2; ++i){  //LEE LAS SIGUIENTES m2 LINEAS. ARCOS CON DIRECCION
-				lineaArray = br.readLine().split(",");  //LEO LA LINEA, y LA PASO A ARRAY CON SPLIT
+				lineaArray = br.readLine().split(" ");  //LEO LA LINEA, y LA PASO A ARRAY CON SPLIT
 				nodo1 = Integer.parseInt(lineaArray[0].trim());
 				nodo2 = Integer.parseInt(lineaArray[1].trim());
 				peso  = Integer.parseInt(lineaArray[2].trim());
