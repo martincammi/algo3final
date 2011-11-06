@@ -14,13 +14,7 @@ public class CarteroBusquedaLocal {
 		Grafo grafo = fm.leerInstancia();
 		while (grafo != null)
 		{
-			//MIENTRAS PARAMETRO DE ITERACIONES CONSTRUCTIVA HACER
-				//HACER UNA COPIA DEL GRAFO
-				//ORIENTAR LAS ARISTAS
-				//CALCULAR UN MATCHING DE DIN DOUT
-				//BUSQUEDA LOCAL SOBRE MATCHING EN LAS VECINDADES//DEFINIR QUIENES SON VECINOS
-			//CALCULAR EULERIANO
-			//DEVOLVER
+			//BUSQUEDALOCAL
 			grafo = fm.leerInstancia();
 		}
 	}	
