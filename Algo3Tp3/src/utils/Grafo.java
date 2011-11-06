@@ -37,12 +37,12 @@ public class Grafo {
 		din = new int[cantNodos];
 		dout = new int[cantNodos];
 		
-		for(int i = 0;i<cantNodos;++i){
+		for(int i = 0; i < cantNodos; ++i){
 			adyacenciasNoOr[i] = new ListaInt();
 			adyacenciasOr[i] = new ListaInt();
 			adyacenciasVisitados[i] = new ListaInt();
-			din[i]=0;
-			for(int j = 0;j<cantNodos;++j){
+			din[i] = 0;
+			for(int j = 0; j < cantNodos;++j){
 				pesosEjes[i][j]= INFINITO;//CAMBIAR POR INFINITO
 			}
 		}
@@ -120,8 +120,6 @@ public class Grafo {
 			sumarBits(peso);
 			
 			agregarAdyacencia(par1, par2, peso, true);
-			dout[par1]++;
-			din[par2]++;
 			
 			complex++;
 		}
@@ -196,6 +194,7 @@ public class Grafo {
 		if(dirigido){
 			adyacenciasOr[par1].add(par2);
 			din[par2]++;
+			dout[par1]++;
 		}else{
 			adyacenciasNoOr[par1].add(par2);
 		}
