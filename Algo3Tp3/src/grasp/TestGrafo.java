@@ -1,4 +1,4 @@
-package heuristica;
+package grasp;
 
 import org.junit.Test;
 

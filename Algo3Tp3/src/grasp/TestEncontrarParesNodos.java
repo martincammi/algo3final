@@ -1,4 +1,4 @@
-package heuristica;
+package grasp;
 import java.util.List;
 import static org.junit.Assert.*;
 

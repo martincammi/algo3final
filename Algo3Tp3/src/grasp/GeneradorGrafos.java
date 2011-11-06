@@ -1,4 +1,4 @@
-package heuristica;
+package grasp;
 
 public class GeneradorGrafos {
 
