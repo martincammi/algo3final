@@ -60,14 +60,20 @@ public class Grafo {
 	{
 		int nodo;
 		int cantidadAristas = cantAristas;
-		String[] direccionOrientacionArista = {null, null};
+		String[] direccionOrientacionArista = {null, null}; 
+		
 		for(int i = 0; i < cantidadAristas - 1; i++)
 		{
+			//LA POSICION CERO DE DIRECCIONORIENTACIONARISTA ME DICE SI HAY ALGUN NODO DONDE LA CANTIDAD DE ARISTAS 
+			//ES IGUAL A LA RESTA ENTRE GRADO DE ENTRADA Y DE SALIDA.
+			//LA POSICION 1 ME DICE SI TODAS LAS ARISTAS DE ESE NODO DEBEN SER DE SALIDA (MARCADA CON UNA S) O DE ENTRADA (CON UNA E)
 			nodo = encontrarNodoAOrientar(direccionOrientacionArista);
 			orientarNodo(nodo, direccionOrientacionArista);
 		}
 	}
 	
+	//ME DA UN NODO A ORIENTAR. SI ENCUENTRA UNO EN LA QUE LA DIFERENCIA DE DIN CON DOUT = CANTIDAD DE ARISTAS DE ESE NODO (Y QUE TENGA ALGUNA ARISTA PARA ORIENTAR)
+	//ME DEVUELVE ESE, SINO, ME DA CUALQUIER OTRO NODO QUE TENGA ALGUNA ARISTA PARA ORIENTAR
 	private int encontrarNodoAOrientar(String[] direccionOrientacionArista)
 	{
 		int result = -1;
@@ -99,6 +105,10 @@ public class Grafo {
 		return result;
 	}
 	
+	//ORIENTA EL NODO QUE VIENE COMO PARAMETRO
+	//SI DIRECCIONORIENTACIONARISTA[0] VIENE CON S, TODAS LAS ARISTAS DE ESE NODO SE ORIENTARAN PARA EL MISMO LADO
+	//Y ESTA DEFINIDO EN DIRECCIONORIENTACIONARISTA[1]
+	//CASO CONTRARIO, ORIENTO ESA ARISTA Y LA HAGO DE SALIDA
 	private void orientarNodo(int nodoAOrientar, String[] direccionOrientacionArista)
 	{
 		int peso = 0;
