@@ -26,6 +26,8 @@ public class CarteroConstructiva {
 			//MIENTRAS PARAMETRO DE ITERACIONES CONSTRUCTIVA HACER
 				//HACER UNA COPIA DEL GRAFO
 				//ORIENTAR LAS ARISTAS
+				
+				grafo.orientarTodasAristas();
 			
 				//CALCULAR UN MATCHING DE DIN DOUT
 				//List<int[]> pares = cartero.encontrarMatchingNodos();

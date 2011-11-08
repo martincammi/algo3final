@@ -56,6 +56,98 @@ public class Grafo {
 		T+= cantBits(n);
 	}
 	
+	public void orientarTodasAristas()
+	{
+		int nodo;
+		int cantidadAristas = cantAristas;
+		String[] direccionOrientacionArista = {null, null};
+		for(int i = 0; i < cantidadAristas - 1; i++)
+		{
+			nodo = encontrarNodoAOrientar(direccionOrientacionArista);
+			orientarNodo(nodo, direccionOrientacionArista);
+		}
+	}
+	
+	private int encontrarNodoAOrientar(String[] direccionOrientacionArista)
+	{
+		int result = -1;
+		for (int i = 0; i < cantNodos; i++)
+		{
+			if (Math.abs(din[i] - dout[i]) == adyacenciasNoOr[i].size() && adyacenciasNoOr[i].size() > 0)
+			{
+				result = i;
+				direccionOrientacionArista[0] = "S";
+				direccionOrientacionArista[1] = din[i] > dout[i] ? "S" : "E";
+				break;
+			}
+		}
+		
+		if (result == -1)
+		{
+			for (int i = 0; i < cantNodos; i++)
+			{
+				if (adyacenciasNoOr[i].size() > 0)
+				{
+					result = i;
+					direccionOrientacionArista[0] = "N";
+					direccionOrientacionArista[1] = null;
+					break;
+				}
+			}
+		}
+			
+		return result;
+	}
+	
+	private void orientarNodo(int nodoAOrientar, String[] direccionOrientacionArista)
+	{
+		int peso = 0;
+		int cantAristasNodo = adyacenciasNoOr[nodoAOrientar].size();
+		
+		if (direccionOrientacionArista[0].equals("S"))
+		{
+			for (int i = cantAristasNodo - 1; i >= 0; i--)
+			{
+				if (direccionOrientacionArista[1].equals("S"))
+				{
+					peso = (pesosEjes[adyacenciasNoOr[nodoAOrientar].get(i)][nodoAOrientar] == INFINITO) 
+				 	  ? pesosEjes[nodoAOrientar][adyacenciasNoOr[nodoAOrientar].get(i)]
+					  : pesosEjes[adyacenciasNoOr[nodoAOrientar].get(i)][nodoAOrientar];
+				 	
+				 	agregarAdyacencia(nodoAOrientar, adyacenciasNoOr[nodoAOrientar].get(i), peso, true);
+				 	adyacenciasNoOr[adyacenciasNoOr[nodoAOrientar].get(i)].remove(new Integer(nodoAOrientar));
+				 	adyacenciasNoOr[nodoAOrientar].remove(i);
+				 	cantAristas--;
+					
+				}
+				else
+				{
+					peso = (pesosEjes[adyacenciasNoOr[nodoAOrientar].get(i)][nodoAOrientar] == INFINITO) 
+				 	  ? pesosEjes[nodoAOrientar][adyacenciasNoOr[nodoAOrientar].get(i)]
+					  : pesosEjes[adyacenciasNoOr[nodoAOrientar].get(i)][nodoAOrientar];
+				 	
+				 	agregarAdyacencia(adyacenciasNoOr[nodoAOrientar].get(i), nodoAOrientar, peso, true);
+				 	adyacenciasNoOr[adyacenciasNoOr[nodoAOrientar].get(i)].remove(new Integer(nodoAOrientar));
+				 	adyacenciasNoOr[nodoAOrientar].remove(i);
+				 	cantAristas--;
+				
+				}
+			}
+		}
+		else
+		{
+			peso = (pesosEjes[adyacenciasNoOr[nodoAOrientar].get(0)][nodoAOrientar] == INFINITO) 
+		 	  ? pesosEjes[nodoAOrientar][adyacenciasNoOr[nodoAOrientar].get(0)]
+			  : pesosEjes[adyacenciasNoOr[nodoAOrientar].get(0)][nodoAOrientar];
+		 	
+		 	agregarAdyacencia(nodoAOrientar, adyacenciasNoOr[nodoAOrientar].get(0), peso, true);
+		 	adyacenciasNoOr[adyacenciasNoOr[nodoAOrientar].get(0)].remove(new Integer(nodoAOrientar));
+		 	adyacenciasNoOr[nodoAOrientar].remove(0);
+		 	cantAristas--;
+		}	
+	}	
+	
+	
 	public void orientarAristas(int semilla){
 
 		for(int nodo1 = 0; nodo1 < cantNodos;++nodo1){

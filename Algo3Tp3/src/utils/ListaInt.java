@@ -2,7 +2,7 @@ package utils;
 
 import java.util.ArrayList;
 
-public class ListaInt extends LinkedList<Integer>{
+public class ListaInt extends ArrayList<Integer>{
 
 	@Override
 	public String toString() {
