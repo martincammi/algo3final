@@ -11,10 +11,10 @@ public class Grafo {
 	protected int[][] pesosEjes;
 	protected ListaInt[] adyacenciasVisitados;
 	protected int din[];
-	private int[] dout;
+	public int[] dout;
 	private int[][] pesoCaminoMinimo;
 	
-	int INFINITO = 100; //Temporal probando
+	int INFINITO = Integer.MAX_VALUE; //Temporal probando
 	/**
 	 * @param cantNodos: cantidad de vértices
 	 * @param cantAristas: cantidad de ejes no orientados
@@ -216,16 +216,42 @@ public class Grafo {
 	
 	@Deprecated
 	public void showGrafo(){
-		for (int i = 0; i < adyacenciasNoOr.length; i++) {
-			ListaInt adyacentes = adyacenciasNoOr[i];
-			for (Integer adyacente : adyacentes) {
-				System.out.print(i + "," + adyacente + ", ");
+		System.out.println("CantNodos: "+this.cantNodos);
+		System.out.println("CantAristas: "+this.cantAristas);
+		System.out.println("CantArcos: "+this.cantArcos);
+		for(int i=0; i < cantNodos; ++i){
+			System.out.println("Nodo: "+i);
+			System.out.println("\tGradoBi: "+this.adyacenciasNoOr[i].size());
+			System.out.println("\tDin: "+this.din[i]);
+			System.out.print("\tDout: "+this.dout[i]);
+			System.out.println("== CantOrientados: "+this.adyacenciasOr[i].size());
+			System.out.println("\tAdyacencias no orientadas:");
+			if(this.adyacenciasNoOr[i].size()>0)System.out.print("\t\t");
+			for(Integer nodo: this.adyacenciasNoOr[i]){
+				System.out.print(nodo+" ");
 			}
+			System.out.println();
+			System.out.println("\tArcos Salientes:");
+			if(this.adyacenciasOr[i].size()>0)System.out.print("\t\t");
+			for(Integer nodo: this.adyacenciasOr[i]){
+				System.out.print(nodo+" ");
+			}
+			System.out.println();
+		}
+		for(int[] l:pesosEjes){
+			for(Integer k:l){
+				System.out.print(k+"\t");
+			}
+			System.out.println();
 		}
 	}
 	
 	public int getNodoInicial(int semilla){
 		return semilla % cantNodos;
+	}
+
+	public int[][] getPesoAristas() {
+		return this.pesosEjes;
 	}
 	
 }

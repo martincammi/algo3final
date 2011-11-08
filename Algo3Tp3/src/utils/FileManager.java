@@ -96,39 +96,4 @@ public class FileManager {
 		}
 		return grafo;
 	}
-
-	//LEE LOS NODOS Y TODAS LAS ARISTAS Y LAS AGREGA AL GRAFO 
-//	public Grafo getInstancia(Grafo grafo, int m1, int m2) throws IOException 
-//	{
-//		String[] lineaArray;
-//		int nodo1, nodo2, peso = 0;
-//		
-//		for (int i = 0; i < m1; i++)  //LEE LAS PRIMERAS m1 LINEAS. ARISTAS SIN DIRECCION
-//		{
-//			lineaArray = br.readLine().split(",");  //LEO LA LINEA, y LA PASO A ARRAY CON SPLIT
-//			nodo1 = Integer.parseInt(lineaArray[0].trim());
-//			nodo2 = Integer.parseInt(lineaArray[1].trim());
-//			peso  = Integer.parseInt(lineaArray[2].trim());
-//			Eje eje = new Eje(nodo1, nodo2, peso, false);
-//			
-//			grafo.agregarNodosAGrafo(nodo1, nodo2, false); //AGREGO A LOS NODOS. EL FALSE ES PQ ES SIN DIRECCION
-//			grafo.getListaEjesNoDirigidos().add(eje); //AGREGO EL EJE A LA LISTA DE NO DIRIGIDOS
-//		}	
-//		
-//		for (int i = 0; i < m2; i++)   //LEE LAS PROXIMAS m2 LINEAS. ARISTAS CON DIRECCION
-//		{
-//			lineaArray = br.readLine().split(","); //LEO LA LINEA, y LA PASO A ARRAY CON SPLIT
-//			nodo1 = Integer.parseInt(lineaArray[0].trim());
-//			nodo2 = Integer.parseInt(lineaArray[1].trim());
-//			peso  = Integer.parseInt(lineaArray[2].trim());
-//			Eje eje = new Eje(nodo1, nodo2, peso, true);  //EL TRUE ES PORQUE ES CON DIRECCION
-//			
-//			grafo.agregarNodosAGrafo(nodo1, nodo2, true); //AGREGO A LOS NODOS
-//			grafo.getListaEjesDirigidos().add(eje); //AGREGO EL EJE A LA LISTA DE NO DIRIGIDOS
-//		}
-//		
-//		return grafo;
-//	}
-	
-	
 }
