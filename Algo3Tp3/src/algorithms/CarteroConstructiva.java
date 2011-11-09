@@ -28,7 +28,7 @@ public class CarteroConstructiva {
 				//2) ORIENTAR LAS ARISTAS
 				grafoCopia.orientarTodasAristas();
 				//3) CALCULAR UN MATCHING DE DIN DOUT
-				List<int[]> pares = cartero.encontrarMatchingNodos(grafo);
+				List<int[]> pares = cartero.encontrarMatchingNodos(grafoCopia);
 				//4) CALCULAR EULERIANO
 				cartero.agregarCaminosMatcheados(pares,grafoCopia);//en vez de grafo hay que pasarle la copia que ya tiene las aristas orientadas//hay que pasarle los pares de la mejor solucion que encontremos
 				ListaInt circuitoEuleriano = CircuitoEuleriano.encontrarCircuitoEuleriano(grafoCopia);
@@ -39,15 +39,9 @@ public class CarteroConstructiva {
 				}
 				System.out.println();
 				System.out.println("----");
-				
-				//5) CALCULAR EULERIANO
-			
-//			grafo.showGrafo();
-			
-			//DEVOLVER
-			
-			grafo = fm.leerInstancia();
-			i++;
+
+				grafo = fm.leerInstancia();
+				i++;
 		}
 	}	
 	//La búsqueda local queda para el de búsqueda local
