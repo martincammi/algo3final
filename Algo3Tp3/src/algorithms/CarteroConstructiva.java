@@ -25,6 +25,7 @@ public class CarteroConstructiva {
 				System.out.println("Instancia " + i + ": ");
 				//1) HACER UNA COPIA DEL GRAFO
 				Grafo grafoCopia = ((Grafo)grafo.clone());
+				grafoCopia.calcularDantzig();
 				//2) ORIENTAR LAS ARISTAS
 				grafoCopia.orientarTodasAristas();
 				//3) CALCULAR UN MATCHING DE DIN DOUT
