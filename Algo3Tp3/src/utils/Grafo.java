@@ -356,4 +356,135 @@ public class Grafo {
 		return this.pesosEjes;
 	}
 	
+	public static long getComplex() {
+		return complex;
+	}
+
+	public static void setComplex(long complex) {
+		Grafo.complex = complex;
+	}
+
+	public long getT() {
+		return T;
+	}
+
+	public void setT(long t) {
+		T = t;
+	}
+
+	public int getCantAristas() {
+		return cantAristas;
+	}
+
+	public void setCantAristas(int cantAristas) {
+		this.cantAristas = cantAristas;
+	}
+
+	public int getCantArcos() {
+		return cantArcos;
+	}
+
+	public void setCantArcos(int cantArcos) {
+		this.cantArcos = cantArcos;
+	}
+
+	public ListaInt[] getAdyacenciasNoOr() {
+		return adyacenciasNoOr;
+	}
+
+	public void setAdyacenciasNoOr(ListaInt[] adyacenciasNoOr) {
+		this.adyacenciasNoOr = adyacenciasNoOr;
+	}
+
+	public ListaInt[] getAdyacenciasOr() {
+		return adyacenciasOr;
+	}
+
+	public void setAdyacenciasOr(ListaInt[] adyacenciasOr) {
+		this.adyacenciasOr = adyacenciasOr;
+	}
+
+	public int[][] getPesosEjes() {
+		return pesosEjes;
+	}
+
+	public void setPesosEjes(int[][] pesosEjes) {
+		this.pesosEjes = pesosEjes;
+	}
+
+	public ListaInt[] getAdyacenciasVisitados() {
+		return adyacenciasVisitados;
+	}
+
+	public void setAdyacenciasVisitados(ListaInt[] adyacenciasVisitados) {
+		this.adyacenciasVisitados = adyacenciasVisitados;
+	}
+
+	public int[] getDin() {
+		return din;
+	}
+
+	public void setDin(int[] din) {
+		this.din = din;
+	}
+
+	public int[] getDout() {
+		return dout;
+	}
+
+	public void setDout(int[] dout) {
+		this.dout = dout;
+	}
+
+	public int[][] getPesoCaminoMinimo() {
+		return pesoCaminoMinimo;
+	}
+
+	public void setPesoCaminoMinimo(int[][] pesoCaminoMinimo) {
+		this.pesoCaminoMinimo = pesoCaminoMinimo;
+	}
+
+	public int getINFINITO() {
+		return INFINITO;
+	}
+
+	public void setINFINITO(int iNFINITO) {
+		INFINITO = iNFINITO;
+	}
+
+	public void setCantNodos(int cantNodos) {
+		this.cantNodos = cantNodos;
+	}
+
+	public Grafo clone() throws CloneNotSupportedException {
+		Grafo grafo = new Grafo(cantNodos, cantAristas, cantArcos);
+		ListaInt[] adyacenteNoOrdenados = new ListaInt[cantNodos];
+		ListaInt[] adyacenteOrdenados = new ListaInt[cantNodos];
+		int[][] pesosDeEjes = new int[cantNodos][cantNodos];
+		int[] gradoEntrada = new int[cantNodos];
+		int[] gradoSalida = new int[cantNodos];
+		
+		for (int i = 0; i < cantNodos; i++)
+		{
+			adyacenteNoOrdenados[i] = (ListaInt) adyacenciasNoOr[i].clone();
+			adyacenteOrdenados[i] = (ListaInt) adyacenciasOr[i].clone();
+			gradoEntrada[i] = din[i];
+			gradoSalida[i] = dout[i];
+			
+			for (int j = 0; j < cantNodos; j++)
+			{
+				pesosDeEjes[i][j] = pesosEjes[i][j];
+			}
+		}
+		
+		grafo.setAdyacenciasNoOr(adyacenteNoOrdenados);
+		grafo.setAdyacenciasOr(adyacenteOrdenados);
+		grafo.setPesosEjes(pesosDeEjes);
+		grafo.setDin(gradoEntrada);
+		grafo.setDout(gradoSalida);
+		grafo.setT(T);
+		
+		return grafo;
+	}
+	
 }

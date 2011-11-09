@@ -12,7 +12,7 @@ public class CarteroConstructiva {
 
 	private Grafo grafo;
 	
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, CloneNotSupportedException {
 
 		FileManager fm = new FileManager("Ej1.in");
 		fm.abrirArchivo();
@@ -27,6 +27,7 @@ public class CarteroConstructiva {
 				//HACER UNA COPIA DEL GRAFO
 				//ORIENTAR LAS ARISTAS
 				
+				Grafo grafo1 = ((Grafo)grafo.clone());
 				grafo.orientarTodasAristas();
 			
 				//CALCULAR UN MATCHING DE DIN DOUT
