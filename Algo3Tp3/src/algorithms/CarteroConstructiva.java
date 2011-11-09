@@ -25,7 +25,6 @@ public class CarteroConstructiva {
 				System.out.println("Instancia " + i + ": ");
 				//1) HACER UNA COPIA DEL GRAFO
 				Grafo grafoCopia = ((Grafo)grafo.clone());
-				grafoCopia.calcularDantzig();
 				//2) ORIENTAR LAS ARISTAS
 				grafoCopia.orientarTodasAristas();
 				//3) CALCULAR UN MATCHING DE DIN DOUT
@@ -35,12 +34,8 @@ public class CarteroConstructiva {
 				ListaInt circuitoEuleriano = CircuitoEuleriano.encontrarCircuitoEuleriano(grafoCopia);
 				//5) DEVOLVER | reemplazar por la llamada a archivo|
 				System.out.print("Circuito: ");
-				for (Integer integer : circuitoEuleriano) {
-					System.out.print( integer + ",");
-				}
-				System.out.println();
+				System.out.println(circuitoEuleriano);
 				System.out.println("----");
-
 				grafo = fm.leerInstancia();
 				i++;
 		}
@@ -159,16 +154,21 @@ public class CarteroConstructiva {
 
 	private void agregarCaminosMatcheados(List<int[]> pares,Grafo gr) {
 		ListaInt[][] sol = new ListaInt[grafo.getCantNodos()][grafo.getCantNodos()];
-		for(int[] i:pares){
-			int nodo1=i[0], nodo2=i[1];
-			if(sol[nodo1][nodo2] == null){
-				sol[nodo1][nodo2] = Dijkstra.getPath(grafo, Dijkstra.dijkstra(grafo, nodo1), nodo1, nodo2);
-			}
-			ListIterator<Integer> li = sol[nodo1][nodo2].listIterator(1);
-			while(li.hasNext()){
-				nodo2 = li.next();
-				gr.agregarAdyacencia(nodo1, nodo2, grafo.getPesoAristas()[nodo1][nodo2],true);
-				nodo1=nodo2;
+		if(pares!=null){
+			for(int[] i:pares){
+				int nodo1=i[0], nodo2=i[1];
+				if(sol[nodo1][nodo2] == null){
+					sol[nodo1][nodo2] = Dijkstra.getPath(grafo, Dijkstra.dijkstra(grafo, nodo1), nodo1, nodo2);
+					System.out.println("Dijkstra: "+sol[nodo1][nodo2]);
+				}
+				ListIterator<Integer> li = sol[nodo1][nodo2].listIterator(1);
+				System.out.println("Arcos Agregados:");
+				while(li.hasNext()){
+					nodo2 = li.next();
+					System.out.println("("+nodo1+","+nodo2+")");
+					gr.agregarAdyacencia(nodo1, nodo2, grafo.getPesoAristas()[nodo1][nodo2],true);
+					nodo1=nodo2;
+				}
 			}
 		}
 	}

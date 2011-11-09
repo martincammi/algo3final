@@ -320,6 +320,7 @@ public class Grafo {
 		System.out.println("CantNodos: "+this.cantNodos);
 		System.out.println("CantAristas: "+this.cantAristas);
 		System.out.println("CantArcos: "+this.cantArcos);
+		System.out.println("sumaPesoAristas: "+this.sumaPesoAristas);
 		for(int i=0; i < cantNodos; ++i){
 			System.out.println("Nodo: "+i);
 			System.out.println("\tGradoBi: "+this.adyacenciasNoOr[i].size());
@@ -340,6 +341,12 @@ public class Grafo {
 			System.out.println();
 		}
 		for(int[] l:pesosEjes){
+			for(Integer k:l){
+				System.out.print(k+"\t");
+			}
+			System.out.println();
+		}
+		for(int[] l:pesoCaminoMinimo){
 			for(Integer k:l){
 				System.out.print(k+"\t");
 			}
@@ -460,6 +467,7 @@ public class Grafo {
 		ListaInt[] adyacenteNoOrdenados = new ListaInt[cantNodos];
 		ListaInt[] adyacenteOrdenados = new ListaInt[cantNodos];
 		int[][] pesosDeEjes = new int[cantNodos][cantNodos];
+		int[][] pesosDeCaminosMinimos = new int[cantNodos][cantNodos];
 		int[] gradoEntrada = new int[cantNodos];
 		int[] gradoSalida = new int[cantNodos];
 		
@@ -473,17 +481,28 @@ public class Grafo {
 			for (int j = 0; j < cantNodos; j++)
 			{
 				pesosDeEjes[i][j] = pesosEjes[i][j];
+				pesosDeCaminosMinimos[i][j] = pesoCaminoMinimo[i][j];
 			}
 		}
 		
 		grafo.setAdyacenciasNoOr(adyacenteNoOrdenados);
 		grafo.setAdyacenciasOr(adyacenteOrdenados);
 		grafo.setPesosEjes(pesosDeEjes);
+		grafo.setPesosCaminosMinimos(pesosDeCaminosMinimos);
 		grafo.setDin(gradoEntrada);
 		grafo.setDout(gradoSalida);
 		grafo.setT(T);
+		grafo.setSumaPesoAristas(sumaPesoAristas);
 		
 		return grafo;
+	}
+
+	private void setSumaPesoAristas(int sumaPesoAristas) {
+		this.sumaPesoAristas = sumaPesoAristas;
+	}
+
+	private void setPesosCaminosMinimos(int[][] pesosDeCaminosMinimos) {
+		this.pesoCaminoMinimo = pesosDeCaminosMinimos;
 	}
 	
 }

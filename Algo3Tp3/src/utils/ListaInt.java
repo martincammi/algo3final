@@ -8,7 +8,7 @@ public class ListaInt extends ArrayList<Integer>{
 	public String toString() {
 		String ret="";
 		for(Integer i: this){
-			ret+=i+" ";
+			ret+=i+",";
 		}
 		return ret;
 	}
