@@ -93,6 +93,7 @@ public class FileManager {
 				grafo.sumarBits(peso);
 				Grafo.complex++;
 			}
+			grafo.calcularDantzig(); //Terminé de armar el grafo, entonces calculo distancias minimas entre sus nodos.
 		}
 		return grafo;
 	}
