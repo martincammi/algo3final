@@ -16,7 +16,7 @@ public class CarteroConstructiva {
 		FileManager fm = new FileManager("Ej1.in");
 		fm.abrirArchivo();
 		Grafo grafo = fm.leerInstancia();
-		CarteroConstructiva cartero = new CarteroConstructiva();
+		CarteroConstructiva cartero = new CarteroConstructiva(grafo);
 		
 		int i = 1;
 		while (grafo != null)
@@ -47,6 +47,10 @@ public class CarteroConstructiva {
 	}	
 	//La búsqueda local queda para el de búsqueda local
 	//BUSQUEDA LOCAL SOBRE MATCHING EN LAS VECINDADES//DEFINIR QUIENES SON VECINOS
+	
+	public CarteroConstructiva(Grafo grafo){
+		this.grafo = grafo;
+	}
 	
 	/*Precondición: Grafo con todos los nodos orientados*/
 	public List<int[]> encontrarMatchingNodos(Grafo grafo){
