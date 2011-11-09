@@ -13,6 +13,7 @@ public class Grafo {
 	protected int din[];
 	public int[] dout;
 	private int[][] pesoCaminoMinimo;
+	private int sumaPesoAristas;
 	
 	int INFINITO = Integer.MAX_VALUE; //Temporal probando
 	/**
@@ -36,7 +37,7 @@ public class Grafo {
 		pesoCaminoMinimo = new int [cantNodos][cantNodos];
 		din = new int[cantNodos];
 		dout = new int[cantNodos];
-		
+		sumaPesoAristas = 0;
 		for(int i = 0; i < cantNodos; ++i){
 			adyacenciasNoOr[i] = new ListaInt();
 			adyacenciasOr[i] = new ListaInt();
@@ -163,19 +164,7 @@ public class Grafo {
 		}	
 	}	
 	
-	
-	public void orientarAristas(int semilla){
 
-		for(int nodo1 = 0; nodo1 < cantNodos;++nodo1){
-			int Ndout	= adyacenciasOr[nodo1].size();
-			int Ndin	= din[nodo1];
-			int Nd		= adyacenciasNoOr[nodo1].size();
-			if(Nd == 1 && (int)Math.abs(Ndin - Ndout) == 1){//hay una unica direccion posible para la arista no dirigida
-				int nodo2 = adyacenciasNoOr[nodo1].get(0);
-			}
-		}
-	}
-	
 	/**
 	 * Constructor para la entrada de la cátedra (no borrar uso para pruebas: Martin)
 	 * @param paresAdyacencias
@@ -212,9 +201,9 @@ public class Grafo {
 			sumarBits(par1);
 			sumarBits(par2);
 			sumarBits(peso);
-			
-			agregarAdyacencia(par1, par2, peso, false);
-			agregarAdyacencia(par2, par1, peso, false);
+
+			agregarAdyacencia(par1, par2, peso, false);//agrego las dos copias directamente en esta funcion para no contar dos veces el peso
+//			agregarAdyacencia(par2, par1, peso, false);
 			
 			complex++;
 		}
@@ -228,7 +217,7 @@ public class Grafo {
 			sumarBits(par1);
 			sumarBits(par2);
 			sumarBits(peso);
-			
+
 			agregarAdyacencia(par1, par2, peso, true);
 			
 			complex++;
@@ -309,9 +298,11 @@ public class Grafo {
 			dout[par1]++;
 		}else{
 			adyacenciasNoOr[par1].add(par2);
+			adyacenciasNoOr[par2].add(par1);
+			pesosEjes[par2][par1] = peso;
 		}
+		sumaPesoAristas+=peso;
 		pesosEjes[par1][par2] = peso;
-		
 	}
 	
 	public ListaInt adyacentesNoOr(int nodo){
@@ -326,7 +317,6 @@ public class Grafo {
 		return adyacenciasVisitados[nodo];
 	}
 	
-	@Deprecated
 	public void showGrafo(){
 		System.out.println("CantNodos: "+this.cantNodos);
 		System.out.println("CantAristas: "+this.cantAristas);

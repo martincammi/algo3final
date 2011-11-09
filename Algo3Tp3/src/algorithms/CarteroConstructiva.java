@@ -4,9 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import utils.FileManager;
-import utils.Grafo;
-import utils.ListaInt;
+import java.util.ListIterator;
+import utils.*;
 
 public class CarteroConstructiva {
 
@@ -27,17 +26,21 @@ public class CarteroConstructiva {
 				//2) ORIENTAR LAS ARISTAS
 				Grafo grafoCopia = ((Grafo)grafo.clone());
 				grafoCopia.orientarTodasAristas();
-			
+
 				//3) CALCULAR UN MATCHING DE DIN DOUT
 				List<int[]> pares = cartero.encontrarMatchingNodos(grafo);
-			
+
 				for (int[] par : pares) {
 					System.out.println("(" + par[0] + "," + par[1] + "," + par[2] + ")");
 				}
 				
 				//4) BUSQUEDA LOCAL SOBRE MATCHING EN LAS VECINDADES//DEFINIR QUIENES SON VECINOS
 			//5) CALCULAR EULERIANO
+			cartero.agregarCaminosMatcheados(pares,grafoCopia);//en vez de grafo hay que pasarle la copia que ya tiene las aristas orientadas//hay que pasarle los pares de la mejor solucion que encontremos
+//			grafo.showGrafo();
+			ListaInt path = CircuitoEuleriano.encontrarCircuitoEuleriano(grafoCopia);
 			//DEVOLVER
+			System.out.println(path);
 			grafo = fm.leerInstancia();
 		}
 	}	
@@ -55,8 +58,8 @@ public class CarteroConstructiva {
 		List<Integer> nodosDout = new ArrayList();
 		ListaInt[] orientados = grafo.adyacenciasOr;
 		
-		int dinExedente[] = new int[grafo.cantNodos];
-		int doutExedente[] = new int[grafo.cantNodos];
+		int dinExedente[] = new int[grafo.getCantNodos()];
+		int doutExedente[] = new int[grafo.getCantNodos()];
 		
 		for (int i = 0; i < orientados.length; i++) {
 			
@@ -142,5 +145,19 @@ public class CarteroConstructiva {
 		
 	}
 
-	
+	private void agregarCaminosMatcheados(List<int[]> pares,Grafo gr) {
+		ListaInt[][] sol = new ListaInt[grafo.getCantNodos()][grafo.getCantNodos()];
+		for(int[] i:pares){
+			int nodo1=i[0], nodo2=i[1];
+			if(sol[nodo1][nodo2] == null){
+				sol[nodo1][nodo2] = Dijkstra.getPath(grafo, Dijkstra.dijkstra(grafo, nodo1), nodo1, nodo2);
+			}
+			ListIterator<Integer> li = sol[nodo1][nodo2].listIterator(1);
+			while(li.hasNext()){
+				nodo2 = li.next();
+				gr.agregarAdyacencia(nodo1, nodo2, grafo.getPesoAristas()[nodo1][nodo2],true);
+				nodo1=nodo2;
+			}
+		}
+	}
 }

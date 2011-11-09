@@ -19,8 +19,16 @@ public class Dijkstra {
 
 			// The shortest path to next is dist[next] and via pred[next].
 
-			final ListaInt adyacentes = G.adyacentesOr(next);
-			for (Integer j: adyacentes) {
+			final ListaInt adyacentesOr = G.adyacentesOr(next);
+			for (Integer j: adyacentesOr) {
+				final int d = dist[next] + pesos[next][j];
+				if (dist[j] > d) {
+					dist[j] = d;
+					pred[j] = next;
+				}
+			}
+			final ListaInt adyacentesNoOr = G.adyacentesNoOr(next);
+			for (Integer j: adyacentesNoOr) {
 				final int d = dist[next] + pesos[next][j];
 				if (dist[j] > d) {
 					dist[j] = d;
