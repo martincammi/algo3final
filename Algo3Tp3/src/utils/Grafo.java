@@ -66,10 +66,9 @@ public class Grafo {
 	public void orientarTodasAristas()
 	{
 		int nodo;
-		int cantidadAristas = cantAristas;
 		String[] direccionOrientacionArista = {null, null}; 
 		
-		for(int i = 0; i < cantidadAristas - 1; i++)
+		while (cantAristas > 0)
 		{
 			//LA POSICION CERO DE DIRECCIONORIENTACIONARISTA ME DICE SI HAY ALGUN NODO DONDE LA CANTIDAD DE ARISTAS 
 			//ES IGUAL A LA RESTA ENTRE GRADO DE ENTRADA Y DE SALIDA.
