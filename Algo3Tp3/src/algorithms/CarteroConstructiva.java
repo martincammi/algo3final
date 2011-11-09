@@ -18,38 +18,46 @@ public class CarteroConstructiva {
 		Grafo grafo = fm.leerInstancia();
 		CarteroConstructiva cartero = new CarteroConstructiva();
 		
+		int i = 1;
 		while (grafo != null)
 		{
 			//MIENTRAS PARAMETRO DE ITERACIONES CONSTRUCTIVA HACER
-			
+				System.out.println("Instancia " + i + ": ");
 				//1) HACER UNA COPIA DEL GRAFO
-				//2) ORIENTAR LAS ARISTAS
 				Grafo grafoCopia = ((Grafo)grafo.clone());
+				//2) ORIENTAR LAS ARISTAS
 				grafoCopia.orientarTodasAristas();
-
 				//3) CALCULAR UN MATCHING DE DIN DOUT
 				List<int[]> pares = cartero.encontrarMatchingNodos(grafo);
-
-				for (int[] par : pares) {
-					System.out.println("(" + par[0] + "," + par[1] + "," + par[2] + ")");
+				//4) CALCULAR EULERIANO
+				cartero.agregarCaminosMatcheados(pares,grafoCopia);//en vez de grafo hay que pasarle la copia que ya tiene las aristas orientadas//hay que pasarle los pares de la mejor solucion que encontremos
+				ListaInt circuitoEuleriano = CircuitoEuleriano.encontrarCircuitoEuleriano(grafoCopia);
+				//5) DEVOLVER | reemplazar por la llamada a archivo|
+				System.out.print("Circuito: ");
+				for (Integer integer : circuitoEuleriano) {
+					System.out.print( integer + ",");
 				}
+				System.out.println();
+				System.out.println("----");
 				
-				//4) BUSQUEDA LOCAL SOBRE MATCHING EN LAS VECINDADES//DEFINIR QUIENES SON VECINOS
-			//5) CALCULAR EULERIANO
-			cartero.agregarCaminosMatcheados(pares,grafoCopia);//en vez de grafo hay que pasarle la copia que ya tiene las aristas orientadas//hay que pasarle los pares de la mejor solucion que encontremos
+				//5) CALCULAR EULERIANO
+			
 //			grafo.showGrafo();
-			ListaInt path = CircuitoEuleriano.encontrarCircuitoEuleriano(grafoCopia);
+			
 			//DEVOLVER
-			System.out.println(path);
+			
 			grafo = fm.leerInstancia();
+			i++;
 		}
 	}	
+	//La búsqueda local queda para el de búsqueda local
+	//BUSQUEDA LOCAL SOBRE MATCHING EN LAS VECINDADES//DEFINIR QUIENES SON VECINOS
 	
 	/*Precondición: Grafo con todos los nodos orientados*/
 	public List<int[]> encontrarMatchingNodos(Grafo grafo){
 		
 		if(!grafo.todasDirigidas()){
-			System.out.println("El grafo no es dirigido");
+			System.out.println("ERROR: El grafo no es dirigido");
 			return null;
 		}
 		
@@ -102,6 +110,11 @@ public class CarteroConstructiva {
 			}
 			
 		}
+		System.out.print("Matching: ");
+		for (int[] par : triplaInOutPeso) {
+			System.out.print("(" + par[0] + "," + par[1] + "," + par[2] + "),");
+		}
+		System.out.println();
 		
 		return triplaInOutPeso;
 		
