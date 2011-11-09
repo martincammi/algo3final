@@ -17,9 +17,9 @@ public class TestEncontrarMatchingNodos {
 	@Test
 	public void testGrafoSumidero(){
 		Grafo grafo = GeneradorGrafos.generarGrafoOrSumidero();
-		CarteroConstructiva cartero = new CarteroConstructiva(grafo);
+		CarteroConstructiva cartero = new CarteroConstructiva();
 		System.out.println("Grafo de " + grafo.cantNodos);
-		List<int[]> pares = cartero.encontrarMatchingNodos();
+		List<int[]> pares = cartero.encontrarMatchingNodos(grafo);
 		
 		assertNotNull(pares);
 		assertEquals(pares.size(), grafo.cantNodos-2-1);
