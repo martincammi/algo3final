@@ -17,89 +17,33 @@ public class CarteroConstructiva {
 		FileManager fm = new FileManager("Ej1.in");
 		fm.abrirArchivo();
 		Grafo grafo = fm.leerInstancia();
-		//String[] params = getTest(2);
-		//Grafo grafo = new Grafo(params);
-		CarteroConstructiva cartero = new CarteroConstructiva(grafo);
+		CarteroConstructiva cartero = new CarteroConstructiva();
 		
 		while (grafo != null)
 		{
 			//MIENTRAS PARAMETRO DE ITERACIONES CONSTRUCTIVA HACER
-				//HACER UNA COPIA DEL GRAFO
-				//ORIENTAR LAS ARISTAS
-				
-				Grafo grafo1 = ((Grafo)grafo.clone());
-				grafo.orientarTodasAristas();
 			
-				//CALCULAR UN MATCHING DE DIN DOUT
-				//List<int[]> pares = cartero.encontrarMatchingNodos();
-				List<int[]> pares = cartero.encontrarMatchingNodos();
+				//1) HACER UNA COPIA DEL GRAFO
+				//2) ORIENTAR LAS ARISTAS
+				Grafo grafoCopia = ((Grafo)grafo.clone());
+				grafoCopia.orientarTodasAristas();
+			
+				//3) CALCULAR UN MATCHING DE DIN DOUT
+				List<int[]> pares = cartero.encontrarMatchingNodos(grafo);
 			
 				for (int[] par : pares) {
 					System.out.println("(" + par[0] + "," + par[1] + "," + par[2] + ")");
 				}
 				
-				//BUSQUEDA LOCAL SOBRE MATCHING EN LAS VECINDADES//DEFINIR QUIENES SON VECINOS
-			//CALCULAR EULERIANO
+				//4) BUSQUEDA LOCAL SOBRE MATCHING EN LAS VECINDADES//DEFINIR QUIENES SON VECINOS
+			//5) CALCULAR EULERIANO
 			//DEVOLVER
 			grafo = fm.leerInstancia();
 		}
 	}	
 	
-	
-	public static void TestingEncontrarParesNodos(String[] args) {
-		String[] params = getTest(2);
-		
-		Grafo grafo = new Grafo(params);
-		
-		CarteroConstructiva cartero = new CarteroConstructiva(grafo);
-		List<int[]> pares = cartero.encontrarMatchingNodos();
-		
-		for (int[] par : pares) {
-			System.out.println("(" + par[0] + "," + par[1] + "," + par[2] + ")");
-		}
-		
-	}
-	
-	public static String[] getTest(int testNumber){
-		
-		switch (testNumber) {
-		case 1:
-				String[] params = {"6","0","8",
-						"0","1","1",
-						"1","3","1",
-						"3","4","1",
-						"3","2","1",
-						"3","5","1",
-						"2","1","1",
-						"5","1","1",
-						"4","0","1"
-						};
-				return params;
-		case 2:
-				String[] params2 = {"5","0","7",
-					"0","1","1",
-					"0","2","1",
-					"0","4","1",
-					"3","0","1",
-					"2","3","1",
-					"1","3","1",
-					"4","3","1"
-					};
-				return params2;
-
-		default:
-			return null;
-		}
-		
-		
-	}
-	
-	public CarteroConstructiva(Grafo grafo){
-		this.grafo = grafo;
-	}
-	
 	/*Precondición: Grafo con todos los nodos orientados*/
-	public List<int[]> encontrarMatchingNodos(){
+	public List<int[]> encontrarMatchingNodos(Grafo grafo){
 		
 		if(!grafo.todasDirigidas()){
 			System.out.println("El grafo no es dirigido");
