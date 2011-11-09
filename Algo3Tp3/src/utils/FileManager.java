@@ -76,7 +76,7 @@ public class FileManager {
 				nodo2 = Integer.parseInt(lineaArray[1].trim());
 				peso  = Integer.parseInt(lineaArray[2].trim());
 				grafo.agregarAdyacencia(nodo1, nodo2, peso, false);
-				grafo.agregarAdyacencia(nodo2, nodo1, peso, false);
+				//grafo.agregarAdyacencia(nodo2, nodo1, peso, false);/ /agrego las dos copias directamente en esta funcion para no contar dos veces el peso
 				grafo.sumarBits(nodo1);
 				grafo.sumarBits(nodo2);
 				grafo.sumarBits(peso);
