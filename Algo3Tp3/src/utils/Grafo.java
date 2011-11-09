@@ -43,7 +43,13 @@ public class Grafo {
 			adyacenciasVisitados[i] = new ListaInt();
 			din[i] = 0;
 			for(int j = 0; j < cantNodos;++j){
-				pesosEjes[i][j]= INFINITO;//CAMBIAR POR INFINITO
+				if(i == j){
+					pesosEjes[i][j] = 0;
+					pesoCaminoMinimo[i][j] = 0;
+				}else{
+					pesosEjes[i][j] = INFINITO;
+					pesoCaminoMinimo[i][j] = INFINITO;
+				}
 			}
 		}
 	}
@@ -186,8 +192,10 @@ public class Grafo {
 			for (int j = 0; j < cantNodos; j++) {
 				if(i == j){
 					pesosEjes[i][j] = 0;
+					pesoCaminoMinimo[i][j] = 0;
 				}else{
 					pesosEjes[i][j] = INFINITO;
+					pesoCaminoMinimo[i][j] = INFINITO;
 				}
 			}
 			adyacenciasNoOr[i] = new ListaInt();
@@ -225,7 +233,7 @@ public class Grafo {
 			
 			complex++;
 		}
-		
+		calcularDantzig();
 	}
 	
 	public int pesoCaminoMinimo (int nodo1, int nodo2){
@@ -236,36 +244,38 @@ public class Grafo {
 		
 		for (int i = 0; i < cantNodos; i++) {
 			for (int j = 0; j < cantNodos; j++) {
-				
-				if(pesosEjes[i][j] >= 0){
-					pesoCaminoMinimo[i][j] = pesosEjes[i][j];
-				}else{
-					pesoCaminoMinimo[i][j] = INFINITO;
-				}
+				pesoCaminoMinimo[i][j] = pesosEjes[i][j];
 			}
 		}
 		
-		/*
-		for (int i = 0; i < cantNodos; i++) {
-			for (int j = i; j < cantNodos; j++) {
-				for (int k = i; k < j; k++) {
-					if(pesoCaminoMinimo[i][j] > pesoCaminoMinimo[i][k] + pesoCaminoMinimo[k][j]){
-						pesoCaminoMinimo[i][j] = pesoCaminoMinimo[i][k] + pesoCaminoMinimo[k][j];
-					}
-				}
-			}
-		}*/
 		
 		for (int k = 0; k < cantNodos; k++) {
 			for (int i = 0; i < cantNodos; i++) {
 				for (int j = 0; j < cantNodos; j++) {
-					//pesoCaminoMinimo[i][j] = min (a[i][j], a[i][k] + a[k][j])					
+					if(pesoCaminoMinimo[i][k] != INFINITO && pesoCaminoMinimo[k][j] != INFINITO && i!=j){
+						pesoCaminoMinimo[i][j] = min (pesoCaminoMinimo[i][j], pesoCaminoMinimo[i][k] + pesoCaminoMinimo[k][j]);
+					}
 				}
 			}
 		}
-		
+	}
+	
+	private int min(int a, int b){
 
+		if(a == INFINITO){
+			return b;
+		}
 		
+		if(b == INFINITO){
+			return a;
+		}
+		
+		if(a < b){
+			return a;
+		}else{
+			return b;
+		}
+			
 	}
 	
 	public int getDin(int nodo){
