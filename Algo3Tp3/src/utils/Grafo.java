@@ -17,7 +17,7 @@ public class Grafo {
 	
 	int INFINITO = Integer.MAX_VALUE; //Temporal probando
 	/**
-	 * @param cantNodos: cantidad de v√©rtices
+	 * @param cantNodos: cantidad de vÈrtices
 	 * @param cantAristas: cantidad de ejes no orientados
 	 * @param cantArcos: cantidad de ejes orientados
 	 */
@@ -56,31 +56,45 @@ public class Grafo {
 	}
 	
 	/**
-	 * Suma al tama√±o de la entrada en bits.
+	 * Suma al tamaÒo de la entrada en bits.
 	 * @param n
 	 */
 	public final void sumarBits(int n){
 		T+= cantBits(n);
 	}
 	
-	public void orientarTodasAristas()
+	public void orientarTodasAristas(int nodoInicial, String decisionDefault)
 	{
-		int nodo;
 		String[] direccionOrientacionArista = {null, null}; 
-		
+		int nodoAOrientar = nodoInicial;
 		while (cantAristas > 0)
 		{
-			//LA POSICION CERO DE DIRECCIONORIENTACIONARISTA ME DICE SI HAY ALGUN NODO DONDE LA CANTIDAD DE ARISTAS 
-			//ES IGUAL A LA RESTA ENTRE GRADO DE ENTRADA Y DE SALIDA.
+			//LA POSICION CERO DE DIRECCIONORIENTACIONARISTA ME DICE SIEMPRE "S". ESTO LO HAGO ASI PARA QUE SE PASE COMO REFERENCIA
 			//LA POSICION 1 ME DICE SI TODAS LAS ARISTAS DE ESE NODO DEBEN SER DE SALIDA (MARCADA CON UNA S) O DE ENTRADA (CON UNA E)
-			nodo = encontrarNodoAOrientar(direccionOrientacionArista);
-			orientarNodo(nodo, direccionOrientacionArista);
+			
+			if (nodoAOrientar >=0)
+			{
+				nodoAOrientar = (nodoAOrientar >= this.cantNodos) ? 0 : nodoAOrientar;
+				direccionOrientacionArista[0] = "S";
+				
+				direccionOrientacionArista[1] = decisionDefault.equals("N") ? din[nodoAOrientar] >= dout[nodoAOrientar] ? "S" : "E" : decisionDefault;
+			}
+			else
+			{
+				nodoAOrientar = encontrarNodoAOrientar(decisionDefault, direccionOrientacionArista);
+			}
+			
+			orientarNodo(nodoAOrientar, direccionOrientacionArista);
+			if (nodoAOrientar >=0)
+			{
+				nodoAOrientar++;
+			}
 		}
 	}
 	
 	//ME DA UN NODO A ORIENTAR. SI ENCUENTRA UNO EN LA QUE LA DIFERENCIA DE DIN CON DOUT = CANTIDAD DE ARISTAS DE ESE NODO (Y QUE TENGA ALGUNA ARISTA PARA ORIENTAR)
 	//ME DEVUELVE ESE, SINO, ME DA CUALQUIER OTRO NODO QUE TENGA ALGUNA ARISTA PARA ORIENTAR
-	private int encontrarNodoAOrientar(String[] direccionOrientacionArista)
+	private int encontrarNodoAOrientar(String decisionDefault, String[] direccionOrientacionArista)
 	{
 		int result = -1;
 		for (int i = 0; i < cantNodos; i++)
@@ -89,7 +103,7 @@ public class Grafo {
 			{
 				result = i;
 				direccionOrientacionArista[0] = "S";
-				direccionOrientacionArista[1] = din[i] > dout[i] ? "S" : "E";
+				direccionOrientacionArista[1] = decisionDefault.equals("N") ? din[i] >= dout[i] ? "S" : "E" : decisionDefault;
 				break;
 			}
 		}
@@ -101,8 +115,15 @@ public class Grafo {
 				if (adyacenciasNoOr[i].size() > 0)
 				{
 					result = i;
-					direccionOrientacionArista[0] = "N";
-					direccionOrientacionArista[1] = null;
+					direccionOrientacionArista[0] = "S";
+					if (decisionDefault.equals("N"))
+					{
+						direccionOrientacionArista[1] = din[i] >= dout[i] ? "S" : "E";
+					}
+					else
+					{
+						direccionOrientacionArista[1] = decisionDefault;
+					}
 					break;
 				}
 			}
@@ -117,55 +138,51 @@ public class Grafo {
 	//CASO CONTRARIO, ORIENTO ESA ARISTA Y LA HAGO DE SALIDA
 	private void orientarNodo(int nodoAOrientar, String[] direccionOrientacionArista)
 	{
-		int peso = 0;
 		int cantAristasNodo = adyacenciasNoOr[nodoAOrientar].size();
 		
-		if (direccionOrientacionArista[0].equals("S"))
+		for (int i = cantAristasNodo - 1; i >= 0; i--)
 		{
-			for (int i = cantAristasNodo - 1; i >= 0; i--)
+			if ("S".equals(direccionOrientacionArista[1]))  // SI ES UNA SALIDA
 			{
-				if (direccionOrientacionArista[1].equals("S"))
-				{
-					peso = (pesosEjes[adyacenciasNoOr[nodoAOrientar].get(i)][nodoAOrientar] == INFINITO) 
-				 	  ? pesosEjes[nodoAOrientar][adyacenciasNoOr[nodoAOrientar].get(i)]
-					  : pesosEjes[adyacenciasNoOr[nodoAOrientar].get(i)][nodoAOrientar];
-				 	
-				 	agregarAdyacencia(nodoAOrientar, adyacenciasNoOr[nodoAOrientar].get(i), peso, true);
-				 	adyacenciasNoOr[adyacenciasNoOr[nodoAOrientar].get(i)].remove(new Integer(nodoAOrientar));
-				 	adyacenciasNoOr[nodoAOrientar].remove(i);
-				 	cantAristas--;
-					
-				}
-				else
-				{
-					peso = (pesosEjes[adyacenciasNoOr[nodoAOrientar].get(i)][nodoAOrientar] == INFINITO) 
-				 	  ? pesosEjes[nodoAOrientar][adyacenciasNoOr[nodoAOrientar].get(i)]
-					  : pesosEjes[adyacenciasNoOr[nodoAOrientar].get(i)][nodoAOrientar];
-				 	
-				 	agregarAdyacencia(adyacenciasNoOr[nodoAOrientar].get(i), nodoAOrientar, peso, true);
-				 	adyacenciasNoOr[adyacenciasNoOr[nodoAOrientar].get(i)].remove(new Integer(nodoAOrientar));
-				 	adyacenciasNoOr[nodoAOrientar].remove(i);
-				 	cantAristas--;
+				agregarEjeSalidaYRemueveArista(i, nodoAOrientar);
 				
-				}
+			}
+			else   //SI ES UNA ENTRADA
+			{
+				agregarEjeEntradaYRemueveArista(i, nodoAOrientar);
 			}
 		}
-		else
-		{
-			peso = (pesosEjes[adyacenciasNoOr[nodoAOrientar].get(0)][nodoAOrientar] == INFINITO) 
-		 	  ? pesosEjes[nodoAOrientar][adyacenciasNoOr[nodoAOrientar].get(0)]
-			  : pesosEjes[adyacenciasNoOr[nodoAOrientar].get(0)][nodoAOrientar];
-		 	
-		 	agregarAdyacencia(nodoAOrientar, adyacenciasNoOr[nodoAOrientar].get(0), peso, true);
-		 	adyacenciasNoOr[adyacenciasNoOr[nodoAOrientar].get(0)].remove(new Integer(nodoAOrientar));
-		 	adyacenciasNoOr[nodoAOrientar].remove(0);
-		 	cantAristas--;
-		}	
-	}	
+	}
+	
+	private void agregarEjeSalidaYRemueveArista(int index, int nodoAOrientar)
+	{
+		int peso;
+		peso = (pesosEjes[adyacenciasNoOr[nodoAOrientar].get(index)][nodoAOrientar] == INFINITO) 
+	 	  ? pesosEjes[nodoAOrientar][adyacenciasNoOr[nodoAOrientar].get(index)]
+		  : pesosEjes[adyacenciasNoOr[nodoAOrientar].get(index)][nodoAOrientar];
+	 	
+	 	agregarAdyacencia(nodoAOrientar, adyacenciasNoOr[nodoAOrientar].get(index), peso, true);
+	 	adyacenciasNoOr[adyacenciasNoOr[nodoAOrientar].get(index)].remove(new Integer(nodoAOrientar));
+	 	adyacenciasNoOr[nodoAOrientar].remove(index);
+	 	cantAristas--;
+	}
+	
+	private void agregarEjeEntradaYRemueveArista(int index, int nodoAOrientar)
+	{
+		int peso;
+		peso = (pesosEjes[adyacenciasNoOr[nodoAOrientar].get(index)][nodoAOrientar] == INFINITO) 
+	 	  ? pesosEjes[nodoAOrientar][adyacenciasNoOr[nodoAOrientar].get(index)]
+		  : pesosEjes[adyacenciasNoOr[nodoAOrientar].get(index)][nodoAOrientar];
+	 	
+	 	agregarAdyacencia(adyacenciasNoOr[nodoAOrientar].get(index), nodoAOrientar, peso, true);
+	 	adyacenciasNoOr[adyacenciasNoOr[nodoAOrientar].get(index)].remove(new Integer(nodoAOrientar));
+	 	adyacenciasNoOr[nodoAOrientar].remove(index);
+	 	cantAristas--;
+	}
 	
 
 	/**
-	 * Constructor para la entrada de la c√°tedra (no borrar uso para pruebas: Martin)
+	 * Constructor para la entrada de la c·tedra (no borrar uso para pruebas: Martin)
 	 * @param paresAdyacencias
 	 */
 	public Grafo(String[] paresAdyacencias){

@@ -17,6 +17,8 @@ public class CarteroConstructiva {
 		fm.abrirArchivo();
 		Grafo grafo = fm.leerInstancia();
 		CarteroConstructiva cartero = new CarteroConstructiva(grafo);
+		int nodoIncial = -1;
+		String decisionDefault = "S";  // S Mandar Siempre Salida, E Mandar Siempre Entrada
 		
 		int i = 1;
 		while (grafo != null)
@@ -26,7 +28,8 @@ public class CarteroConstructiva {
 				//1) HACER UNA COPIA DEL GRAFO
 				Grafo grafoCopia = ((Grafo)grafo.clone());
 				//2) ORIENTAR LAS ARISTAS
-				grafoCopia.orientarTodasAristas();
+				grafoCopia.orientarTodasAristas(nodoIncial, decisionDefault);
+				
 				//3) CALCULAR UN MATCHING DE DIN DOUT
 				List<Eje> unMatching = cartero.encontrarMatchingNodos(grafoCopia);
 				
@@ -35,8 +38,8 @@ public class CarteroConstructiva {
 				
 				//4) CALCULAR EULERIANO 
 				// TODO Sebas Adaptar al nuevo matchingMinimo
-//				cartero.agregarCaminosMatcheados(unMatching,grafoCopia);//en vez de grafo hay que pasarle la copia que ya tiene las aristas orientadas//hay que pasarle los pares de la mejor solucion que encontremos
-//				ListaInt circuitoEuleriano = CircuitoEuleriano.encontrarCircuitoEuleriano(grafoCopia);
+				cartero.agregarCaminosMatcheados(unMatching,grafoCopia);//en vez de grafo hay que pasarle la copia que ya tiene las aristas orientadas//hay que pasarle los pares de la mejor solucion que encontremos
+				ListaInt circuitoEuleriano = CircuitoEuleriano.encontrarCircuitoEuleriano(grafoCopia);
 //				5) DEVOLVER | reemplazar por la llamada a archivo|
 //				System.out.print("Circuito: ");
 //				System.out.println(circuitoEuleriano);
@@ -225,11 +228,11 @@ public class CarteroConstructiva {
 		
 	}
 
-	private void agregarCaminosMatcheados(List<int[]> pares,Grafo gr) {
+	private void agregarCaminosMatcheados(List<Eje> pares,Grafo gr) {
 		ListaInt[][] sol = new ListaInt[grafo.getCantNodos()][grafo.getCantNodos()];
 		if(pares!=null){
-			for(int[] i:pares){
-				int nodo1=i[0], nodo2=i[1];
+			for(Eje i:pares){
+				int nodo1=i.getNodo1(), nodo2=i.getNodo2();
 				if(sol[nodo1][nodo2] == null){
 					sol[nodo1][nodo2] = Dijkstra.getPath(grafo, Dijkstra.dijkstra(grafo, nodo1), nodo1, nodo2);
 					System.out.println("Dijkstra: "+sol[nodo1][nodo2]);
