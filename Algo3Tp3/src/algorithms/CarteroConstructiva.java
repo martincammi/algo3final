@@ -10,6 +10,7 @@ import utils.*;
 public class CarteroConstructiva {
 
 	private Grafo grafo;
+	private int[] primos = {1,3,5,7,11,13,17,19,23};
 	
 	public static void main(String[] args) throws IOException, CloneNotSupportedException {
 
@@ -31,15 +32,16 @@ public class CarteroConstructiva {
 				grafoCopia.orientarTodasAristas(nodoIncial, decisionDefault);
 				
 				//3) CALCULAR UN MATCHING DE DIN DOUT
-				List<Eje> unMatching = cartero.encontrarMatchingNodos(grafoCopia);
+				int aleatoriedad = 10; 
+				List<Eje> unMatching = cartero.encontrarMatchingNodos(grafoCopia, aleatoriedad);
 				
 				//3.1) Calcular de todos los vecinos el de menor matching
 				//List<Eje> matchingMinimo = cartero.encontrarMatchingDeMenorPeso(unMatching,grafo.getPesoCaminoMinimo());
 				
 				//4) CALCULAR EULERIANO 
 				// TODO Sebas Adaptar al nuevo matchingMinimo
-				cartero.agregarCaminosMatcheados(unMatching,grafoCopia);//en vez de grafo hay que pasarle la copia que ya tiene las aristas orientadas//hay que pasarle los pares de la mejor solucion que encontremos
-				ListaInt circuitoEuleriano = CircuitoEuleriano.encontrarCircuitoEuleriano(grafoCopia);
+//				cartero.agregarCaminosMatcheados(unMatching,grafoCopia);//en vez de grafo hay que pasarle la copia que ya tiene las aristas orientadas//hay que pasarle los pares de la mejor solucion que encontremos
+//				ListaInt circuitoEuleriano = CircuitoEuleriano.encontrarCircuitoEuleriano(grafoCopia);
 //				5) DEVOLVER | reemplazar por la llamada a archivo|
 //				System.out.print("Circuito: ");
 //				System.out.println(circuitoEuleriano);
@@ -50,7 +52,7 @@ public class CarteroConstructiva {
 	}	
 	//La búsqueda local queda para el de búsqueda local
 	//BUSQUEDA LOCAL SOBRE MATCHING EN LAS VECINDADES//DEFINIR QUIENES SON VECINOS
-	
+	@Deprecated
 	public List<Eje> encontrarMatchingDeMenorPeso(List<Eje> matching, int[][] pesosMin){
 		
 		List<Eje> listaResultado = new ArrayList<Eje>();
@@ -124,7 +126,10 @@ public class CarteroConstructiva {
 	}
 	
 	/*Precondición: Grafo con todos los nodos orientados*/
-	public List<Eje> encontrarMatchingNodos(Grafo grafo){
+	public List<Eje> encontrarMatchingNodos(Grafo grafo, int aleatoriedad){
+		
+		int primo = getPrimeIndex(aleatoriedad);
+		System.out.println("primo: " + primo);
 		
 		if(!grafo.todasDirigidas()){
 			System.out.println("ERROR: El grafo no es dirigido");
@@ -143,7 +148,7 @@ public class CarteroConstructiva {
 			
 			if(grafo.getDin(i) > grafo.getDout(i)){
 				nodosDin.add(i);
-				dinExedente[i] = grafo.getDin(i) - grafo.getDout(i) ;
+				dinExedente[i] = grafo.getDin(i) - grafo.getDout(i);
 			}
 			
 			if(grafo.getDout(i) > grafo.getDin(i)){
@@ -157,13 +162,38 @@ public class CarteroConstructiva {
 			cantResult += dinExedente[nodoIn];
 		}
 		
-		triplaInOutPeso = new ArrayList<Eje>(); 
+		triplaInOutPeso = new ArrayList<Eje>();
+		
+		if(nodosDout.size() == 0){
+			return triplaInOutPeso;
+		}
+			
+		int i = 0;
+		
+		int corte = 0;
+		while(primo % nodosDin.size() == 0 && corte <= primos.length){
+			primo = getPrimeIndex( (aleatoriedad+1) % primos.length);
+			corte++;
+		}
+		
+		if(corte > primos.length){
+			//Comprarle medio kilo de helado a Sebas.
+		}
+		
+		int indexIn = primo % (nodosDin.size());
+		int indexOut = nodosDout.size() - indexIn - 1;
+		
+		System.out.println(nodosDin);
+		System.out.println(nodosDout);
 		
 		while( nodosDin.size() > 0 && nodosDout.size() > 0){
 			
 			//las listas nodoDin y nodoDout son mutuamente excluyentes.
-			Integer nodoIn = nodosDin.get(0);
-			Integer nodoOut = nodosDout.get(0);
+			//las listas nodoDin y nodoDout deberian tener la misma longitud.
+			
+			Integer nodoIn = nodosDin.get(indexIn);
+			Integer nodoOut = nodosDout.get(indexOut);
+			
 			int valorCaminoMinimo = grafo.pesoCaminoMinimo(nodoIn, nodoOut);
 			Eje eje = new Eje(nodoIn, nodoOut, valorCaminoMinimo);
 			triplaInOutPeso.add(eje);
@@ -179,6 +209,12 @@ public class CarteroConstructiva {
 				nodosDout.remove(nodoOut);
 			}
 			
+			if(nodosDin.size() > 0){
+				indexIn = (indexIn + primo) % nodosDin.size();
+				indexOut = (indexOut + primo) % nodosDout.size();
+			}
+
+			i++;
 		}
 		System.out.print("Matching: ");
 		for (Eje eje : triplaInOutPeso) {
@@ -188,6 +224,11 @@ public class CarteroConstructiva {
 		
 		return triplaInOutPeso;
 		
+	}
+	
+	private int getPrimeIndex(int aleatoriedad) {
+		int modulo = aleatoriedad % primos.length;
+		return primos[modulo];
 	}
 	
 	public void encontrarCamino() {
