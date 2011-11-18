@@ -63,94 +63,188 @@ public class Grafo {
 		T+= cantBits(n);
 	}
 	
-	public void orientarTodasAristas(int nodoInicial, String decisionDefault)
+	private int encontrarProximoNodoConAristas(int nodoAOrientar)
 	{
-		String[] direccionOrientacionArista = {null, null}; 
-		int nodoAOrientar = nodoInicial;
-		while (cantAristas > 0)
-		{
-			//LA POSICION CERO DE DIRECCIONORIENTACIONARISTA ME DICE SIEMPRE "S". ESTO LO HAGO ASI PARA QUE SE PASE COMO REFERENCIA
-			//LA POSICION 1 ME DICE SI TODAS LAS ARISTAS DE ESE NODO DEBEN SER DE SALIDA (MARCADA CON UNA S) O DE ENTRADA (CON UNA E)
-			
-			if (nodoAOrientar >=0)
-			{
-				nodoAOrientar = (nodoAOrientar >= this.cantNodos) ? 0 : nodoAOrientar;
-				direccionOrientacionArista[0] = "S";
-				
-				direccionOrientacionArista[1] = decisionDefault.equals("N") ? din[nodoAOrientar] >= dout[nodoAOrientar] ? "S" : "E" : decisionDefault;
-			}
-			else
-			{
-				nodoAOrientar = encontrarNodoAOrientar(decisionDefault, direccionOrientacionArista);
-			}
-			
-			orientarNodo(nodoAOrientar, direccionOrientacionArista);
-			if (nodoAOrientar >=0)
-			{
-				nodoAOrientar++;
-			}
-		}
-	}
-	
-	//ME DA UN NODO A ORIENTAR. SI ENCUENTRA UNO EN LA QUE LA DIFERENCIA DE DIN CON DOUT = CANTIDAD DE ARISTAS DE ESE NODO (Y QUE TENGA ALGUNA ARISTA PARA ORIENTAR)
-	//ME DEVUELVE ESE, SINO, ME DA CUALQUIER OTRO NODO QUE TENGA ALGUNA ARISTA PARA ORIENTAR
-	private int encontrarNodoAOrientar(String decisionDefault, String[] direccionOrientacionArista)
-	{
-		int result = -1;
-		for (int i = 0; i < cantNodos; i++)
-		{
-			if (Math.abs(din[i] - dout[i]) == adyacenciasNoOr[i].size() && adyacenciasNoOr[i].size() > 0)
-			{
-				result = i;
-				direccionOrientacionArista[0] = "S";
-				direccionOrientacionArista[1] = decisionDefault.equals("N") ? din[i] >= dout[i] ? "S" : "E" : decisionDefault;
-				break;
-			}
-		}
-		
-		if (result == -1)
+		int result = 0;
+		if (nodoAOrientar+1 >= cantNodos)
 		{
 			for (int i = 0; i < cantNodos; i++)
 			{
 				if (adyacenciasNoOr[i].size() > 0)
 				{
 					result = i;
-					direccionOrientacionArista[0] = "S";
-					if (decisionDefault.equals("N"))
-					{
-						direccionOrientacionArista[1] = din[i] >= dout[i] ? "S" : "E";
-					}
-					else
-					{
-						direccionOrientacionArista[1] = decisionDefault;
-					}
 					break;
 				}
 			}
 		}
-			
+		else
+		{
+			for (int i = nodoAOrientar+1; i < cantNodos; i++)
+			{
+				if (adyacenciasNoOr[i].size() > 0)
+				{
+					result = i;
+					break;
+				}
+			}
+		}
+		
 		return result;
 	}
 	
-	//ORIENTA EL NODO QUE VIENE COMO PARAMETRO
-	//SI DIRECCIONORIENTACIONARISTA[0] VIENE CON S, TODAS LAS ARISTAS DE ESE NODO SE ORIENTARAN PARA EL MISMO LADO
-	//Y ESTA DEFINIDO EN DIRECCIONORIENTACIONARISTA[1]
-	//CASO CONTRARIO, ORIENTO ESA ARISTA Y LA HAGO DE SALIDA
+	public void orientarTodasAristas(int formaElegirNodo, int nodoInicial, String decisionDefault)
+	{
+		String[] direccionOrientacionArista = {null, null}; 
+		int nodoAOrientar = nodoInicial;
+		
+		if (formaElegirNodo == 2 && adyacenciasNoOr[nodoAOrientar].size() == 0)
+		{
+			nodoAOrientar = encontrarProximoNodoConAristas(nodoAOrientar);			
+		}
+		
+		while (cantAristas > 0)
+		{
+			//LA POSICION CERO DE DIRECCIONORIENTACIONARISTA ME DICE SIEMPRE "S". ESTO LO HAGO ASI PARA QUE SE PASE COMO REFERENCIA
+			//LA POSICION 1 ME DICE SI TODAS LAS ARISTAS DE ESE NODO DEBEN SER DE SALIDA (MARCADA CON UNA S) O DE ENTRADA (CON UNA E)
+			
+			switch (formaElegirNodo) {
+			case 1:				//   DIREFERENCIA DI CON DOUT
+				nodoAOrientar = encontrarNodoAOrientar(1, decisionDefault, direccionOrientacionArista);
+				break;
+			case 2:				//   COMIENZO DESDE UN CIERTO NODO. DEBE ESTAR CARGADO EL PARAMETRO NODOINCIIAL
+				direccionOrientacionArista[0] = "S";
+				direccionOrientacionArista[1] = din[nodoAOrientar] == dout[nodoAOrientar] ? decisionDefault : (din[nodoAOrientar] > dout[nodoAOrientar] ? "S" : "E");
+				break;
+			case 3:				//   EL QUE TENGA MAYOR GRADO (MAS ARISTAS POR ORDENAR)
+				nodoAOrientar = encontrarNodoAOrientar(3, decisionDefault, direccionOrientacionArista);
+				break;
+			case 4:				//   EL QUE TENGA MAYOR GRADO DE ENTRADA LO ORIENTO PRIMERO
+				nodoAOrientar = encontrarNodoAOrientar(4, decisionDefault, direccionOrientacionArista);
+				break;
+			case 5:				//   EL QUE TENGA MAYOR GRADO DE SALIDA LO ORIENTO PRIMERO
+				nodoAOrientar = encontrarNodoAOrientar(5, decisionDefault, direccionOrientacionArista);
+				break;
+			default:
+				nodoAOrientar = encontrarNodoAOrientar(6, decisionDefault, direccionOrientacionArista);
+				break;
+			}
+			
+			orientarNodo(nodoAOrientar, direccionOrientacionArista);
+			if (formaElegirNodo == 2 && adyacenciasNoOr[nodoAOrientar].size() == 0)
+			{
+				nodoAOrientar = encontrarProximoNodoConAristas(nodoAOrientar);
+			}
+		}
+	}
+	
+	//ME DA UN NODO A ORIENTAR. SI ENCUENTRA UNO EN LA QUE LA DIFERENCIA DE DIN CON DOUT = CANTIDAD DE ARISTAS DE ESE NODO (Y QUE TENGA ALGUNA ARISTA PARA ORIENTAR)
+	//ME DEVUELVE ESE, SINO, ME DA CUALQUIER OTRO NODO QUE TENGA ALGUNA ARISTA PARA ORIENTAR
+	private int encontrarNodoAOrientar(int formaElegirNodo, String decisionDefault, String[] direccionOrientacionArista)
+	{
+		int result = -1;
+		int grado = 0;
+		
+		if (formaElegirNodo == 1)
+		{
+			for (int i = 0; i < cantNodos; i++)
+			{
+				if (Math.abs(din[i] - dout[i]) == adyacenciasNoOr[i].size() && adyacenciasNoOr[i].size() > 0)
+				{
+					result = i;
+					direccionOrientacionArista[0] = "S";
+					direccionOrientacionArista[1] = din[i] == dout[i] ? decisionDefault : (din[i] > dout[i] ? "S" : "E");
+					break;
+				}
+			}
+			
+			if (result == -1)
+			{
+				for (int i = 0; i < cantNodos; i++)
+				{
+					if (adyacenciasNoOr[i].size() > 0)
+					{
+						result = i;
+						direccionOrientacionArista[0] = "S";
+						direccionOrientacionArista[1] = din[i] == dout[i] ? decisionDefault : (din[i] > dout[i] ? "S" : "E");
+						break;
+					}
+				}
+			}
+		}
+		else
+		{
+			if (formaElegirNodo == 3)
+			{
+				for (int i = 0; i < cantNodos; i++)
+				{
+					if (adyacenciasNoOr[i].size() > 0)
+					{
+						if (adyacenciasNoOr[i].size() > grado)
+						{
+							grado = adyacenciasNoOr[i].size();
+							result = i;
+							direccionOrientacionArista[0] = "S";
+							direccionOrientacionArista[1] = din[i] == dout[i] ? decisionDefault : (din[i] > dout[i] ? "S" : "E");
+						}
+					}
+				}
+			}
+			else
+			{
+				if (formaElegirNodo == 4)
+				{
+					result = 0;
+					for (int i = 0; i < cantNodos; i++)
+					{
+						if (adyacenciasNoOr[i].size() > grado)
+						{
+							if (din[i] > grado)
+							{
+								grado = din[i];
+								result = i;
+								direccionOrientacionArista[0] = "S";
+								direccionOrientacionArista[1] = din[i] == dout[i] ? decisionDefault : (din[i] > dout[i] ? "S" : "E");
+							}
+						}
+					}
+				}
+				else
+				{
+					if (formaElegirNodo == 5)
+					{
+						result = 0;
+						for (int i = 0; i < cantNodos; i++)
+						{
+							if (adyacenciasNoOr[i].size() > 0)
+							{
+								if (dout[i] > grado)
+								{
+									grado = dout[i];
+									result = i;
+									direccionOrientacionArista[0] = "S";
+									direccionOrientacionArista[1] = din[i] == dout[i] ? decisionDefault : (din[i] > dout[i] ? "S" : "E");
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		return result;
+	}
+	
+	//ORIENTA EL NODO QUE VIENE COMO PARAMETRO Y ESTA DEFINIDO EN DIRECCIONORIENTACIONARISTA[1]
 	private void orientarNodo(int nodoAOrientar, String[] direccionOrientacionArista)
 	{
-		int cantAristasNodo = adyacenciasNoOr[nodoAOrientar].size();
-		
-		for (int i = cantAristasNodo - 1; i >= 0; i--)
+		if ("S".equals(direccionOrientacionArista[1]))  // SI ES UNA SALIDA
 		{
-			if ("S".equals(direccionOrientacionArista[1]))  // SI ES UNA SALIDA
-			{
-				agregarEjeSalidaYRemueveArista(i, nodoAOrientar);
-				
-			}
-			else   //SI ES UNA ENTRADA
-			{
-				agregarEjeEntradaYRemueveArista(i, nodoAOrientar);
-			}
+			agregarEjeSalidaYRemueveArista(0, nodoAOrientar);
+			
+		}
+		else   //SI ES UNA ENTRADA
+		{
+			agregarEjeEntradaYRemueveArista(0, nodoAOrientar);
 		}
 	}
 	
