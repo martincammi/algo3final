@@ -63,6 +63,48 @@ public class Grafo {
 		T+= cantBits(n);
 	}
 	
+	public void orientarTodasAristas(int formaElegirNodo, int nodoInicial, String decisionDefault)
+	{
+		String[] direccionOrientacionArista = {null, null}; 
+		int nodoAOrientar = nodoInicial;
+		
+		if (formaElegirNodo == 2 && adyacenciasNoOr[nodoAOrientar].size() == 0)
+		{
+			nodoAOrientar = encontrarProximoNodoConAristas(nodoAOrientar);			
+		}
+		
+		while (cantAristas > 0)
+		{
+			//LA POSICION CERO DE DIRECCIONORIENTACIONARISTA ME DICE SIEMPRE "S". ESTO LO HAGO ASI PARA QUE SE PASE COMO REFERENCIA
+			//LA POSICION 1 ME DICE SI TODAS LAS ARISTAS DE ESE NODO DEBEN SER DE SALIDA (MARCADA CON UNA S) O DE ENTRADA (CON UNA E)
+			
+			switch (formaElegirNodo) {
+			case 1:				//   DIREFERENCIA DIN CON DOUT
+				nodoAOrientar = encontrarNodoAOrientar(1, decisionDefault, direccionOrientacionArista);
+				break;
+			case 2:				//   COMIENZO DESDE UN CIERTO NODO. DEBE ESTAR CARGADO EL PARAMETRO NODOINCIIAL
+				direccionOrientacionArista[0] = "S";
+				direccionOrientacionArista[1] = din[nodoAOrientar] == dout[nodoAOrientar] ? decisionDefault : (din[nodoAOrientar] > dout[nodoAOrientar] ? "S" : "E");
+				break;
+			case 3:				//   EL QUE TENGA MAYOR GRADO (MAS ARISTAS POR ORDENAR)
+				nodoAOrientar = encontrarNodoAOrientar(3, decisionDefault, direccionOrientacionArista);
+				break;
+			case 4:				//   EL QUE TENGA MAYOR GRADO DE ENTRADA LO ORIENTO PRIMERO
+				nodoAOrientar = encontrarNodoAOrientar(4, decisionDefault, direccionOrientacionArista);
+				break;
+			case 5:				//   EL QUE TENGA MAYOR GRADO DE SALIDA LO ORIENTO PRIMERO
+				nodoAOrientar = encontrarNodoAOrientar(5, decisionDefault, direccionOrientacionArista);
+				break;
+			}
+			
+			orientarNodo(nodoAOrientar, direccionOrientacionArista);
+			if (formaElegirNodo == 2 && adyacenciasNoOr[nodoAOrientar].size() == 0)
+			{
+				nodoAOrientar = encontrarProximoNodoConAristas(nodoAOrientar);
+			}
+		}
+	}
+	
 	private int encontrarProximoNodoConAristas(int nodoAOrientar)
 	{
 		int result = 0;
@@ -90,48 +132,6 @@ public class Grafo {
 		}
 		
 		return result;
-	}
-	
-	public void orientarTodasAristas(int formaElegirNodo, int nodoInicial, String decisionDefault)
-	{
-		String[] direccionOrientacionArista = {null, null}; 
-		int nodoAOrientar = nodoInicial;
-		
-		if (formaElegirNodo == 2 && adyacenciasNoOr[nodoAOrientar].size() == 0)
-		{
-			nodoAOrientar = encontrarProximoNodoConAristas(nodoAOrientar);			
-		}
-		
-		while (cantAristas > 0)
-		{
-			//LA POSICION CERO DE DIRECCIONORIENTACIONARISTA ME DICE SIEMPRE "S". ESTO LO HAGO ASI PARA QUE SE PASE COMO REFERENCIA
-			//LA POSICION 1 ME DICE SI TODAS LAS ARISTAS DE ESE NODO DEBEN SER DE SALIDA (MARCADA CON UNA S) O DE ENTRADA (CON UNA E)
-			
-			switch (formaElegirNodo) {
-			case 1:				//   DIREFERENCIA DI CON DOUT
-				nodoAOrientar = encontrarNodoAOrientar(1, decisionDefault, direccionOrientacionArista);
-				break;
-			case 2:				//   COMIENZO DESDE UN CIERTO NODO. DEBE ESTAR CARGADO EL PARAMETRO NODOINCIIAL
-				direccionOrientacionArista[0] = "S";
-				direccionOrientacionArista[1] = din[nodoAOrientar] == dout[nodoAOrientar] ? decisionDefault : (din[nodoAOrientar] > dout[nodoAOrientar] ? "S" : "E");
-				break;
-			case 3:				//   EL QUE TENGA MAYOR GRADO (MAS ARISTAS POR ORDENAR)
-				nodoAOrientar = encontrarNodoAOrientar(3, decisionDefault, direccionOrientacionArista);
-				break;
-			case 4:				//   EL QUE TENGA MAYOR GRADO DE ENTRADA LO ORIENTO PRIMERO
-				nodoAOrientar = encontrarNodoAOrientar(4, decisionDefault, direccionOrientacionArista);
-				break;
-			case 5:				//   EL QUE TENGA MAYOR GRADO DE SALIDA LO ORIENTO PRIMERO
-				nodoAOrientar = encontrarNodoAOrientar(5, decisionDefault, direccionOrientacionArista);
-				break;
-			}
-			
-			orientarNodo(nodoAOrientar, direccionOrientacionArista);
-			if (formaElegirNodo == 2 && adyacenciasNoOr[nodoAOrientar].size() == 0)
-			{
-				nodoAOrientar = encontrarProximoNodoConAristas(nodoAOrientar);
-			}
-		}
 	}
 	
 	//ME DA UN NODO A ORIENTAR. SI ENCUENTRA UNO EN LA QUE LA DIFERENCIA DE DIN CON DOUT = CANTIDAD DE ARISTAS DE ESE NODO (Y QUE TENGA ALGUNA ARISTA PARA ORIENTAR)
