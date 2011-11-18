@@ -124,9 +124,6 @@ public class Grafo {
 			case 5:				//   EL QUE TENGA MAYOR GRADO DE SALIDA LO ORIENTO PRIMERO
 				nodoAOrientar = encontrarNodoAOrientar(5, decisionDefault, direccionOrientacionArista);
 				break;
-			default:
-				nodoAOrientar = encontrarNodoAOrientar(6, decisionDefault, direccionOrientacionArista);
-				break;
 			}
 			
 			orientarNodo(nodoAOrientar, direccionOrientacionArista);
