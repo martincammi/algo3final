@@ -18,8 +18,9 @@ public class CarteroConstructiva {
 		fm.abrirArchivo();
 		Grafo grafo = fm.leerInstancia();
 		CarteroConstructiva cartero = new CarteroConstructiva(grafo);
-		int nodoIncial = -1;
-		String decisionDefault = "S";  // S Mandar Siempre Salida, E Mandar Siempre Entrada
+		int nodoIncial = 3;
+		int formaElegirNodo = 2;
+		String decisionDefault = "E";  // S Mandar Default Salida, E Mandar Default Entrada
 		
 		int i = 1;
 		while (grafo != null)
@@ -29,7 +30,7 @@ public class CarteroConstructiva {
 				//1) HACER UNA COPIA DEL GRAFO
 				Grafo grafoCopia = ((Grafo)grafo.clone());
 				//2) ORIENTAR LAS ARISTAS
-				grafoCopia.orientarTodasAristas(nodoIncial, decisionDefault);
+				grafoCopia.orientarTodasAristas(formaElegirNodo, nodoIncial, decisionDefault);
 				
 				//3) CALCULAR UN MATCHING DE DIN DOUT
 				int aleatoriedad = 10; 
