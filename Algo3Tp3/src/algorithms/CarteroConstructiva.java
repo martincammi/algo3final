@@ -25,6 +25,7 @@ public class CarteroConstructiva {
 		int i = 1;
 		while (grafo != null)
 		{
+			if(FuertementeConexo.fuertementeConexo(grafo)){
 			//MIENTRAS PARAMETRO DE ITERACIONES CONSTRUCTIVA HACER
 				System.out.println("Instancia " + i + ": ");
 				//1) HACER UNA COPIA DEL GRAFO
@@ -47,8 +48,11 @@ public class CarteroConstructiva {
 //				System.out.print("Circuito: ");
 //				System.out.println(circuitoEuleriano);
 //				System.out.println("----");
-				grafo = fm.leerInstancia();
-				i++;
+			}else{
+				System.out.println("No existe solución porque el grafo no es fuertemente conexo");
+			}
+			grafo = fm.leerInstancia();
+			i++;
 		}
 	}	
 	//La búsqueda local queda para el de búsqueda local
