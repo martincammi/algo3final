@@ -20,7 +20,7 @@ public class TestEncontrarMatchingNodos {
 		Grafo grafo = GeneradorGrafos.generarGrafoOrSumidero();
 		CarteroConstructiva cartero = new CarteroConstructiva(grafo);
 		System.out.println("Grafo de " + grafo.cantNodos);
-		List<Eje> pares = cartero.encontrarMatchingNodos(grafo);
+		List<Eje> pares = cartero.encontrarMatchingNodos(grafo, 10);
 		
 		assertNotNull(pares);
 		assertEquals(pares.size(), grafo.cantNodos-2-1);

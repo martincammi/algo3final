@@ -48,7 +48,7 @@ public class CarteroConstructiva {
 				List<Eje> unMatching = cartero.encontrarMatchingNodos(grafoCopia, aleatoriedad);
 				
 				//3.1) Calcular de todos los vecinos el de menor matching
-				//List<Eje> matchingMinimo = cartero.encontrarMatchingDeMenorPeso(unMatching,grafo.getPesoCaminoMinimo());
+				List<Eje> matchingMinimo = cartero.encontrarMatchingDeMenorPeso(unMatching,grafo.getPesoCaminoMinimo());
 				
 				//4) CALCULAR EULERIANO 
 				// TODO Sebas Adaptar al nuevo matchingMinimo
@@ -66,8 +66,7 @@ public class CarteroConstructiva {
 		}
 	}	
 	//La búsqueda local queda para el de búsqueda local
-	//BUSQUEDA LOCAL SOBRE MATCHING EN LAS VECINDADES//DEFINIR QUIENES SON VECINOS
-	@Deprecated
+	//BUSQUEDA LOCAL SOBRE MATCHING EN LAS VECINDADES Los vecinos
 	public List<Eje> encontrarMatchingDeMenorPeso(List<Eje> matching, int[][] pesosMin){
 		
 		List<Eje> listaResultado = new ArrayList<Eje>();
