@@ -4,12 +4,18 @@ package utils;
 public class GeneradorGrafos {
 
 	private static int SUMIDERO_MAX_NODOS  = 5;
+	private static int CANT_NODOS = -1;
 	
 	public static void main(String[] args) {
 	
 		Grafo grafo = generarGrafoOrSumidero();
 		System.out.println("finish");
 		
+	}
+	
+	public static Grafo generarGrafoOrSumidero(int cantNodos){
+		CANT_NODOS = cantNodos;
+		return generarGrafoOrSumidero();
 	}
 	
 	/**
@@ -21,6 +27,11 @@ public class GeneradorGrafos {
 	public static Grafo generarGrafoOrSumidero(){
 		
 		int cantNodos = (int)(Math.random()*SUMIDERO_MAX_NODOS)+3; //Al menos deberia haber 3.
+		
+		if(CANT_NODOS != -1){
+			cantNodos = CANT_NODOS;
+		}
+			
 		int cantArcos = (cantNodos-2)*2 + 1; //Los ejes in y out de los del medio y el del final al primero.
 		
 		String[] params = new String[(cantArcos+1)*3];
@@ -46,7 +57,9 @@ public class GeneradorGrafos {
 		params[nextIndex+1] = String.valueOf(0);
 		params[nextIndex+2] = String.valueOf(1);
 		
-		return new Grafo(params);
+		Grafo grafoSumidero = new Grafo(params); 
+		grafoSumidero.calcularDantzig();
+		return grafoSumidero;
 		
 	}
 }

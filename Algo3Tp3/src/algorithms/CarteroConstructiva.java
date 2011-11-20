@@ -43,7 +43,7 @@ public class CarteroConstructiva {
 				//2) ORIENTAR LAS ARISTAS
 				grafoCopia.orientarTodasAristas(tipoOrientacionAristas, parametroBusqueda, parametroEleccionLista, decisionDefault);
 				
-				//3) CALCULAR UN MATCHING DE DIN DOUT
+				//3) Calcular un Matching cualquiera de Din Dout
 				int aleatoriedad = 10; 
 				List<Eje> unMatching = cartero.encontrarMatchingNodos(grafoCopia, aleatoriedad);
 				
@@ -98,7 +98,7 @@ public class CarteroConstructiva {
 				
 				posibleMinimo = pesosMin[eje.getNodo1()][eje2.getNodo2()] + pesosMin[eje2.getNodo1()][eje.getNodo2()];
 				
-				if(posibleMinimo < minimoInicial){
+				if(posibleMinimo <= minimoInicial){
 					minimoInicial = posibleMinimo;
 					swapIndex1 = i;
 					swapIndex2 = j;
@@ -143,7 +143,9 @@ public class CarteroConstructiva {
 	public List<Eje> encontrarMatchingNodos(Grafo grafo, int aleatoriedad){
 		
 		int primo = getPrimeIndex(aleatoriedad);
+		int primo2 = primos[primo % primos.length];
 		System.out.println("primo: " + primo);
+		System.out.println("primo2: " + primo2);
 		
 		if(!grafo.todasDirigidas()){
 			System.out.println("ERROR: El grafo no es dirigido");
@@ -195,7 +197,7 @@ public class CarteroConstructiva {
 		}
 		
 		int indexIn = primo % (nodosDin.size());
-		int indexOut = nodosDout.size() - indexIn - 1;
+		int indexOut = primo2 % (nodosDout.size());
 		
 		System.out.println(nodosDin);
 		System.out.println(nodosDout);

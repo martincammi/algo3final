@@ -38,4 +38,9 @@ public class Eje {
 	public void setNodo2(int nodo2) {
 		this.nodo2 = nodo2;
 	}
+	
+	@Override
+	public String toString() {
+		return "(" + nodo1 + "," + nodo2 + "," + peso + ")";
+	}
 }
