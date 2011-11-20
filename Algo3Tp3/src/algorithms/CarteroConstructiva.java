@@ -19,7 +19,17 @@ public class CarteroConstructiva {
 		Grafo grafo = fm.leerInstancia();
 		CarteroConstructiva cartero = new CarteroConstructiva(grafo);
 		int nodoIncial = 3;
-		int formaElegirNodo = 2;
+		
+		//1 REALIZA UN BALANCEO ENTRE LOS GRADOS DE ENTRADA Y GRADOS DE SALIDA, 
+		//  CALCULANDO PRIMERO AL NODO DONDE SE CUMPLA (CANTIDAD ARISTAS NODO = DIN NODO - DOUT NODO) 
+		//2 ORIENTA PRIMERO CON LA MISMA CUENTA QUE EL PRIMERO, PERO EMPEZANDO DESDE UN CIERTO NODO QUE VIENE POR PARAMETRO
+		//3 ORIENTA PRIMERO AL QUE TENGA MAYOR GRADO (CANTIDAD DE ARISTAS)
+		//4 ORIENTA PRIMERO AL QUE TENGA MAYOR GRADO DE ENTRADA (DIN)
+		//5 ORIENTA PRIMERO AL QUE TENGA MAYOR SALIDA DE ENTRADA (DOUT)
+		int tipoOrientacionAristas = 2;
+		
+		int parametroBusqueda = 2;  //CALCULA LA LISTA CON ESTE PARAMETRO. 
+		int parametroEleccionLista = 1;  //ESTE ME DICE CUAL DE LA LISTA ELEGIR, VA DESDE 0 A CANTIDAD DE LA LISTA QUE ME DIO ARRIBA. SI ESTE VALOR ES MAYOR, ME DEVUELVE LA PRIMERA POSICION DE LA LISTA
 		String decisionDefault = "E";  // S Mandar Default Salida, E Mandar Default Entrada
 		
 		int i = 1;
@@ -31,7 +41,7 @@ public class CarteroConstructiva {
 				//1) HACER UNA COPIA DEL GRAFO
 				Grafo grafoCopia = ((Grafo)grafo.clone());
 				//2) ORIENTAR LAS ARISTAS
-				grafoCopia.orientarTodasAristas(formaElegirNodo, nodoIncial, decisionDefault);
+				grafoCopia.orientarTodasAristas(tipoOrientacionAristas, parametroBusqueda, parametroEleccionLista, decisionDefault);
 				
 				//3) CALCULAR UN MATCHING DE DIN DOUT
 				int aleatoriedad = 10; 
