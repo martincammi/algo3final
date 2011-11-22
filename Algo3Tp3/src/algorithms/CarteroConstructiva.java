@@ -17,8 +17,6 @@ public class CarteroConstructiva {
 		FileManager fm = new FileManager("Ej1.in");
 		fm.abrirArchivo();
 		Grafo grafo = fm.leerInstancia();
-		CarteroConstructiva cartero = new CarteroConstructiva(grafo);
-		int nodoIncial = 3;
 		
 		//1 REALIZA UN BALANCEO ENTRE LOS GRADOS DE ENTRADA Y GRADOS DE SALIDA, 
 		//  CALCULANDO PRIMERO AL NODO DONDE SE CUMPLA (CANTIDAD ARISTAS NODO = DIN NODO - DOUT NODO) 
@@ -28,36 +26,59 @@ public class CarteroConstructiva {
 		//5 ORIENTA PRIMERO AL QUE TENGA MAYOR SALIDA DE ENTRADA (DOUT)
 		int tipoOrientacionAristas = 2;
 		
-		int parametroBusqueda = 2;  //CALCULA LA LISTA CON ESTE PARAMETRO. 
-		int parametroEleccionLista = 1;  //ESTE ME DICE CUAL DE LA LISTA ELEGIR, VA DESDE 0 A CANTIDAD DE LA LISTA QUE ME DIO ARRIBA. SI ESTE VALOR ES MAYOR, ME DEVUELVE LA PRIMERA POSICION DE LA LISTA
+		int parametroBusqueda = 3;  //CALCULA LA LISTA CON ESTE PARAMETRO. 
+//int parametroEleccionLista = 1;  //ESTE ME DICE CUAL DE LA LISTA ELEGIR, VA DESDE 0 A CANTIDAD DE LA LISTA QUE ME DIO ARRIBA. SI ESTE VALOR ES MAYOR, ME DEVUELVE LA PRIMERA POSICION DE LA LISTA
+		int[] parametroIteracionesGraspRandom= {33, 52, 48, 96, 125};//Random
+		
 		String decisionDefault = "E";  // S Mandar Default Salida, E Mandar Default Entrada
 		
 		int i = 1;
 		while (grafo != null)
 		{
 			if(FuertementeConexo.fuertementeConexo(grafo)){
-			//MIENTRAS PARAMETRO DE ITERACIONES CONSTRUCTIVA HACER
+				int[][] pesoCaminoMinimo = grafo.calcularDantzig();
+				int sumaPesosEjes = grafo.sumaPesosEjes();
 				System.out.println("Instancia " + i + ": ");
-				//1) HACER UNA COPIA DEL GRAFO
-				Grafo grafoCopia = ((Grafo)grafo.clone());
-				//2) ORIENTAR LAS ARISTAS
-				grafoCopia.orientarTodasAristas(tipoOrientacionAristas, parametroBusqueda, parametroEleccionLista, decisionDefault);
+				CarteroConstructiva cartero = new CarteroConstructiva(grafo);
 				
-				//3) Calcular un Matching cualquiera de Din Dout
-				int aleatoriedad = 10; 
-				List<Eje> unMatching = cartero.encontrarMatchingNodos(grafoCopia, aleatoriedad);
-				
-				//3.1) Calcular de todos los vecinos el de menor matching
-				List<Eje> matchingMinimo = cartero.encontrarMatchingDeMenorPeso(unMatching,grafo.getPesoCaminoMinimo());
-				
+				List<Eje> matchingSolucion = null;
+				Grafo mejorGrafoSolucion = null;
+				int sumaMejorSolucion = Grafo.INFINITO;
+				int j= 1;
+				for(int parametroGRASP:parametroIteracionesGraspRandom){
+				//MIENTRAS PARAMETRO DE ITERACIONES CONSTRUCTIVA HACER
+					System.out.println("Iteración GRASP " + j + ": ");
+					//1) HACER UNA COPIA DEL GRAFO
+					Grafo grafoCopia = ((Grafo)grafo.clone());
+					//2) ORIENTAR LAS ARISTAS
+					grafoCopia.orientarTodasAristas(tipoOrientacionAristas, parametroBusqueda, parametroGRASP, decisionDefault);
+
+					//3) Calcular un Matching cualquiera de Din Dout
+					int aleatoriedad = 10; 
+					List<Eje> unMatching = cartero.encontrarMatchingNodos(grafoCopia, aleatoriedad,pesoCaminoMinimo);
+					int pesoMatching = pesoMatching(unMatching);
+					//3.1) Calcular de todos los vecinos el de menor matchingSolucion
+					//List<Eje> matchingMinimo = cartero.encontrarMatchingDeMenorPeso(unMatching,grafo.getPesoCaminoMinimo());
+					List<Eje> matchingMinimo = cartero.encontrarMatchingDeMenorPeso(unMatching,pesoCaminoMinimo);
+					int pesoBusquedaLocal = pesoMatching(matchingMinimo);
+					System.out.println("Se mejoró el peso del mathcing de "+pesoMatching+" a "+pesoBusquedaLocal);
+					int sumaSolucion = sumaPesosEjes + pesoBusquedaLocal;
+					if(sumaSolucion < sumaMejorSolucion){
+						System.out.println("Mejoró la solución de "+sumaMejorSolucion+" a "+sumaSolucion);
+						sumaMejorSolucion = sumaSolucion;
+						mejorGrafoSolucion = grafoCopia;
+						matchingSolucion = matchingMinimo;
+					}
+					++j;
+				}
 				//4) CALCULAR EULERIANO 
-				// TODO Sebas Adaptar al nuevo matchingMinimo
-//				cartero.agregarCaminosMatcheados(unMatching,grafoCopia);//en vez de grafo hay que pasarle la copia que ya tiene las aristas orientadas//hay que pasarle los pares de la mejor solucion que encontremos
-//				ListaInt circuitoEuleriano = CircuitoEuleriano.encontrarCircuitoEuleriano(grafoCopia);
+				cartero.agregarCaminosMatcheados(matchingSolucion,mejorGrafoSolucion);//en vez de grafo hay que pasarle la copia que ya tiene las aristas orientadas//hay que pasarle los pares de la mejor solucion que encontremos
+				ListaInt circuitoEuleriano = CircuitoEuleriano.encontrarCircuitoEuleriano(mejorGrafoSolucion);
 //				5) DEVOLVER | reemplazar por la llamada a archivo|
-//				System.out.print("Circuito: ");
-//				System.out.println(circuitoEuleriano);
-//				System.out.println("----");
+				System.out.print("Circuito: ");
+				System.out.println(circuitoEuleriano);
+				System.out.println("----");
+
 			}else{
 				System.out.println("No existe solución porque el grafo no es fuertemente conexo");
 			}
@@ -126,11 +147,11 @@ public class CarteroConstructiva {
 			}
 		}
 		
-		System.out.print("Vecino de Matching minimo: ");
-		for (Eje ejeShow : listaResultado) {
-			System.out.print("(" + ejeShow.getNodo1() + "," + ejeShow.getNodo2() + "," + ejeShow.getPeso() + "),");
-		}
-		System.out.println();
+//		System.out.print("Vecino de Matching minimo: ");
+//		for (Eje ejeShow : listaResultado) {
+//			System.out.print("(" + ejeShow.getNodo1() + "," + ejeShow.getNodo2() + "," + ejeShow.getPeso() + "),");
+//		}
+//		System.out.println();
 		
 		return listaResultado;
 	}
@@ -140,12 +161,12 @@ public class CarteroConstructiva {
 	}
 	
 	/*Precondición: Grafo con todos los nodos orientados*/
-	public List<Eje> encontrarMatchingNodos(Grafo grafo, int aleatoriedad){
+	public List<Eje> encontrarMatchingNodos(Grafo grafo, int aleatoriedad,int[][] pesosMin){
 		
 		int primo = getPrimeIndex(aleatoriedad);
 		int primo2 = primos[primo % primos.length];
-		System.out.println("primo: " + primo);
-		System.out.println("primo2: " + primo2);
+//		System.out.println("primo: " + primo);
+//		System.out.println("primo2: " + primo2);
 		
 		if(!grafo.todasDirigidas()){
 			System.out.println("ERROR: El grafo no es dirigido");
@@ -180,7 +201,7 @@ public class CarteroConstructiva {
 		
 		triplaInOutPeso = new ArrayList<Eje>();
 		
-		if(nodosDout.size() == 0){
+		if(nodosDout.isEmpty()){
 			return triplaInOutPeso;
 		}
 			
@@ -199,8 +220,8 @@ public class CarteroConstructiva {
 		int indexIn = primo % (nodosDin.size());
 		int indexOut = primo2 % (nodosDout.size());
 		
-		System.out.println(nodosDin);
-		System.out.println(nodosDout);
+//		System.out.println(nodosDin);
+//		System.out.println(nodosDout);
 		
 		while( nodosDin.size() > 0 && nodosDout.size() > 0){
 			
@@ -210,7 +231,8 @@ public class CarteroConstructiva {
 			Integer nodoIn = nodosDin.get(indexIn);
 			Integer nodoOut = nodosDout.get(indexOut);
 			
-			int valorCaminoMinimo = grafo.pesoCaminoMinimo(nodoIn, nodoOut);
+			//int valorCaminoMinimo = grafo.pesoCaminoMinimo(nodoIn, nodoOut);
+			int valorCaminoMinimo = pesosMin[nodoIn][nodoOut];
 			Eje eje = new Eje(nodoIn, nodoOut, valorCaminoMinimo);
 			triplaInOutPeso.add(eje);
 
@@ -232,11 +254,11 @@ public class CarteroConstructiva {
 
 			i++;
 		}
-		System.out.print("Matching: ");
-		for (Eje eje : triplaInOutPeso) {
-			System.out.print("(" + eje.getNodo1() + "," + eje.getNodo2() + "," + eje.getPeso() + "),");
-		}
-		System.out.println();
+//		System.out.print("Matching: ");
+//		for (Eje eje : triplaInOutPeso) {
+//			System.out.print("(" + eje.getNodo1() + "," + eje.getNodo2() + "," + eje.getPeso() + "),");
+//		}
+//		System.out.println();
 		
 		return triplaInOutPeso;
 		
@@ -285,6 +307,16 @@ public class CarteroConstructiva {
 		
 	}
 
+	private static int pesoMatching(List<Eje> matching) {
+		int peso = 0;
+		if(matching != null){
+			for(Eje eje:matching){
+				peso+=eje.getPeso();
+			}
+		}
+		return peso;
+	}
+
 	private void agregarCaminosMatcheados(List<Eje> pares,Grafo gr) {
 		ListaInt[][] sol = new ListaInt[grafo.getCantNodos()][grafo.getCantNodos()];
 		if(pares!=null){
@@ -292,13 +324,13 @@ public class CarteroConstructiva {
 				int nodo1=i.getNodo1(), nodo2=i.getNodo2();
 				if(sol[nodo1][nodo2] == null){
 					sol[nodo1][nodo2] = Dijkstra.getPath(grafo, Dijkstra.dijkstra(grafo, nodo1), nodo1, nodo2);
-					System.out.println("Dijkstra: "+sol[nodo1][nodo2]);
+//					System.out.println("Dijkstra: "+sol[nodo1][nodo2]);
 				}
 				ListIterator<Integer> li = sol[nodo1][nodo2].listIterator(1);
-				System.out.println("Arcos Agregados:");
+//				System.out.println("Arcos Agregados:");
 				while(li.hasNext()){
 					nodo2 = li.next();
-					System.out.println("("+nodo1+","+nodo2+")");
+//					System.out.println("("+nodo1+","+nodo2+")");
 					gr.agregarAdyacencia(nodo1, nodo2, grafo.getPesoAristas()[nodo1][nodo2],true);
 					nodo1=nodo2;
 				}

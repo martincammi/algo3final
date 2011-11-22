@@ -1,4 +1,4 @@
-package utils;
+ utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,10 +15,9 @@ public class Grafo {
 	protected ListaInt[] adyacenciasVisitados;
 	protected int din[];
 	public int[] dout;
-	private int[][] pesoCaminoMinimo;
-	private int sumaPesoAristas;
+	//private int[][] pesoCaminoMinimo;
 	
-	int INFINITO = Integer.MAX_VALUE; //Temporal probando
+	public static int INFINITO = Integer.MAX_VALUE; //Temporal probando
 	/**
 	 * @param cantNodos: cantidad de vértices
 	 * @param cantAristas: cantidad de ejes no orientados
@@ -37,10 +36,9 @@ public class Grafo {
 		adyacenciasOr = new ListaInt[cantNodos];
 		adyacenciasVisitados = new ListaInt[cantNodos];
 		pesosEjes = new int[cantNodos][cantNodos];
-		pesoCaminoMinimo = new int [cantNodos][cantNodos];
+//		pesoCaminoMinimo = new int [cantNodos][cantNodos];
 		din = new int[cantNodos];
 		dout = new int[cantNodos];
-		sumaPesoAristas = 0;
 		for(int i = 0; i < cantNodos; ++i){
 			adyacenciasNoOr[i] = new ListaInt();
 			adyacenciasOr[i] = new ListaInt();
@@ -49,10 +47,10 @@ public class Grafo {
 			for(int j = 0; j < cantNodos;++j){
 				if(i == j){
 					pesosEjes[i][j] = 0;
-					pesoCaminoMinimo[i][j] = 0;
+//					pesoCaminoMinimo[i][j] = 0;
 				}else{
 					pesosEjes[i][j] = INFINITO;
-					pesoCaminoMinimo[i][j] = INFINITO;
+//					pesoCaminoMinimo[i][j] = INFINITO;
 				}
 			}
 		}
@@ -181,7 +179,7 @@ public class Grafo {
 		}
 		
 		//CASO DEFAULT - SI LOS ANTERIORES NO ENCONTRARON NODOS, TRAIGO LOS PRIMEROS HASTA parametroBusqueda
-		if (listaNodosAOrientar.size() == 0)
+		if (listaNodosAOrientar.isEmpty())
 		{
 			for (i = 0; i <= cantNodos; i++)
 			{
@@ -201,12 +199,12 @@ public class Grafo {
 	
 	private int eleccionNodoAOrientar(List<Integer> listaNodosAOrientar, int parametroEleccionLista)
 	{
-		int nodoAOrientar = listaNodosAOrientar.get(0);
-		if (parametroEleccionLista < listaNodosAOrientar.size())
-		{
-			listaNodosAOrientar.get(parametroEleccionLista);
-		}
-		
+//		int nodoAOrientar = listaNodosAOrientar.get(0);
+//		if (parametroEleccionLista < listaNodosAOrientar.size())
+//		{
+//			listaNodosAOrientar.get(parametroEleccionLista);
+//		}
+		int nodoAOrientar = listaNodosAOrientar.get(parametroEleccionLista%listaNodosAOrientar.size());
 		return nodoAOrientar;
 	}
 	
@@ -269,10 +267,10 @@ public class Grafo {
 			for (int j = 0; j < cantNodos; j++) {
 				if(i == j){
 					pesosEjes[i][j] = 0;
-					pesoCaminoMinimo[i][j] = 0;
+//					pesoCaminoMinimo[i][j] = 0;
 				}else{
 					pesosEjes[i][j] = INFINITO;
-					pesoCaminoMinimo[i][j] = INFINITO;
+//					pesoCaminoMinimo[i][j] = INFINITO;
 				}
 			}
 			adyacenciasNoOr[i] = new ListaInt();
@@ -310,15 +308,14 @@ public class Grafo {
 			
 			complex++;
 		}
-		calcularDantzig();
 	}
 	
-	public int pesoCaminoMinimo (int nodo1, int nodo2){
-		return pesoCaminoMinimo[nodo1][nodo2];
-	}
+//	public int pesoCaminoMinimo (int nodo1, int nodo2){
+//		return pesoCaminoMinimo[nodo1][nodo2];
+//	}
 	
-	public void calcularDantzig(){
-		
+	public int[][] calcularDantzig(){
+		int[][] pesoCaminoMinimo = new int[cantNodos][cantNodos];
 		for (int i = 0; i < cantNodos; i++) {
 			for (int j = 0; j < cantNodos; j++) {
 				pesoCaminoMinimo[i][j] = pesosEjes[i][j];
@@ -335,6 +332,7 @@ public class Grafo {
 				}
 			}
 		}
+		return pesoCaminoMinimo;
 	}
 	
 	private int min(int a, int b){
@@ -389,7 +387,6 @@ public class Grafo {
 			adyacenciasNoOr[par2].add(par1);
 			pesosEjes[par2][par1] = peso;
 		}
-		sumaPesoAristas+=peso;
 		pesosEjes[par1][par2] = peso;
 	}
 	
@@ -409,7 +406,6 @@ public class Grafo {
 		System.out.println("CantNodos: "+this.cantNodos);
 		System.out.println("CantAristas: "+this.cantAristas);
 		System.out.println("CantArcos: "+this.cantArcos);
-		System.out.println("sumaPesoAristas: "+this.sumaPesoAristas);
 		for(int i=0; i < cantNodos; ++i){
 			System.out.println("Nodo: "+i);
 			System.out.println("\tGradoBi: "+this.adyacenciasNoOr[i].size());
@@ -435,12 +431,12 @@ public class Grafo {
 			}
 			System.out.println();
 		}
-		for(int[] l:pesoCaminoMinimo){
-			for(Integer k:l){
-				System.out.print(k+"\t");
-			}
-			System.out.println();
-		}
+//		for(int[] l:pesoCaminoMinimo){
+//			for(Integer k:l){
+//				System.out.print(k+"\t");
+//			}
+//			System.out.println();
+//		}
 	}
 	
 	public int getNodoInicial(int semilla){
@@ -531,13 +527,13 @@ public class Grafo {
 		this.dout = dout;
 	}
 
-	public int[][] getPesoCaminoMinimo() {
-		return pesoCaminoMinimo;
-	}
+//	public int[][] getPesoCaminoMinimo() {
+//		return pesoCaminoMinimo;
+//	}
 
-	public void setPesoCaminoMinimo(int[][] pesoCaminoMinimo) {
-		this.pesoCaminoMinimo = pesoCaminoMinimo;
-	}
+//	public void setPesoCaminoMinimo(int[][] pesoCaminoMinimo) {
+//		this.pesoCaminoMinimo = pesoCaminoMinimo;
+//	}
 
 	public int getINFINITO() {
 		return INFINITO;
@@ -551,6 +547,7 @@ public class Grafo {
 		this.cantNodos = cantNodos;
 	}
 
+	@Override
 	public Grafo clone() throws CloneNotSupportedException {
 		Grafo grafo = new Grafo(cantNodos, cantAristas, cantArcos);
 		ListaInt[] adyacenteNoOrdenados = new ListaInt[cantNodos];
@@ -570,28 +567,37 @@ public class Grafo {
 			for (int j = 0; j < cantNodos; j++)
 			{
 				pesosDeEjes[i][j] = pesosEjes[i][j];
-				pesosDeCaminosMinimos[i][j] = pesoCaminoMinimo[i][j];
+//				pesosDeCaminosMinimos[i][j] = pesoCaminoMinimo[i][j];
 			}
 		}
 		
 		grafo.setAdyacenciasNoOr(adyacenteNoOrdenados);
 		grafo.setAdyacenciasOr(adyacenteOrdenados);
 		grafo.setPesosEjes(pesosDeEjes);
-		grafo.setPesosCaminosMinimos(pesosDeCaminosMinimos);
 		grafo.setDin(gradoEntrada);
 		grafo.setDout(gradoSalida);
 		grafo.setT(T);
-		grafo.setSumaPesoAristas(sumaPesoAristas);
 		
 		return grafo;
 	}
 
-	private void setSumaPesoAristas(int sumaPesoAristas) {
-		this.sumaPesoAristas = sumaPesoAristas;
-	}
-
-	private void setPesosCaminosMinimos(int[][] pesosDeCaminosMinimos) {
-		this.pesoCaminoMinimo = pesosDeCaminosMinimos;
+	public int sumaPesosEjes(){
+		int peso = 0;
+		for(int nodo = 0;nodo < this.getCantNodos(); ++nodo){
+			for(int adyacente:this.adyacentesNoOr(nodo)){
+				peso+=this.pesosEjes[nodo][adyacente];
+			}
+		}
+		peso/=2;
+		for(int nodo = 0;nodo < this.getCantNodos(); ++nodo){
+			for(int adyacente:this.adyacentesOr(nodo)){
+				peso+=this.pesosEjes[nodo][adyacente];
+			}
+		}
+		return peso;
 	}
 	
+//	private void setPesosCaminosMinimos(int[][] pesosDeCaminosMinimos) {
+//		this.pesoCaminoMinimo = pesosDeCaminosMinimos;
+//	}
 }

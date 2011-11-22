@@ -26,10 +26,12 @@ public class FuertementeConexo {
 		resetVisitados(visitados);
 		visitarNodos(0,aristas,arcosOriginales,visitados);
 		ret = checkVisitados(visitados);
-		if(ret){
+		if(ret){//si desde el nodo 0 se puede llegar a cualquier nodo => es conexo
 			resetVisitados(visitados);
 			visitarNodos(0,aristas,arcosInvertidos,visitados);
 			ret = checkVisitados(visitados);
+			//si tambien se puede llegar desde cualquier nodo al nodo 0 entonces
+			//para todo nodo v hay un camino que va de 0 a ve y otro de v a 0  
 		}
 		return ret;
 	}
