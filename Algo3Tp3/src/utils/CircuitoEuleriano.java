@@ -24,7 +24,7 @@ public class CircuitoEuleriano {
 	
 	public static ListaInt encontrarCircuitoEuleriano(Grafo G){
 		inicializar(G);
-		int nodoInicial = 3;
+		int nodoInicial = 0;
 		//circuitosParciales.add(new ListaInt());
 		circuitosParciales.push(new LinkedList<Integer>());
 		//circuitosParciales.get(0).add(nodoInicial);

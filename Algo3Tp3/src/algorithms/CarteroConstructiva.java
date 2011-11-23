@@ -14,6 +14,12 @@ public class CarteroConstructiva {
 	
 	public static void main(String[] args) throws IOException, CloneNotSupportedException {
 
+//PARAMETROS
+		String decisionDefault = "E";  // S Mandar Default Salida, E Mandar Default Entrada
+		int tipoOrientacionAristas = 2;
+		int parametroBusqueda = 5;  //CALCULA LA LISTA CON ESTE PARAMETRO. 
+//int parametroEleccionLista = 1;  //ESTE ME DICE CUAL DE LA LISTA ELEGIR, VA DESDE 0 A CANTIDAD DE LA LISTA QUE ME DIO ARRIBA. SI ESTE VALOR ES MAYOR, ME DEVUELVE LA PRIMERA POSICION DE LA LISTA
+		int[] parametroIteracionesGraspRandom= {33, 52, 48, 96, 125};//Random
 		FileManager fm = new FileManager("Ej1.in");
 		fm.abrirArchivo();
 		Grafo grafo = fm.leerInstancia();
@@ -24,13 +30,6 @@ public class CarteroConstructiva {
 		//3 ORIENTA PRIMERO AL QUE TENGA MAYOR GRADO (CANTIDAD DE ARISTAS)
 		//4 ORIENTA PRIMERO AL QUE TENGA MAYOR GRADO DE ENTRADA (DIN)
 		//5 ORIENTA PRIMERO AL QUE TENGA MAYOR SALIDA DE ENTRADA (DOUT)
-		int tipoOrientacionAristas = 2;
-		
-		int parametroBusqueda = 3;  //CALCULA LA LISTA CON ESTE PARAMETRO. 
-//int parametroEleccionLista = 1;  //ESTE ME DICE CUAL DE LA LISTA ELEGIR, VA DESDE 0 A CANTIDAD DE LA LISTA QUE ME DIO ARRIBA. SI ESTE VALOR ES MAYOR, ME DEVUELVE LA PRIMERA POSICION DE LA LISTA
-		int[] parametroIteracionesGraspRandom= {33, 52, 48, 96, 125};//Random
-		
-		String decisionDefault = "E";  // S Mandar Default Salida, E Mandar Default Entrada
 		
 		int i = 1;
 		while (grafo != null)
@@ -45,7 +44,7 @@ public class CarteroConstructiva {
 				Grafo mejorGrafoSolucion = null;
 				int sumaMejorSolucion = Grafo.INFINITO;
 				int j= 1;
-				for(int parametroGRASP:parametroIteracionesGraspRandom){
+				for(int parametroGRASP: parametroIteracionesGraspRandom){
 				//MIENTRAS PARAMETRO DE ITERACIONES CONSTRUCTIVA HACER
 					System.out.println("Iteración GRASP " + j + ": ");
 					//1) HACER UNA COPIA DEL GRAFO
@@ -56,18 +55,21 @@ public class CarteroConstructiva {
 					//3) Calcular un Matching cualquiera de Din Dout
 					int aleatoriedad = 10; 
 					List<Eje> unMatching = cartero.encontrarMatchingNodos(grafoCopia, aleatoriedad,pesoCaminoMinimo);
-					int pesoMatching = pesoMatching(unMatching);
+					//int pesoMatching = pesoMatching(unMatching);
 					//3.1) Calcular de todos los vecinos el de menor matchingSolucion
-					//List<Eje> matchingMinimo = cartero.encontrarMatchingDeMenorPeso(unMatching,grafo.getPesoCaminoMinimo());
 					List<Eje> matchingMinimo = cartero.encontrarMatchingDeMenorPeso(unMatching,pesoCaminoMinimo);
 					int pesoBusquedaLocal = pesoMatching(matchingMinimo);
-					System.out.println("Se mejoró el peso del mathcing de "+pesoMatching+" a "+pesoBusquedaLocal);
+					//System.out.println("Se mejoró el peso del mathcing de "+pesoMatching+" a "+pesoBusquedaLocal);
 					int sumaSolucion = sumaPesosEjes + pesoBusquedaLocal;
 					if(sumaSolucion < sumaMejorSolucion){
 						System.out.println("Mejoró la solución de "+sumaMejorSolucion+" a "+sumaSolucion);
 						sumaMejorSolucion = sumaSolucion;
 						mejorGrafoSolucion = grafoCopia;
 						matchingSolucion = matchingMinimo;
+						if(unMatching.isEmpty()){
+							System.out.println("Solución óptima ");
+							break;//solucion optima
+						}
 					}
 					++j;
 				}
@@ -75,8 +77,17 @@ public class CarteroConstructiva {
 				cartero.agregarCaminosMatcheados(matchingSolucion,mejorGrafoSolucion);//en vez de grafo hay que pasarle la copia que ya tiene las aristas orientadas//hay que pasarle los pares de la mejor solucion que encontremos
 				ListaInt circuitoEuleriano = CircuitoEuleriano.encontrarCircuitoEuleriano(mejorGrafoSolucion);
 //				5) DEVOLVER | reemplazar por la llamada a archivo|
-				System.out.print("Circuito: ");
-				System.out.println(circuitoEuleriano);
+				System.out.println("Circuito: ");
+//				System.out.println(sumaMejorSolucion);
+				System.out.println(circuitoEuleriano.size()-1);
+//				System.out.println(circuitoEuleriano);
+				ListIterator<Integer> li = circuitoEuleriano.listIterator();
+				int nodo1,nodo2 = li.next();
+				while(li.hasNext()){
+					nodo1 = nodo2;
+					nodo2 = li.next();
+					System.out.println(nodo1+" "+nodo2+" "+grafo.getPesoAristas()[nodo1][nodo2]);
+				}
 				System.out.println("----");
 
 			}else{
@@ -269,44 +280,6 @@ public class CarteroConstructiva {
 		return primos[modulo];
 	}
 	
-	public void encontrarCamino() {
-		
-		int nodoInicial = grafo.getNodoInicial(3);
-		int nodo1 = nodoInicial;
-		List<Integer> visitados = new ArrayList<Integer>();
-		
-		while ( grafo.adyacentesNoOr(nodoInicial).size() + grafo.adyacentesOr(nodoInicial).size() > 0 ){
-			
-			if( grafo.adyacentesOr(nodo1).size() > 0){
-				int nodo2 = grafo.adyacentesOr(nodo1).get(0);
-				grafo.adyacentesVisitados(nodo1).add(nodo2);
-				grafo.adyacentesOr(nodo1).remove(0);
-				nodo1 = nodo2;
-				
-			}else if(grafo.adyacentesNoOr(nodo1).size() > 0){
-				int nodo2 = grafo.adyacentesNoOr(nodo1).get(0);
-				grafo.adyacentesVisitados(nodo1).add(nodo2);
-				grafo.adyacentesNoOr(nodo1).remove(0);
-				nodo1 = nodo2;
-				
-			}else{
-				int nodo2 = grafo.adyacentesVisitados(nodo1).get(0);
-				grafo.adyacentesVisitados(nodo1).add(nodo2);
-				grafo.adyacentesVisitados(nodo1).remove(0);
-				nodo1 = nodo2;
-				
-			}
-			
-			visitados.add(nodo1);
-		}
-		
-
-		for (Integer i : visitados) {
-			System.out.println("Nodo " + i);
-		}
-		
-	}
-
 	private static int pesoMatching(List<Eje> matching) {
 		int peso = 0;
 		if(matching != null){

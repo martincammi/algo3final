@@ -12,14 +12,12 @@ public class Grafo {
 	protected ListaInt[] adyacenciasNoOr; //Guarda dado un nodo sus adyacencias no orientadas.
 	public ListaInt[] adyacenciasOr; //Guarda dado un nodo sus adyacencias orientadas.
 	protected int[][] pesosEjes;
-	protected ListaInt[] adyacenciasVisitados;
 	protected int din[];
 	public int[] dout;
-	//private int[][] pesoCaminoMinimo;
 	
 	public static int INFINITO = Integer.MAX_VALUE; //Temporal probando
 	/**
-	 * @param cantNodos: cantidad de vértices
+	 * @param cantNodos: cantidad de vÃ©rtices
 	 * @param cantAristas: cantidad de ejes no orientados
 	 * @param cantArcos: cantidad de ejes orientados
 	 */
@@ -34,30 +32,25 @@ public class Grafo {
 		sumarBits(cantArcos);
 		adyacenciasNoOr = new ListaInt[cantNodos];
 		adyacenciasOr = new ListaInt[cantNodos];
-		adyacenciasVisitados = new ListaInt[cantNodos];
 		pesosEjes = new int[cantNodos][cantNodos];
-//		pesoCaminoMinimo = new int [cantNodos][cantNodos];
 		din = new int[cantNodos];
 		dout = new int[cantNodos];
 		for(int i = 0; i < cantNodos; ++i){
 			adyacenciasNoOr[i] = new ListaInt();
 			adyacenciasOr[i] = new ListaInt();
-			adyacenciasVisitados[i] = new ListaInt();
 			din[i] = 0;
 			for(int j = 0; j < cantNodos;++j){
 				if(i == j){
 					pesosEjes[i][j] = 0;
-//					pesoCaminoMinimo[i][j] = 0;
 				}else{
 					pesosEjes[i][j] = INFINITO;
-//					pesoCaminoMinimo[i][j] = INFINITO;
 				}
 			}
 		}
 	}
 	
 	/**
-	 * Suma al tamaño de la entrada en bits.
+	 * Suma al tamaÃ±o de la entrada en bits.
 	 * @param n
 	 */
 	public final void sumarBits(int n){
@@ -252,7 +245,7 @@ public class Grafo {
 	
 
 	/**
-	 * Constructor para la entrada de la cátedra (no borrar uso para pruebas: Martin)
+	 * Constructor para la entrada de la cÃ¡tedra (no borrar uso para pruebas: Martin)
 	 * @param paresAdyacencias
 	 */
 	public Grafo(String[] paresAdyacencias){
@@ -275,7 +268,6 @@ public class Grafo {
 			}
 			adyacenciasNoOr[i] = new ListaInt();
 			adyacenciasOr[i] = new ListaInt();
-			adyacenciasVisitados[i] = new ListaInt();
 		}
 		
 		for (int i = 3; i < (cantAristas+1)*3; i=i+3) {
@@ -398,10 +390,6 @@ public class Grafo {
 		return adyacenciasOr[nodo];
 	}
 	
-	public ListaInt adyacentesVisitados(int nodo){
-		return adyacenciasVisitados[nodo];
-	}
-	
 	public void showGrafo(){
 		System.out.println("CantNodos: "+this.cantNodos);
 		System.out.println("CantAristas: "+this.cantAristas);
@@ -495,20 +483,8 @@ public class Grafo {
 		this.adyacenciasOr = adyacenciasOr;
 	}
 
-	public int[][] getPesosEjes() {
-		return pesosEjes;
-	}
-
 	public void setPesosEjes(int[][] pesosEjes) {
 		this.pesosEjes = pesosEjes;
-	}
-
-	public ListaInt[] getAdyacenciasVisitados() {
-		return adyacenciasVisitados;
-	}
-
-	public void setAdyacenciasVisitados(ListaInt[] adyacenciasVisitados) {
-		this.adyacenciasVisitados = adyacenciasVisitados;
 	}
 
 	public int[] getDin() {
@@ -553,7 +529,6 @@ public class Grafo {
 		ListaInt[] adyacenteNoOrdenados = new ListaInt[cantNodos];
 		ListaInt[] adyacenteOrdenados = new ListaInt[cantNodos];
 		int[][] pesosDeEjes = new int[cantNodos][cantNodos];
-		int[][] pesosDeCaminosMinimos = new int[cantNodos][cantNodos];
 		int[] gradoEntrada = new int[cantNodos];
 		int[] gradoSalida = new int[cantNodos];
 		
@@ -567,7 +542,6 @@ public class Grafo {
 			for (int j = 0; j < cantNodos; j++)
 			{
 				pesosDeEjes[i][j] = pesosEjes[i][j];
-//				pesosDeCaminosMinimos[i][j] = pesoCaminoMinimo[i][j];
 			}
 		}
 		
@@ -596,8 +570,4 @@ public class Grafo {
 		}
 		return peso;
 	}
-	
-//	private void setPesosCaminosMinimos(int[][] pesosDeCaminosMinimos) {
-//		this.pesoCaminoMinimo = pesosDeCaminosMinimos;
-//	}
 }
