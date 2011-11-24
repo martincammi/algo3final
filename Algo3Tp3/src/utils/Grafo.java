@@ -174,7 +174,7 @@ public class Grafo {
 		//CASO DEFAULT - SI LOS ANTERIORES NO ENCONTRARON NODOS, TRAIGO LOS PRIMEROS HASTA parametroBusqueda
 		if (listaNodosAOrientar.isEmpty())
 		{
-			for (i = 0; i <= cantNodos; i++)
+			for (i = 0; i < cantNodos; i++)
 			{
 				if (adyacenciasNoOr[i].size() > 0)
 				{

@@ -16,8 +16,8 @@ public class CarteroConstructiva {
 
 //PARAMETROS
 		String decisionDefault = "E";  // S Mandar Default Salida, E Mandar Default Entrada
-		int tipoOrientacionAristas = 2;
-		int parametroBusqueda = 5;  //CALCULA LA LISTA CON ESTE PARAMETRO. 
+		int tipoOrientacionAristas = 1;
+		int parametroBusqueda = 10;  //CALCULA LA LISTA CON ESTE PARAMETRO. 
 //int parametroEleccionLista = 1;  //ESTE ME DICE CUAL DE LA LISTA ELEGIR, VA DESDE 0 A CANTIDAD DE LA LISTA QUE ME DIO ARRIBA. SI ESTE VALOR ES MAYOR, ME DEVUELVE LA PRIMERA POSICION DE LA LISTA
 		int[] parametroIteracionesGraspRandom= {33, 52, 48, 96, 125};//Random
 		FileManager fm = new FileManager("Ej1.in");
@@ -46,7 +46,6 @@ public class CarteroConstructiva {
 				int j= 1;
 				for(int parametroGRASP: parametroIteracionesGraspRandom){
 				//MIENTRAS PARAMETRO DE ITERACIONES CONSTRUCTIVA HACER
-					System.out.println("Iteraci√≥n GRASP " + j + ": ");
 					//1) HACER UNA COPIA DEL GRAFO
 					Grafo grafoCopia = ((Grafo)grafo.clone());
 					//2) ORIENTAR LAS ARISTAS
@@ -62,14 +61,18 @@ public class CarteroConstructiva {
 					//System.out.println("Se mejor√≥ el peso del mathcing de "+pesoMatching+" a "+pesoBusquedaLocal);
 					int sumaSolucion = sumaPesosEjes + pesoBusquedaLocal;
 					if(sumaSolucion < sumaMejorSolucion){
-						System.out.println("Mejor√≥ la soluci√≥n de "+sumaMejorSolucion+" a "+sumaSolucion);
+						System.out.println("IteraciÛn GRASP " + j + ": MejorÛ la soluciÛn de "+sumaMejorSolucion+" a "+sumaSolucion);
 						sumaMejorSolucion = sumaSolucion;
 						mejorGrafoSolucion = grafoCopia;
 						matchingSolucion = matchingMinimo;
 						if(unMatching.isEmpty()){
-							System.out.println("Soluci√≥n √≥ptima ");
+							System.out.println("SoluciÛn Optima");
 							break;//solucion optima
 						}
+					}
+					else
+					{
+						System.out.println("IteraciÛn GRASP " + j + ": No mejorÛ la soluciÛn en esta iteraciÛn");
 					}
 					++j;
 				}
