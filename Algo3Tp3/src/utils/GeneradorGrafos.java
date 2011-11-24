@@ -30,8 +30,8 @@ public class GeneradorGrafos {
 			cantidadAristas = maxGradoNodo.intValue() < 1 ? 1: maxGradoNodo.intValue();
 			for (j = 0; j < cantidadAristas; j++)
 			{
-				int ari = i+j+1;
-				aristas.add(i + " " + ari + " " + peso.intValue());
+				int segundaArista = i+j+1;
+				aristas.add(i + " " + segundaArista + " " + peso.intValue());
 			}
 		}
 		
