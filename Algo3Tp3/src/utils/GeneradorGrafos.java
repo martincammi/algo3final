@@ -1,65 +1,45 @@
 package utils;
 
+import java.util.ArrayList;
+import java.util.List;
 
 public class GeneradorGrafos {
 
-	private static int SUMIDERO_MAX_NODOS  = 5;
-	private static int CANT_NODOS = -1;
+	private static int CANT_NODOS = 100;   //DICE DE CUANTOS NODOS SERA (ESTA EN 100, PESO SE MODIFICA DE ESTA VARIABLE) 
+	private static int RANDOM_PESO = 3000;   //ME DA VALORES DE PESO ENTRE 1 Y 3000 (SI QUIEREN CAMBIAR, CAMBIAN ESTA VARIABLE)
 	
 	public static void main(String[] args) {
 	
-		Grafo grafo = generarGrafoOrSumidero();
+		generarGrafo();
 		System.out.println("finish");
-		
 	}
 	
-	public static Grafo generarGrafoOrSumidero(int cantNodos){
-		CANT_NODOS = cantNodos;
-		return generarGrafoOrSumidero();
-	}
-	
-	/**
-	 * Genera un grafo en el que un nodo inicial se relaciona con varios otros
-	 * y los varios otros se relacionan solamente con un nodo final
-	 * y el nodo final se relaciona solo con el nodo inicial.
-	 * @return
-	 */
-	public static Grafo generarGrafoOrSumidero(){
+	private static void generarGrafo()
+	{
+		Double maxGradoNodo;		//cuantos adyacentes tendra el nodo i
+		Double peso;				//peso de la arista
+		int cantidadAristas;		//el random puede dar menor que uno, por lo que, en esos casos, acomodo este valor a 1. Caso contrario lo paso solo a enteros al ramdom
+		List<String> aristas = new ArrayList<String>();
+		int i, j;				
 		
-		int cantNodos = (int)(Math.random()*SUMIDERO_MAX_NODOS)+3; //Al menos deberia haber 3.
-		
-		if(CANT_NODOS != -1){
-			cantNodos = CANT_NODOS;
-		}
+		for (i = 0; i < CANT_NODOS-1; i++)			
+		{
+			maxGradoNodo = Math.random() * (CANT_NODOS - (i+1));
+			peso = Math.random() * RANDOM_PESO < 1 ? 1: Math.random() * RANDOM_PESO;				
 			
-		int cantArcos = (cantNodos-2)*2 + 1; //Los ejes in y out de los del medio y el del final al primero.
-		
-		String[] params = new String[(cantArcos+1)*3];
-		params[0] = String.valueOf(cantNodos);
-		params[1] = String.valueOf(0);
-		params[2] = String.valueOf(cantArcos);
-		
-		int nextIndex = 0;
-		for (int i = 0; i < cantArcos-1; i=i+2) {
-			int index = 3 + i*3;
-			params[index] = String.valueOf(0);
-			params[index+1] = String.valueOf((i/2)+1);
-			params[index+2] = String.valueOf(1);
-			
-			index = 3 + (i+1)*3;
-			params[index] = String.valueOf((i/2)+1);
-			params[index+1] = String.valueOf(cantNodos-1);
-			params[index+2] = String.valueOf(1);
-			nextIndex = index+3;
+			cantidadAristas = maxGradoNodo.intValue() < 1 ? 1: maxGradoNodo.intValue();
+			for (j = 0; j < cantidadAristas; j++)
+			{
+				int ari = i+j+1;
+				aristas.add(i + " " + ari + " " + peso.intValue());
+			}
 		}
 		
-		params[nextIndex] = String.valueOf(cantNodos-1);
-		params[nextIndex+1] = String.valueOf(0);
-		params[nextIndex+2] = String.valueOf(1);
-		
-		Grafo grafoSumidero = new Grafo(params); 
-		grafoSumidero.calcularDantzig();
-		return grafoSumidero;
-		
+		System.out.println(CANT_NODOS + " " + aristas.size() + " 0");
+		for (i = 0; i < aristas.size(); i++)
+		{
+			System.out.println(aristas.get(i));
+		}
 	}
 }
+
