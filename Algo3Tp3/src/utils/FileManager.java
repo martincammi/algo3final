@@ -60,7 +60,8 @@ public class FileManager {
 		String linea = br.readLine();
 
 		if (linea != null && !linea.equals("")) 			//SI LINEA = NULL, RETORNA GRAFO NULL (NO HAY MAS INSTANCIAS)
-		{		
+		{
+			Grafo.complex = 0;//reinicio comprejidad para cada instancia
 			int n, m1, m2;
 			String lineaSplit[] = linea.split(" ");
 			//cantidades
@@ -92,7 +93,7 @@ public class FileManager {
 				grafo.sumarBits(peso);
 				Grafo.complex++;
 			}
-			grafo.calcularDantzig(); //Terminé de armar el grafo, entonces calculo distancias minimas entre sus nodos.
+			//grafo.calcularDantzig(); //Terminé de armar el grafo, entonces calculo distancias minimas entre sus nodos.//lo hace despues cartero
 		}
 		return grafo;
 	}

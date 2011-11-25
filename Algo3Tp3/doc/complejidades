@@ -1,0 +1,41 @@
+Complejidades
+
+Inicializar grafo (lectura de archivo) O(n^{2} + m)
+
+fuertementeConexo
+	inicializacion de arrays O(n+m)
+	resetVisitados y checkVisitados 
+		recorren un array de bools de tamaño cantNodos O(n) 
+	visitarNodos
+		recorre recursivamente en DFS las adyacencias y marca los nodos que son accesibles desde el nodo 0 O(m)
+Total O(n+m)
+
+calcularDantzig
+	inicializacion de la matriz de pesos de caminos minimos O(n^{2})
+	3 for nidados de 0 a cantNodos con operaciones de tiempo constante O(n^{3})
+Total O(n^{3})
+
+sumaPesosEjes recorre todas las aristas y arcos de los nodos O(m) 
+
+Clonar el grafo O(n^{2} + m) para copiar las estructuras
+
+orientarTodasAristas
+
+encontrarMatchingNodos
+
+pesoMatching recorre una lista de tamaño a lo sumo m O(m) 
+
+encontrarMatchingDeMenorPeso
+
+agregarCaminosMatcheados
+	inicializacion de matriz O(n^{2})
+	Para cada elemento del matching (a lo sumo m elementos) //ver de acotar // no se puede 
+		inicializacion de variables O(n)
+		Para cada nodo i (n elementos)
+			Minvertex O(n)
+			for (d(i))//termina dando m
+		total (n^{2} + m) incluido en O(n^{2})
+	total O(m*n^{2})
+
+encontrar circuito euleriano
+	O(2 * largo del circuito )

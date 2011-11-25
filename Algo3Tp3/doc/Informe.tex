@@ -1,0 +1,141 @@
+	\documentclass[11pt, a4paper, spanish]{article}
+
+\usepackage{alltt}
+
+%%%%%%%%%% COMIENZO DEL PREAMBULO %%%%%%%%%%
+
+%Info sobre este documento
+\author{Mart\'n Cammi}
+\title{Trabajo Pr\'actico de Algoritmos y Estucturas de datos III}
+
+%\usepackage{infostyle}                                                  % provee un look & feel similar a un documento Word
+\usepackage[top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry}  % m\'argenes
+\usepackage[ansinew]{inputenc}                                           % permite que los acentos del estilo \'a\'e\'i\'o\'u salgan joya
+\usepackage[spanish, activeacute]{babel}                                 % idioma espaniol, acentos f\'aciles y deletreo de palabras
+\usepackage{indentfirst}                                                 % permite indentar un parrafo a mano
+\usepackage{caratula}                                                    % incluye caratula est\'andar
+\usepackage{graphicx}                                                    % permite insertar gr\'aficos
+\usepackage{color}                                                       % permite el uso de colores en el documento
+\usepackage{amssymb}
+\usepackage[pdfcreator={TexLive!, LaTeX2e con TeXnicCenter},
+			pdfauthor={Grupo: "1"},
+			pdftitle={Algoritmos III - Trabajo Pr\'actico 2},
+			pdfsubject={Trabajo Pr\'actico 1},
+			pdfkeywords={Prismas, Esferas, Punto de corte, puente, pizza},
+			pdfstartview=FitH,            % Fits the width of the page to the window
+			bookmarksnumbered,            % los bookmarks numerados se ven mejor...
+			colorlinks,                   % links con bellos colores
+			linkcolor=magenta]            % permite cambiar el color de los links
+			{hyperref}                    % Permite jugar con algunas cosas que aparecer\'an en el PDF final
+
+%RESTAURAR
+
+\usepackage{algorithm}							% Permite tabular un codigo
+\usepackage{algorithmic}
+%\input{spanishAlgorithmic} % mi archivo de traducci\'on			
+
+%\selectlanguage{spanish}
+
+%\selectlanguage{spanish}
+\linespread{1.3}                    % interlineado equivalente al 1.5 l\'ineas de Word...
+\pagestyle{myheadings}              %encabezado personalizable con \markboth{}{}
+\markboth{}{Algoritmos III  - Trabajo Pr\'actico 2 - Cammi, Garbi, Kretschmayer}
+\headsep = 30pt                     % separaci\'on entre encabezado y comienzo del p\'arrafo
+
+%\addtolength{\oddsidemargin}{-2cm}	% configuracion IDEAL!!!
+%\addtolength{\textwidth}{4cm}
+%\addtolength{\textheight}{2cm}
+
+% macro 'todo' para To-Do's
+\def\todo#1{\textcolor{red}{#1}}
+
+% Macro 'borde' para un texto con borde
+\newsavebox{\fmbox}
+\newenvironment{borde}[1]
+{\begin{lrbox}{\fmbox}\begin{minipage}{#1}}
+{\end{minipage}\end{lrbox}\fbox{\usebox{\fmbox}}\\[10pt]}
+
+%%%%%%%%%% FIN DEL PREAMBULO %%%%%%%%%%
+
+\begin{document}
+
+\materia{Algoritmos y Estucturas de datos III}
+\submateria{Segundo Cuatrimestre de 2011}
+\titulo{Trabajo Pr\'actico 3}
+\subtitulo{Cartero Chino en grafo mixto.}
+\grupo{Grupo: `1'}
+\integrante{Cammi, Mart\'in}{676/02}{martincammi@gmail.com}
+\integrante{Garbi, Sebasti\'an}{179/05}{garbyseba@gmail.com}
+\integrante{Kretschmayer, Daniel}{310/99}{daniak@gmail.com}
+
+\maketitle
+
+\thispagestyle{empty}
+
+\tableofcontents
+
+\newpage
+
+
+\textbf{Ejecuci\'on del TP}
+\label{sec:ejecucion}
+
+	\subsection{Lenguaje utilizado}
+		
+		El lenguaje utilizado para el trabajo pr\'actico ha sido \emph{Java}, compilando con la versi\'on 1.5 de la Virtual Machine.
+		
+		El trabajo se acompa\~{n}a con los fuentes de la soluci\'on que puede importarse en IDE de Eclipse o ejecutarse desde l\'inea de comandos.
+
+	\subsection{Como ejecutar el TP}
+	
+	\textbf{\underline{Desde l\'inea de comandos}}
+	\begin{itemize}
+			\item{Posicionarse en el directorio Algo3Tp2}
+			\item{Copiar all\'i el archivo de entrada para el problema i, por ejemplo Ej1.in}
+			\item{Ejecutar el comando: \emph{java -cp ./bin problema1.Ej1}}
+	\end{itemize}
+	Esto generar\'a el archivo Ej1.out con la soluci\'on en el mismo directorio Algo3Tp2.
+
+	\textbf{\underline{Desde el Eclipse}}
+	
+	Primero importaremos el proyecto:	
+	
+	\begin{itemize}
+			\item{Seleccionar File $\Rightarrow$ Import.}
+			\item{Seleccionar General $\Rightarrow$ Existing Projects into Workspace $\Rightarrow$ Next.}
+			\item{Seleccionar el directorio llamado Algo3Tp2.}
+			\item{Finish.}
+	\end{itemize}
+	
+	Desde la vista de \textbf{Package Explorer} bajo el paquete \textbf{src} aparecer\'an tres paquetes más y dentro de cada uno de ellos los siguientes archivos de java:\\
+
+	\begin{center}
+		%\includegraphics[scale=0.65]{others/packageExplorer.png}\\
+		COLOCAR IMAGEN CORRECTA
+	\end{center}
+
+\newpage
+
+	Para ejecutar un problema:
+
+	\begin{itemize}
+			\item{Posicionarse en el directorio Algo3Tp2}
+			\item{Copiar en el directorio Algo3Tp2 el archivo de entrada para el problema i, por ejemplo Ej1.in}
+			\item{Con bot\'on derecho Run As $\Rightarrow$ Java Application. Se ejecutar\'a el problema seleccionado.}
+	\end{itemize}
+	Esto generar\'a el archivo Ej1.out con la soluci\'on en el mismo directorio Algo3Tp2.
+
+\newpage
+
+\section{Situaciones de la vida real}
+\section{Heuristica Constructiva}
+\section{Heuristica de busqueda Local}
+Nuestro algoritmo de busqueda local se basa en eliminar aristas y arcos agregados para igualar los grados de salida a los de entrada de algunos nodos y cambiarlos por un conjunto de aristas que cumplen la misma propiedad pero cuya suma es menor.
+Para ello 
+\section{Metaheuristica Grasp}
+
+%\label{sec:problema1}
+%\subsection{Introducci\'on}
+	
+
+\end{document}

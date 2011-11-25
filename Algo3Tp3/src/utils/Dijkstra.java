@@ -10,17 +10,19 @@ public class Dijkstra {
 
 		for (int i=0; i<dist.length; i++) {
 			dist[i] = Integer.MAX_VALUE;
+			Grafo.complex++;
 		}
 		dist[s] = 0;
 
 		for (int i=0; i < dist.length; i++) {
 			final int next = minVertex (dist, visited);
 			visited[next] = true;
-
+			Grafo.complex++;
 			// The shortest path to next is dist[next] and via pred[next].
 
 			final ListaInt adyacentesOr = G.adyacentesOr(next);
 			for (Integer j: adyacentesOr) {
+				Grafo.complex++;
 				final int d = dist[next] + pesos[next][j];
 				if (dist[j] > d) {
 					dist[j] = d;
@@ -29,6 +31,7 @@ public class Dijkstra {
 			}
 			final ListaInt adyacentesNoOr = G.adyacentesNoOr(next);
 			for (Integer j: adyacentesNoOr) {
+				Grafo.complex++;
 				final int d = dist[next] + pesos[next][j];
 				if (dist[j] > d) {
 					dist[j] = d;
@@ -43,6 +46,7 @@ public class Dijkstra {
 		int x = Integer.MAX_VALUE;
 		int y = -1;   // graph not connected, or no unvisited vertices
 		for (int i=0; i<dist.length; i++) {
+			Grafo.complex++;
 			if (!v[i] && dist[i]<x) {
 				y=i;
 				x=dist[i];
@@ -55,6 +59,7 @@ public class Dijkstra {
 		final ListaInt path = new ListaInt();
 		int x = e;
 		while (x!=s){
+			Grafo.complex++;
 			path.add (0, x);
 			x = pred[x];
 		}

@@ -17,6 +17,7 @@ public class CircuitoEuleriano {
 		visitas = new int[G.getCantNodos()];
 		adyacentes = new ListIterator[G.getCantNodos()];
 		for(int i = 0; i < G.getCantNodos();++i){
+			Grafo.complex++;
 			visitas[i]=0;
 			adyacentes[i]=G.adyacentesOr(i).listIterator();
 		}
@@ -32,9 +33,10 @@ public class CircuitoEuleriano {
 		while(!circuitosParciales.isEmpty()){
 			int nodoCorteActual = circuitosParciales.peek().element();
 			int nodo = nodoCorteActual;
-			//while(G.adyacentesOr(nodoCorteActual).size() > 0){
+			Grafo.complex++;
 			//armo un circuito
 			while(visitas[nodoCorteActual] < G.dout[nodoCorteActual]){
+				Grafo.complex++;
 				int ady = (Integer)adyacentes[nodo].next();
 				circuitosParciales.peek().offer(ady);
 				nodo = ady;
@@ -42,6 +44,7 @@ public class CircuitoEuleriano {
 			}
 			//voy agregando los que no le queden aristas sin revisar a la solucion
 			while((!circuitosParciales.peek().isEmpty()) && (visitas[circuitosParciales.peek().element()] == G.dout[circuitosParciales.peek().element()])){
+				Grafo.complex++;
 				circuito.add(circuitosParciales.peek().element());
 				circuitosParciales.peek().remove();
 			}
@@ -52,8 +55,8 @@ public class CircuitoEuleriano {
 				circuitosParciales.peek().remove();
 				circuitosParciales.push(new LinkedList<Integer>());
 				circuitosParciales.peek().offer(nodoCorteActual);
-			}		
-		}				
+			}
+		}
 		return circuito;
 	}
 }

@@ -1,0 +1,9 @@
+\select@language {spanish}
+\contentsline {subsection}{\numberline {0.1}Lenguaje utilizado}{3}{subsection.0.1}
+\contentsline {subsection}{\numberline {0.2}Como ejecutar el TP}{3}{subsection.0.2}
+\contentsline {section}{\numberline {1}Situaciones de la vida real}{5}{section.1}
+\contentsline {section}{\numberline {2}Algoritmo Exacto}{5}{section.2}
+\contentsline {section}{\numberline {3}Heuristica Constructiva}{5}{section.3}
+\contentsline {section}{\numberline {4}Heuristica de busqueda Local}{5}{section.4}
+\contentsline {section}{\numberline {5}Metaheuristica}{5}{section.5}
+\contentsline {section}{\numberline {6}Heuristica de busqueda Local}{5}{section.6}

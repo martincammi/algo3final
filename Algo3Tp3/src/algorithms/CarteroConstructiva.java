@@ -61,18 +61,18 @@ public class CarteroConstructiva {
 					//System.out.println("Se mejor√≥ el peso del mathcing de "+pesoMatching+" a "+pesoBusquedaLocal);
 					int sumaSolucion = sumaPesosEjes + pesoBusquedaLocal;
 					if(sumaSolucion < sumaMejorSolucion){
-						System.out.println("IteraciÛn GRASP " + j + ": MejorÛ la soluciÛn de "+sumaMejorSolucion+" a "+sumaSolucion);
+						System.out.println("Iteraci√≥n GRASP " + j + ": Mejor√≥ la soluci√≥n de "+sumaMejorSolucion+" a "+sumaSolucion);
 						sumaMejorSolucion = sumaSolucion;
 						mejorGrafoSolucion = grafoCopia;
 						matchingSolucion = matchingMinimo;
 						if(unMatching.isEmpty()){
-							System.out.println("SoluciÛn Optima");
+							System.out.println("Soluci√≥n Optima. El Grafo original es Euleriano");
 							break;//solucion optima
 						}
 					}
 					else
 					{
-						System.out.println("IteraciÛn GRASP " + j + ": No mejorÛ la soluciÛn en esta iteraciÛn");
+						System.out.println("Iteraci√≥n GRASP " + j + ": No mejor√≥ la soluci√≥n en esta iteraci√≥n");
 					}
 					++j;
 				}
@@ -87,6 +87,7 @@ public class CarteroConstructiva {
 				ListIterator<Integer> li = circuitoEuleriano.listIterator();
 				int nodo1,nodo2 = li.next();
 				while(li.hasNext()){
+					Grafo.complex++;
 					nodo1 = nodo2;
 					nodo2 = li.next();
 					System.out.println(nodo1+" "+nodo2+" "+grafo.getPesoAristas()[nodo1][nodo2]);
@@ -123,7 +124,7 @@ public class CarteroConstructiva {
 			eje = matching.get(i);
 			
 			for (int j = i+1; j < matching.size(); j++) {
-
+				Grafo.complex++;
 				eje2 = matching.get(j);
 
 				if(primeraVez){
@@ -156,6 +157,7 @@ public class CarteroConstructiva {
 		listaResultado.add(eje2);
 		
 		for (int i = 0; i < matching.size(); i++) {
+			Grafo.complex++;
 			if(i != swapIndex1 && i != swapIndex2){
 				listaResultado.add(matching.get(i));
 			}
@@ -196,7 +198,7 @@ public class CarteroConstructiva {
 		int doutExedente[] = new int[grafo.getCantNodos()];
 		
 		for (int i = 0; i < orientados.length; i++) {
-			
+			Grafo.complex++;
 			if(grafo.getDin(i) > grafo.getDout(i)){
 				nodosDin.add(i);
 				dinExedente[i] = grafo.getDin(i) - grafo.getDout(i);
@@ -208,10 +210,10 @@ public class CarteroConstructiva {
 			}
 		}
 		
-		int cantResult = 0;
-		for (Integer nodoIn : nodosDin) {
-			cantResult += dinExedente[nodoIn];
-		}
+//		int cantResult = 0;
+//		for (Integer nodoIn : nodosDin) {
+//			cantResult += dinExedente[nodoIn];
+//		}//Se puede eliminar todo esto?
 		
 		triplaInOutPeso = new ArrayList<Eje>();
 		
@@ -223,12 +225,14 @@ public class CarteroConstructiva {
 		
 		int corte = 0;
 		while(primo % nodosDin.size() == 0 && corte <= primos.length){
+			Grafo.complex++;
 			primo = getPrimeIndex( (aleatoriedad+1) % primos.length);
 			corte++;
 		}
 		
 		if(corte > primos.length){
 			//Comprarle medio kilo de helado a Sebas.
+			//bizarro - by Seba.
 		}
 		
 		int indexIn = primo % (nodosDin.size());
@@ -238,7 +242,7 @@ public class CarteroConstructiva {
 //		System.out.println(nodosDout);
 		
 		while( nodosDin.size() > 0 && nodosDout.size() > 0){
-			
+			Grafo.complex++;
 			//las listas nodoDin y nodoDout son mutuamente excluyentes.
 			//las listas nodoDin y nodoDout deberian tener la misma longitud.
 			
@@ -287,6 +291,7 @@ public class CarteroConstructiva {
 		int peso = 0;
 		if(matching != null){
 			for(Eje eje:matching){
+				Grafo.complex++;
 				peso+=eje.getPeso();
 			}
 		}
@@ -305,6 +310,7 @@ public class CarteroConstructiva {
 				ListIterator<Integer> li = sol[nodo1][nodo2].listIterator(1);
 //				System.out.println("Arcos Agregados:");
 				while(li.hasNext()){
+					Grafo.complex++;
 					nodo2 = li.next();
 //					System.out.println("("+nodo1+","+nodo2+")");
 					gr.agregarAdyacencia(nodo1, nodo2, grafo.getPesoAristas()[nodo1][nodo2],true);

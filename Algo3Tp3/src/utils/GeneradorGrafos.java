@@ -11,6 +11,8 @@ public class GeneradorGrafos {
 	public static void main(String[] args) {
 	
 		generarGrafo();
+		//System.out.println();
+		//generarGrafoMaloParaMatching();
 		System.out.println("finish");
 	}
 	
@@ -30,7 +32,11 @@ public class GeneradorGrafos {
 			for (j = 0; j < cantidadAristas; j++)
 			{
 				int segundaNodoArista = i+j+1;
-				peso = Math.random() * RANDOM_PESO < 1 ? 1: Math.random() * RANDOM_PESO;
+				//peso = Math.random() * RANDOM_PESO < 1 ? 1: Math.random() * RANDOM_PESO;
+				peso = Math.random() * RANDOM_PESO;
+				if(peso < 1){
+					peso = 1.0;
+				}
 				aristas.add(i + " " + segundaNodoArista + " " + peso.intValue());
 			}
 		}
@@ -41,5 +47,36 @@ public class GeneradorGrafos {
 			System.out.println(aristas.get(i));
 		}
 	}
+	
+	private static void generarGrafoMaloParaMatching(){
+		Double peso;
+		int nodoFin = CANT_NODOS-1;
+		int x=0,y=0,cantAristas=0;
+		if(CANT_NODOS%2==0){
+			y=x=CANT_NODOS/2 -1;
+		}else{
+			x= (CANT_NODOS-1)/2;
+			y= (CANT_NODOS-3)/2;
+		}
+		cantAristas = x + y + x*y +1;
+		System.out.println(CANT_NODOS+" "+"0"+" "+cantAristas);
+		peso = Math.random() * RANDOM_PESO;
+		if(peso < 1) peso = 1.0;
+		System.out.println(nodoFin+" "+0+" "+peso.intValue());
+		for(int i = 1; i <= x;++i){
+			peso = Math.random() * RANDOM_PESO;
+			if(peso < 1) peso = 1.0;
+			System.out.println(0+" "+i+" "+peso.intValue());
+			for(int j= x+1;j <= x+y;++j){
+				peso = Math.random() * RANDOM_PESO;
+				if(peso < 1) peso = 1.0;
+				System.out.println(i+" "+j+" "+peso.intValue());
+			}
+		}
+		for(int i = x+1; i <= x+y;++i){
+			peso = Math.random() * RANDOM_PESO;
+			if(peso < 1) peso = 1.0;
+			System.out.println(i+" "+nodoFin+" "+peso.intValue());
+		}
+	}
 }
-
