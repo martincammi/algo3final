@@ -25,12 +25,12 @@ public class GeneradorGrafos {
 		for (i = 0; i < CANT_NODOS-1; i++)			
 		{
 			maxGradoNodo = Math.random() * (CANT_NODOS - (i+1));
-			peso = Math.random() * RANDOM_PESO < 1 ? 1: Math.random() * RANDOM_PESO;				
 			
 			cantidadAristas = maxGradoNodo.intValue() < 1 ? 1: maxGradoNodo.intValue();
 			for (j = 0; j < cantidadAristas; j++)
 			{
 				int segundaNodoArista = i+j+1;
+				peso = Math.random() * RANDOM_PESO < 1 ? 1: Math.random() * RANDOM_PESO;
 				aristas.add(i + " " + segundaNodoArista + " " + peso.intValue());
 			}
 		}
