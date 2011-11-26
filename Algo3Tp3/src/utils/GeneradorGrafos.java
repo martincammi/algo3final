@@ -1,5 +1,8 @@
 package utils;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,13 +11,19 @@ public class GeneradorGrafos {
 	private static int CANT_NODOS = 100;   //DICE DE CUANTOS NODOS SERA (ESTA EN 100, PESO SE MODIFICA DE ESTA VARIABLE) 
 	private static int RANDOM_PESO = 3000;   //ME DA VALORES DE PESO ENTRE 1 Y 3000 (SI QUIEREN CAMBIAR, CAMBIAN ESTA VARIABLE)
 	
-	public static void main(String[] args) {
-	
+	public static void main(String[] args) throws IOException {
+		FileWriter fw = new FileWriter("ej.in", true);
+		BufferedWriter bw = new BufferedWriter(fw);
+		
 		//generarGrafo();
 		//System.out.println();
 		//generarGrafoMaloParaMatching();
 		//generaParametrosGrasp(200);
-		generarGrafoArcosYAristas();
+		for(int cantNodos = 100;cantNodos <= 2000; cantNodos+=100){
+			System.out.println(cantNodos);
+			generarGrafoArcosYAristas(cantNodos,bw);
+		}
+		bw.close();
 		System.out.println("finish");
 	}
 	
@@ -50,7 +59,7 @@ public class GeneradorGrafos {
 		}
 	}
 	
-	private static void generarGrafoArcosYAristas()
+	private static void generarGrafoArcosYAristas(int cantNodos,BufferedWriter bw) throws IOException
 	{
 		Double maxGradoNodo;		//cuantos adyacentes tendra el nodo i
 		Double peso;				//peso de la arista
@@ -59,9 +68,9 @@ public class GeneradorGrafos {
 		List<String> arcos = new ArrayList<String>();
 		int i, j;				
 		
-		for (i = 0; i < CANT_NODOS-1; i++)			
+		for (i = 0; i < cantNodos-1; i++)			
 		{
-			maxGradoNodo = Math.random() * (CANT_NODOS - (i+1));
+			maxGradoNodo = Math.random() * (cantNodos - (i+1));
 			
 			cantidadAristas = maxGradoNodo.intValue() < 1 ? 1: maxGradoNodo.intValue();
 			
@@ -92,17 +101,18 @@ public class GeneradorGrafos {
 				
 			}
 		}
-		
-		System.out.println(CANT_NODOS + " " + aristas.size() + " " + arcos.size());
+		//System.out.println(cantNodos + " " + aristas.size() + " " + arcos.size());
+		bw.write(cantNodos + " " + aristas.size() + " " + arcos.size() + "\n");
 		for (i = 0; i < aristas.size(); i++)
 		{
-			System.out.println(aristas.get(i));
+			//System.out.println(aristas.get(i));
+			bw.write(aristas.get(i)+"\n");
 		}
 		for (i = 0; i < arcos.size(); i++)
 		{
-			System.out.println(arcos.get(i));
+			//System.out.println(arcos.get(i));
+			bw.write(aristas.get(i)+"\n");
 		}
-		
 	}
 	
 	private static void generarGrafoMaloParaMatching(){

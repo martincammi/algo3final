@@ -11,9 +11,9 @@ public class CarteroConstructiva {
 
 	private Grafo grafo;
 	private int[] primos = {1,3,5,7,11,13,17,19,23};
-	static final float ALFA = (float) 0.8;  //CALCULA LA LISTA CON ESTE PARAMETRO. 
-	static int CANT_ITERACIONES_MAXIMA = 2000; 
-	static int CANT_ITERACIONES_SIN_MEJORAR = 300; // Ver si puede ser un porcentaje de la cantidad de nodos. Para Daniel si :p
+	static final float ALFA = (float) 0.1;  //CALCULA LA LISTA CON ESTE PARAMETRO. 
+	static int CANT_ITERACIONES_MAXIMA = 200; 
+	static int CANT_ITERACIONES_SIN_MEJORAR = 10; // Ver si puede ser un porcentaje de la cantidad de nodos. Para Daniel si :p
 	static int TIPO_ORIENTACION_ARISTAS;
 	
 	public static void main(String[] args) throws IOException, CloneNotSupportedException {
@@ -21,13 +21,16 @@ public class CarteroConstructiva {
 //PARAMETROS
 		String decisionDefault = "E";  // S Mandar Default Salida, E Mandar Default Entrada
 
-		//int parametroEleccionLista = 1;  //ESTE ME DICE CUAL DE LA LISTA ELEGIR, VA DESDE 0 A CANTIDAD DE LA LISTA QUE ME DIO ARRIBA. SI ESTE VALOR ES MAYOR, ME DEVUELVE LA PRIMERA POSICION DE LA LISTA
-		int[] parametroIteracionesGraspRandom = new int[CANT_ITERACIONES_MAXIMA];
-		FileManager fm = new FileManager("Ej1.in");
+		int[] parametroIteracionesGraspRandom= {435693, 344031, 460173, 227725, 430024, 132060, 352001, 211477, 515771, 747551, 504368, 760850, 978532, 751967, 184402, 418925, 461554, 994190, 473839, 59819, 633512, 213684, 127438, 481296, 923496, 682578, 179673, 185301, 94789, 299200, 628481, 507476, 832449, 394170, 131279, 433443, 579169, 265103, 411148, 22666, 569807, 117055, 990045, 349963, 386973, 653261, 941081, 270227, 388434, 34331, 583368, 113698, 41628, 303959, 430610, 627118, 541428, 665323, 248579, 90369, 84351, 184765, 776814, 558694, 825732, 597923, 526288, 607361, 855952, 898422, 77543, 788653, 497637, 300339, 472692, 250286, 847793, 983025, 619893, 609920, 767202, 750538, 110370, 232126, 453925, 367788, 485700, 512236, 328623, 871647, 787099, 635717, 206447, 597660, 168562, 552242, 633585, 11611, 462221, 580379, 826110, 690095, 846932, 141837, 864622, 955384, 190088, 613448, 670196, 737232, 207807, 180591, 815529, 207931, 320131, 877511, 409707, 616786, 965544, 707993, 135837, 536321, 183061, 854117, 17896, 424919, 470346, 501319, 646404, 9203, 282759, 734747, 402171, 494386, 50926, 294901, 683136, 21928, 263365, 719820, 261397, 111215, 985908, 546565, 675883, 45625, 171105, 796523, 633, 293227, 248470, 927049, 419530, 88475, 780399, 796243, 785342, 243661, 418782, 958144, 744320, 107508, 3756, 782382, 67085, 343190, 408760, 475373, 542441, 859163, 655009, 69334, 162753, 793611, 893659, 840972, 357902, 926922, 85419, 423411, 719354, 276488, 595056, 82949, 996741, 914285, 462158, 246494, 146391, 240029, 809742, 386024, 864581, 41372, 708736, 793196, 347859, 677478, 829047, 610208};//Random
+		FileManager fm = new FileManager("Ej.in");
 		fm.abrirArchivo();
+		String datasetFilename = "Ej_ALFA_"+ALFA+"_CANT_ITERACIONES_MAXIMA_"+CANT_ITERACIONES_MAXIMA+"_CANT_ITERACIONES_SIN_MEJORAR_"+CANT_ITERACIONES_SIN_MEJORAR+".dataset";
+		String logFilename = "Ej_ALFA_"+ALFA+"_CANT_ITERACIONES_MAXIMA_"+CANT_ITERACIONES_MAXIMA+"_CANT_ITERACIONES_SIN_MEJORAR_"+CANT_ITERACIONES_SIN_MEJORAR+".log";
+		String outFilename = "Ej.out";
 		Grafo grafo = fm.leerInstancia();
-		fm.borrarArchivo("El1.out");
-		fm.borrarArchivo("El1.log");
+		fm.borrarArchivo(outFilename);
+		fm.borrarArchivo(datasetFilename);
+		fm.borrarArchivo(logFilename);
 		
 		//1 REALIZA UN BALANCEO ENTRE LOS GRADOS DE ENTRADA Y GRADOS DE SALIDA, 
 		//  CALCULANDO PRIMERO AL NODO DONDE SE CUMPLA (CANTIDAD ARISTAS NODO = DIN NODO - DOUT NODO) 
@@ -35,14 +38,18 @@ public class CarteroConstructiva {
 		//3 ORIENTA PRIMERO AL QUE TENGA MAYOR GRADO (CANTIDAD DE ARISTAS)
 		//4 ORIENTA PRIMERO AL QUE TENGA MAYOR GRADO DE ENTRADA (DIN)
 		//5 ORIENTA PRIMERO AL QUE TENGA MAYOR SALIDA DE ENTRADA (DOUT)
-		
+
+		String textoParametros = "ALFA: "+ALFA+"\nCANT_ITERACIONES_MAXIMA: "+CANT_ITERACIONES_MAXIMA+"\nCANT_ITERACIONES_SIN_MEJORAR: "+CANT_ITERACIONES_SIN_MEJORAR+"\n";
+		fm.escribirArchivo(textoParametros, logFilename);
 		int i = 1;
 		while (grafo != null)
 		{
 			if(FuertementeConexo.fuertementeConexo(grafo)){
 				int[][] pesoCaminoMinimo = grafo.calcularDantzig();
 				int sumaPesosEjes = grafo.sumaPesosEjes();
-				System.out.println("Instancia " + i + ": ");
+				String textoInstancia= "Instancia " + i + ": "+grafo.getCantNodos()+" Nodos "+grafo.getCantAristas()+" Aristas "+grafo.getCantArcos()+" Arcos";
+				System.out.println(textoInstancia);
+				fm.escribirArchivo(textoInstancia, logFilename);
 				CarteroConstructiva cartero = new CarteroConstructiva(grafo);
 				
 				List<Eje> matchingSolucion = null;
@@ -51,18 +58,14 @@ public class CarteroConstructiva {
 				int j= 1;
 				int cantidadIteraciones = 0;
 				int iteracionesSinMejorar = 0;
-
-				for (int ind = 0; ind < CANT_ITERACIONES_MAXIMA; ind++)
-				{
-					int parametroGRASP = ((Double)(Math.random() * CANT_ITERACIONES_MAXIMA)).intValue();
-					parametroIteracionesGraspRandom[ind] = parametroGRASP;
-				}
-				//MIENTRAS PARAMETRO DE ITERACIONES CONSTRUCTIVA HACER				
+				
 				while (cantidadIteraciones < CANT_ITERACIONES_MAXIMA && iteracionesSinMejorar < CANT_ITERACIONES_SIN_MEJORAR){
+				//MIENTRAS PARAMETRO DE ITERACIONES CONSTRUCTIVA HACER
 					//1) HACER UNA COPIA DEL GRAFO
 					Grafo grafoCopia = ((Grafo)grafo.clone());
 					
-					int parametroGRASP = parametroIteracionesGraspRandom[cantidadIteraciones];
+					int parametroGRASP = ((Double)(Math.random() * 1000000)).intValue();
+					//int parametroGRASP = parametroIteracionesGraspRandom[cantidadIteraciones];
 					//CUANDO TENGAMOS DECIDIDOS LOS VALORES DE ALFA E ITERACIONES LO DEJAMOS ALEATORIO. By Seba
 					TIPO_ORIENTACION_ARISTAS = parametroGRASP % 6 == 0 ? 1 : parametroGRASP % 6;
 					
@@ -80,22 +83,26 @@ public class CarteroConstructiva {
 					int sumaSolucion = sumaPesosEjes + pesoBusquedaLocal;
 					cantidadIteraciones++;
 					if(sumaSolucion < sumaMejorSolucion){
-						fm.escribirArchivo("Iteración GRASP " + j + ": Mejoró la solución de "+sumaMejorSolucion+" a "+sumaSolucion, "Ej1.log");
-						System.out.println("Iteración GRASP " + j + ": Mejoró la solución de "+sumaMejorSolucion+" a "+sumaSolucion);
+						String textoIteracionGraspMejoro = "Iteración GRASP " + j + ": Mejoró la solución de "+sumaMejorSolucion+" a "+sumaSolucion;
+						fm.escribirArchivo(textoIteracionGraspMejoro, logFilename);
+						System.out.println(textoIteracionGraspMejoro);
 						sumaMejorSolucion = sumaSolucion;
 						mejorGrafoSolucion = grafoCopia;
 						matchingSolucion = matchingMinimo;
 						iteracionesSinMejorar = 0;
 						if(unMatching.isEmpty()){
-							System.out.println("Solución Optima. El Grafo original es Euleriano");
+							String textoSolOpt = "Solución Optima. El Grafo original es Euleriano";
+							System.out.println(textoSolOpt);
+							fm.escribirArchivo(textoSolOpt, logFilename);
 							break;//solucion optima
 						}
 					}
 					else
 					{
 						iteracionesSinMejorar++;
-						fm.escribirArchivo("Iteración GRASP " + j + ": No se encontró una mejor solución en esta iteración", "Ej1.log");
-						System.out.println("Iteración GRASP " + j + ": No se encontró una mejor solución en esta iteración");
+						String textoIteracionGraspNoMejoro = "Iteración GRASP " + j + ": No se encontró una mejor solución en esta iteración "+sumaSolucion;
+//						fm.escribirArchivo(textoIteracionGraspNoMejoro, logFilename);
+						System.out.println(textoIteracionGraspNoMejoro);
 					}
 					++j;
 				}
@@ -103,20 +110,28 @@ public class CarteroConstructiva {
 				cartero.agregarCaminosMatcheados(matchingSolucion,mejorGrafoSolucion);//en vez de grafo hay que pasarle la copia que ya tiene las aristas orientadas//hay que pasarle los pares de la mejor solucion que encontremos
 				ListaInt circuitoEuleriano = CircuitoEuleriano.encontrarCircuitoEuleriano(mejorGrafoSolucion);
 //				5) DEVOLVER | reemplazar por la llamada a archivo|
-				System.out.println("Circuito: ");
+//				System.out.println("Circuito: ");
 //				System.out.println(sumaMejorSolucion);
-				System.out.println(circuitoEuleriano.size()-1);
-				fm.escribirArchivo(String.valueOf(circuitoEuleriano.size()-1), "Ej1.out");
-//				System.out.println(circuitoEuleriano);
+//				System.out.println(circuitoEuleriano.size()-1);
+				fm.escribirArchivo(String.valueOf(circuitoEuleriano.size()-1), outFilename);
+				//fm.escribirArchivo(String.valueOf(circuitoEuleriano.size()-1)+" "+String.valueOf(sumaMejorSolucion), outFilename);
 				ListIterator<Integer> li = circuitoEuleriano.listIterator();
 				int nodo1,nodo2 = li.next();
 				while(li.hasNext()){
 					Grafo.complex++;
 					nodo1 = nodo2;
 					nodo2 = li.next();
-					fm.escribirArchivo(nodo1+" "+nodo2+" "+grafo.getPesoAristas()[nodo1][nodo2], "Ej1.out");
-					System.out.println(nodo1+" "+nodo2+" "+grafo.getPesoAristas()[nodo1][nodo2]);
+					String textoCircuito= nodo1+" "+nodo2+" "+grafo.getPesoAristas()[nodo1][nodo2];
+
+					fm.escribirArchivo(textoCircuito, "Ej1.out");
+					//System.out.println(textoCircuito);
 				}
+				String textoComplejidadYParametros = "Nodos: "+grafo.getCantNodos()+" Aristas: "+grafo.getCantAristas()+" Arcos: "+grafo.getCantArcos()+" Repetidos: "+(circuitoEuleriano.size() -1 - (grafo.getCantAristas() + grafo.getCantArcos()));
+				String textoDataSet = grafo.getCantNodos()+"\t"+grafo.getCantAristas()+"\t"+grafo.getCantArcos()+"\t"+grafo.T+"\t"+Grafo.complex;
+				fm.escribirArchivo(textoComplejidadYParametros, logFilename);
+				fm.escribirArchivo(textoDataSet, datasetFilename);
+				System.out.println(textoComplejidadYParametros);
+				fm.escribirArchivo("----", logFilename);
 				System.out.println("----");
 
 			}else{
