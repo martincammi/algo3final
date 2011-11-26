@@ -13,6 +13,7 @@ public class GeneradorGrafos {
 		generarGrafo();
 		//System.out.println();
 		//generarGrafoMaloParaMatching();
+		//generaParametrosGrasp(200);
 		System.out.println("finish");
 	}
 	
@@ -78,5 +79,15 @@ public class GeneradorGrafos {
 			if(peso < 1) peso = 1.0;
 			System.out.println(i+" "+nodoFin+" "+peso.intValue());
 		}
+	}
+	
+	private static void generaParametrosGrasp(int n){
+		int parametroGRASP;
+		for(int i =1; i< n;++i){
+			parametroGRASP = ((Double)(Math.random() * 1000000)).intValue();
+			System.out.print(parametroGRASP+", ");
+		}
+		parametroGRASP = ((Double)(Math.random() * 1000000)).intValue();
+		System.out.print(parametroGRASP);
 	}
 }

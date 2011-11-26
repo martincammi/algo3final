@@ -12,17 +12,17 @@ public class CarteroConstructiva {
 	private Grafo grafo;
 	private int[] primos = {1,3,5,7,11,13,17,19,23};
 	static final float ALFA = (float) 0.8;  //CALCULA LA LISTA CON ESTE PARAMETRO. 
-	static int CANT_ITERACIONES_MAXIMA = 2000; 
-	static int CANT_ITERACIONES_SIN_MEJORAR = 2000; // Ver si puede ser un porcentaje de la cantidad de nodos. Para Daniel si :p
+	static int CANT_ITERACIONES_MAXIMA = 200; 
+	static int CANT_ITERACIONES_SIN_MEJORAR = 10; // Ver si puede ser un porcentaje de la cantidad de nodos. Para Daniel si :p
 	static int TIPO_ORIENTACION_ARISTAS;
 	
 	public static void main(String[] args) throws IOException, CloneNotSupportedException {
 
 //PARAMETROS
 		String decisionDefault = "E";  // S Mandar Default Salida, E Mandar Default Entrada
-		
+
 		//int parametroEleccionLista = 1;  //ESTE ME DICE CUAL DE LA LISTA ELEGIR, VA DESDE 0 A CANTIDAD DE LA LISTA QUE ME DIO ARRIBA. SI ESTE VALOR ES MAYOR, ME DEVUELVE LA PRIMERA POSICION DE LA LISTA
-		int[] parametroIteracionesGraspRandom= {33, 52, 48, 96, 125};//Random
+		int[] parametroIteracionesGraspRandom= {435693, 344031, 460173, 227725, 430024, 132060, 352001, 211477, 515771, 747551, 504368, 760850, 978532, 751967, 184402, 418925, 461554, 994190, 473839, 59819, 633512, 213684, 127438, 481296, 923496, 682578, 179673, 185301, 94789, 299200, 628481, 507476, 832449, 394170, 131279, 433443, 579169, 265103, 411148, 22666, 569807, 117055, 990045, 349963, 386973, 653261, 941081, 270227, 388434, 34331, 583368, 113698, 41628, 303959, 430610, 627118, 541428, 665323, 248579, 90369, 84351, 184765, 776814, 558694, 825732, 597923, 526288, 607361, 855952, 898422, 77543, 788653, 497637, 300339, 472692, 250286, 847793, 983025, 619893, 609920, 767202, 750538, 110370, 232126, 453925, 367788, 485700, 512236, 328623, 871647, 787099, 635717, 206447, 597660, 168562, 552242, 633585, 11611, 462221, 580379, 826110, 690095, 846932, 141837, 864622, 955384, 190088, 613448, 670196, 737232, 207807, 180591, 815529, 207931, 320131, 877511, 409707, 616786, 965544, 707993, 135837, 536321, 183061, 854117, 17896, 424919, 470346, 501319, 646404, 9203, 282759, 734747, 402171, 494386, 50926, 294901, 683136, 21928, 263365, 719820, 261397, 111215, 985908, 546565, 675883, 45625, 171105, 796523, 633, 293227, 248470, 927049, 419530, 88475, 780399, 796243, 785342, 243661, 418782, 958144, 744320, 107508, 3756, 782382, 67085, 343190, 408760, 475373, 542441, 859163, 655009, 69334, 162753, 793611, 893659, 840972, 357902, 926922, 85419, 423411, 719354, 276488, 595056, 82949, 996741, 914285, 462158, 246494, 146391, 240029, 809742, 386024, 864581, 41372, 708736, 793196, 347859, 677478, 829047, 610208};//Random
 		FileManager fm = new FileManager("Ej1.in");
 		fm.abrirArchivo();
 		Grafo grafo = fm.leerInstancia();
@@ -53,19 +53,23 @@ public class CarteroConstructiva {
 				int iteracionesSinMejorar = 0;
 				
 //				for(int parametroGRASP: parametroIteracionesGraspRandom){
-				while (cantidadIteraciones < CANT_ITERACIONES_MAXIMA || iteracionesSinMejorar < CANT_ITERACIONES_SIN_MEJORAR){
+				while (cantidadIteraciones < CANT_ITERACIONES_MAXIMA && iteracionesSinMejorar < CANT_ITERACIONES_SIN_MEJORAR){
 				//MIENTRAS PARAMETRO DE ITERACIONES CONSTRUCTIVA HACER
 					//1) HACER UNA COPIA DEL GRAFO
 					Grafo grafoCopia = ((Grafo)grafo.clone());
 					
 					
 					//FIXME PARA QUE VEAN LO QUE CAMBIE
-					//int parametroGRASP = parametroIteracionesGraspRandom[cantidadIteraciones];
+					
 					
 					//ESTO ME DEVUELVE UN RANDOM CUALQUIERA. PARA LO UNICO QUE SIRVE ESTE NUMERO, ES PARA VER DE MI LISTA
 					//DE NODOS A ORIENTAR, CON CUAL ME QUEDO. NO SE USA PARA OTRA COSA. ASI QUE ESTA BUENO QUE NO SEA SIEMPRE EL MISMO, QUE 
 					//SEA BIEN ALEATORIO
-					int parametroGRASP = ((Double)(Math.random() * 1000000)).intValue();
+					//int parametroGRASP = ((Double)(Math.random() * 1000000)).intValue();
+
+					int parametroGRASP = parametroIteracionesGraspRandom[cantidadIteraciones];
+					//CUANDO TENGAMOS DECIDIDOS LOS VALORES DE ALFA E ITERACIONES LO DEJAMOS ALEATORIO. By Seba
+
 					//Y ADEMAS, ESTE RANDOM SE PUEDE USAR PARA CAMBIAR LA ORIENTACION DE LAS ARISTAS, ASI NOS QUEDA UNA ORIENTACION TOTALMENTE DISTINTA A LA ANTERIOR.
 					//CASO CONTRARIO, VOLVEMOS A PONER ESTO EN 1 Y COMO ATRIBUTO DE LA CLASE
 					TIPO_ORIENTACION_ARISTAS = parametroGRASP % 6 == 0 ? 1 : parametroGRASP % 6;
@@ -86,21 +90,21 @@ public class CarteroConstructiva {
 					int sumaSolucion = sumaPesosEjes + pesoBusquedaLocal;
 					cantidadIteraciones++;
 					if(sumaSolucion < sumaMejorSolucion){
-						fm.escribirArchivo("Iteración GRASP " + j + ": Mejoró la solución de "+sumaMejorSolucion+" a "+sumaSolucion, "Ej1.log");
-						System.out.println("Iteración GRASP " + j + ": Mejoró la solución de "+sumaMejorSolucion+" a "+sumaSolucion);
+						fm.escribirArchivo("IteraciÃ³n GRASP " + j + ": MejorÃ³ la soluciÃ³n de "+sumaMejorSolucion+" a "+sumaSolucion, "Ej1.log");
+						System.out.println("IteraciÃ³n GRASP " + j + ": MejorÃ³ la soluciÃ³n de "+sumaMejorSolucion+" a "+sumaSolucion);
 						sumaMejorSolucion = sumaSolucion;
 						mejorGrafoSolucion = grafoCopia;
 						matchingSolucion = matchingMinimo;
 						if(unMatching.isEmpty()){
-							System.out.println("Solución Optima. El Grafo original es Euleriano");
+							System.out.println("SoluciÃ³n Optima. El Grafo original es Euleriano");
 							break;//solucion optima
 						}
 					}
 					else
 					{
 						iteracionesSinMejorar++;
-						fm.escribirArchivo("Iteración GRASP " + j + ": No se encontró una mejor solución en esta iteración", "Ej1.log");
-						System.out.println("Iteración GRASP " + j + ": No se encontró una mejor solución en esta iteración");
+						fm.escribirArchivo("IteraciÃ³n GRASP " + j + ": No se encontrÃ³ una mejor soluciÃ³n en esta iteraciÃ³n", "Ej1.log");
+						System.out.println("IteraciÃ³n GRASP " + j + ": No se encontrÃ³ una mejor soluciÃ³n en esta iteraciÃ³n");
 					}
 					++j;
 				}
@@ -123,7 +127,7 @@ public class CarteroConstructiva {
 				System.out.println("----");
 
 			}else{
-				System.out.println("No existe solución porque el grafo no es fuertemente conexo");
+				System.out.println("No existe soluciÃ³n porque el grafo no es fuertemente conexo");
 			}
 			grafo = fm.leerInstancia();
 			i++;
