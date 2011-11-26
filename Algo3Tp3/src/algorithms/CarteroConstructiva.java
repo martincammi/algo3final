@@ -11,13 +11,16 @@ public class CarteroConstructiva {
 
 	private Grafo grafo;
 	private int[] primos = {1,3,5,7,11,13,17,19,23};
+	static final float ALFA = (float) 0.8;  //CALCULA LA LISTA CON ESTE PARAMETRO. 
+	static int CANT_ITERACIONES_MAXIMA = 20; 
+	static int CANT_ITERACIONES_SIN_MEJORAR = 10; // Ver si puede ser un porcentaje de la cantidad de nodos. Para Daniel si :p
+	static int TIPO_ORIENTACION_ARISTAS = 1;
 	
 	public static void main(String[] args) throws IOException, CloneNotSupportedException {
 
 //PARAMETROS
 		String decisionDefault = "E";  // S Mandar Default Salida, E Mandar Default Entrada
-		int tipoOrientacionAristas = 1;
-		int parametroBusqueda = 10;  //CALCULA LA LISTA CON ESTE PARAMETRO. 
+		
 //int parametroEleccionLista = 1;  //ESTE ME DICE CUAL DE LA LISTA ELEGIR, VA DESDE 0 A CANTIDAD DE LA LISTA QUE ME DIO ARRIBA. SI ESTE VALOR ES MAYOR, ME DEVUELVE LA PRIMERA POSICION DE LA LISTA
 		int[] parametroIteracionesGraspRandom= {33, 52, 48, 96, 125};//Random
 		FileManager fm = new FileManager("Ej1.in");
@@ -44,12 +47,16 @@ public class CarteroConstructiva {
 				Grafo mejorGrafoSolucion = null;
 				int sumaMejorSolucion = Grafo.INFINITO;
 				int j= 1;
-				for(int parametroGRASP: parametroIteracionesGraspRandom){
+				int cantidadIteraciones = 0;
+				int iteracionesSinMejorar = 0;
+//				for(int parametroGRASP: parametroIteracionesGraspRandom){
+				while (cantidadIteraciones < CANT_ITERACIONES_MAXIMA && iteracionesSinMejorar > CANT_ITERACIONES_SIN_MEJORAR){
 				//MIENTRAS PARAMETRO DE ITERACIONES CONSTRUCTIVA HACER
 					//1) HACER UNA COPIA DEL GRAFO
+					int parametroGRASP = parametroIteracionesGraspRandom[cantidadIteraciones];
 					Grafo grafoCopia = ((Grafo)grafo.clone());
 					//2) ORIENTAR LAS ARISTAS
-					grafoCopia.orientarTodasAristas(tipoOrientacionAristas, parametroBusqueda, parametroGRASP, decisionDefault);
+					grafoCopia.orientarTodasAristas(TIPO_ORIENTACION_ARISTAS, ALFA, parametroGRASP, decisionDefault);
 
 					//3) Calcular un Matching cualquiera de Din Dout
 					int aleatoriedad = 10; 

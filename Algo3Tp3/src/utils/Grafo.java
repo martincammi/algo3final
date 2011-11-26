@@ -58,7 +58,7 @@ public class Grafo {
 		T+= cantBits(n);
 	}
 	
-	public void orientarTodasAristas(int tipoOrientacionAristas, int parametroBusqueda, int parametroEleccionLista, String decisionDefault)
+	public void orientarTodasAristas(int tipoOrientacionAristas, float ALFA, int parametroEleccionLista, String decisionDefault)
 	{
 		List<Integer> listaNodosAOrientar = new ArrayList<Integer>();
 		int nodoAOrientar = 0;
@@ -66,24 +66,7 @@ public class Grafo {
 		while (cantAristas > 0)
 		{
 			Grafo.complex++;
-//			switch (tipoOrientacionAristas) {
-//			case 1:				
-//				listaNodosAOrientar = encontrarNodoAOrientar(1, parametroBusqueda);
-//				break;
-//			case 2:				
-//				listaNodosAOrientar = encontrarNodoAOrientar(2, parametroBusqueda);
-//				break;
-//			case 3:				
-//				listaNodosAOrientar = encontrarNodoAOrientar(3, parametroBusqueda);
-//				break;
-//			case 4:				
-//				listaNodosAOrientar = encontrarNodoAOrientar(4, parametroBusqueda);
-//				break;
-//			case 5:				
-//				listaNodosAOrientar = encontrarNodoAOrientar(5, parametroBusqueda);
-//				break;
-//			}
-			listaNodosAOrientar = encontrarNodoAOrientar(tipoOrientacionAristas, parametroBusqueda);
+			listaNodosAOrientar = encontrarNodoAOrientar(tipoOrientacionAristas, ALFA);
 			
 			nodoAOrientar = eleccionNodoAOrientar(listaNodosAOrientar, parametroEleccionLista);
 			orientarNodo(nodoAOrientar, decisionDefault);
@@ -91,8 +74,10 @@ public class Grafo {
 	}
 	
 	//ME DA UNA LISTA DE NODOS A ORIENTAR, QUE CUMPLAN CON "PARAMETROBUSQUEDA"
-	private List<Integer> encontrarNodoAOrientar(int tipoOrientacionAristas, int parametroBusqueda)
+	private List<Integer> encontrarNodoAOrientar(int tipoOrientacionAristas, float ALFA)
 	{
+		int gradoMaximo = encontrarGradoMaximo();
+		int grado = (int) ALFA * gradoMaximo;
 		List<Integer> listaNodosAOrientar = new ArrayList<Integer>();
 		int i = 0;
 		//LOS DISTINTOS TIPOS DE GREEDY
@@ -103,7 +88,7 @@ public class Grafo {
 					Grafo.complex++;
 					//SIEMPRE TIENE QUE TENER ALGUNA ARISTA PARA ORIENTAR, QUE ESTAN EN EL ARREGLO adyacenciasNoOr
 					//T ADEMAS, LA DIFERENCIA DE DIN Y DOUT ES IGUAL A LA CANTIDAD ARISTAS NODO
-					if (Math.abs(din[i] - dout[i]) == adyacenciasNoOr[i].size() && adyacenciasNoOr[i].size() >= parametroBusqueda)
+					if (Math.abs(din[i] - dout[i]) == adyacenciasNoOr[i].size() && adyacenciasNoOr[i].size() >= grado)
 					{
 						listaNodosAOrientar.add(i);
 					}
@@ -116,7 +101,7 @@ public class Grafo {
 					if (adyacenciasNoOr[i].size() > 0)    //SIEMPRE TIENE QUE TENER ALGUNA ARISTA PARA ORIENTAR, QUE ESTAN EN EL ARREGLO adyacenciasNoOr
 					{
 						listaNodosAOrientar.add(i);
-						if (listaNodosAOrientar.size() > parametroBusqueda)
+						if (listaNodosAOrientar.size() > grado)
 						{
 							break;
 						}
@@ -129,7 +114,7 @@ public class Grafo {
 					Grafo.complex++;
 					if (adyacenciasNoOr[i].size() > 0)    //SIEMPRE TIENE QUE TENER ALGUNA ARISTA PARA ORIENTAR, QUE ESTAN EN EL ARREGLO adyacenciasNoOr 
 					{
-						if (adyacenciasNoOr[i].size() >= parametroBusqueda)  //GRADO DE ARISTA SEA MAYOR A PARAMETRO
+						if (adyacenciasNoOr[i].size() >= grado)  //GRADO DE ARISTA SEA MAYOR A PARAMETRO
 						{
 							listaNodosAOrientar.add(i);
 						}
@@ -142,7 +127,7 @@ public class Grafo {
 					Grafo.complex++;
 					if (adyacenciasNoOr[i].size() > 0)	 //SIEMPRE TIENE QUE TENER ALGUNA ARISTA PARA ORIENTAR, QUE ESTAN EN EL ARREGLO adyacenciasNoOr
 					{
-						if (din[i] >= parametroBusqueda)  //GRADO ENTRADA DE ARISTA MAYOR A PARAMETRO
+						if (din[i] >= grado)  //GRADO ENTRADA DE ARISTA MAYOR A PARAMETRO
 						{
 							listaNodosAOrientar.add(i);
 						}
@@ -155,128 +140,43 @@ public class Grafo {
 					Grafo.complex++;
 					if (adyacenciasNoOr[i].size() > 0)	 //SIEMPRE TIENE QUE TENER ALGUNA ARISTA PARA ORIENTAR, QUE ESTAN EN EL ARREGLO adyacenciasNoOr
 					{
-						if (dout[i] >= parametroBusqueda)	//GRADO DE SALIDA MAYOR O IGUAL A PARAMETRO
+						if (dout[i] >= grado)	//GRADO DE SALIDA MAYOR O IGUAL A PARAMETRO
 						{
 							listaNodosAOrientar.add(i);
 						}
 					}
 				}
 				break;
-			default:
-				for (i = 0; i < cantNodos; i++)
-				{
-					Grafo.complex++;
-					if (adyacenciasNoOr[i].size() > 0)
-					{
-						listaNodosAOrientar.add(i);
-						if (listaNodosAOrientar.size() > parametroBusqueda)
-						{
-							break;
-						}
-					}
-				}
-				break;
 		}
 		
-		
-//		if (tipoOrientacionAristas == 1)
-//		{
-//			for (i = 0; i < cantNodos; i++)
-//			{
-//				Grafo.complex++;
-//				//SIEMPRE TIENE QUE TENER ALGUNA ARISTA PARA ORIENTAR, QUE ESTAN EN EL ARREGLO adyacenciasNoOr
-//				//T ADEMAS, LA DIFERENCIA DE DIN Y DOUT ES IGUAL A LA CANTIDAD ARISTAS NODO
-//				if (Math.abs(din[i] - dout[i]) == adyacenciasNoOr[i].size() && adyacenciasNoOr[i].size() >= parametroBusqueda)
-//				{
-//					listaNodosAOrientar.add(i);
-//				}
-//			}
-//		}
-//		else
-//		{
-//			if (tipoOrientacionAristas == 2)
-//			{
-//				for (i = 0; i < cantNodos; i++)  //AGREGO LOS PRIMEROS NODOS MENORES O IGUALES AL PARAMETRO
-//				{
-//					Grafo.complex++;
-//					if (adyacenciasNoOr[i].size() > 0)    //SIEMPRE TIENE QUE TENER ALGUNA ARISTA PARA ORIENTAR, QUE ESTAN EN EL ARREGLO adyacenciasNoOr
-//					{
-//						listaNodosAOrientar.add(i);
-//						if (listaNodosAOrientar.size() > parametroBusqueda)
-//						{
-//							break;
-//						}
-//					}
-//				}
-//			}
-//			else
-//			{
-//				if (tipoOrientacionAristas == 3)
-//				{
-//					for (i = 0; i < cantNodos; i++)
-//					{
-//						Grafo.complex++;
-//						if (adyacenciasNoOr[i].size() > 0)    //SIEMPRE TIENE QUE TENER ALGUNA ARISTA PARA ORIENTAR, QUE ESTAN EN EL ARREGLO adyacenciasNoOr 
-//						{
-//							if (adyacenciasNoOr[i].size() >= parametroBusqueda)  //GRADO DE ARISTA SEA MAYOR A PARAMETRO
-//							{
-//								listaNodosAOrientar.add(i);
-//							}
-//						}
-//					}
-//				}
-//				else
-//				{
-//					if (tipoOrientacionAristas == 4)
-//					{
-//						for (i = 0; i < cantNodos; i++)
-//						{
-//							if (adyacenciasNoOr[i].size() > 0)	 //SIEMPRE TIENE QUE TENER ALGUNA ARISTA PARA ORIENTAR, QUE ESTAN EN EL ARREGLO adyacenciasNoOr
-//							{
-//								if (din[i] >= parametroBusqueda)  //GRADO ENTRADA DE ARISTA MAYOR A PARAMETRO
-//								{
-//									listaNodosAOrientar.add(i);
-//								}
-//							}
-//						}
-//					}
-//					else
-//					{
-//						if (tipoOrientacionAristas == 5)
-//						{
-//							for (i = 0; i < cantNodos; i++)
-//							{
-//								if (adyacenciasNoOr[i].size() > 0)	 //SIEMPRE TIENE QUE TENER ALGUNA ARISTA PARA ORIENTAR, QUE ESTAN EN EL ARREGLO adyacenciasNoOr
-//								{
-//									if (dout[i] >= parametroBusqueda)	//GRADO DE SALIDA MAYOR O IGUAL A PARAMETRO
-//									{
-//										listaNodosAOrientar.add(i);
-//									}
-//								}
-//							}
-//						}
-//					}		
-//				}
-//			}
-//		}
-//		
-//		//CASO DEFAULT - SI LOS ANTERIORES NO ENCONTRARON NODOS, TRAIGO LOS PRIMEROS HASTA parametroBusqueda
-//		if (listaNodosAOrientar.isEmpty())
-//		{
-//			for (i = 0; i < cantNodos; i++)
-//			{
-//				if (adyacenciasNoOr[i].size() > 0)
-//				{
-//					listaNodosAOrientar.add(i);
-//					if (listaNodosAOrientar.size() > parametroBusqueda)
-//					{
-//						break;
-//					}
-//				}
-//			}
-//		}
+		if (listaNodosAOrientar.isEmpty())
+		{
+			for (i = 0; i < cantNodos; i++)
+			{
+				if (adyacenciasNoOr[i].size() > 0)
+				{
+					listaNodosAOrientar.add(i);
+					if (listaNodosAOrientar.size() > grado)
+					{
+						break;
+					}
+				}
+			}
+		}
 		
 		return listaNodosAOrientar;
+	}
+	
+	private int encontrarGradoMaximo()
+	{
+		int grado = 0;
+		
+		for (int i = 0; i < cantNodos; i++)
+		{
+			grado = adyacentesNoOr(i).size() > grado ? adyacentesNoOr(i).size() : grado;
+		}
+		
+		return grado;
 	}
 	
 	private int eleccionNodoAOrientar(List<Integer> listaNodosAOrientar, int parametroEleccionLista)
