@@ -22,7 +22,7 @@ public class CarteroConstructiva {
 		String decisionDefault = "E";  // S Mandar Default Salida, E Mandar Default Entrada
 
 		//int parametroEleccionLista = 1;  //ESTE ME DICE CUAL DE LA LISTA ELEGIR, VA DESDE 0 A CANTIDAD DE LA LISTA QUE ME DIO ARRIBA. SI ESTE VALOR ES MAYOR, ME DEVUELVE LA PRIMERA POSICION DE LA LISTA
-		List<Integer> parametroIteracionesGraspRandom = new ArrayList<Integer>();
+		int[] parametroIteracionesGraspRandom = new int[CANT_ITERACIONES_MAXIMA];
 		FileManager fm = new FileManager("Ej1.in");
 		fm.abrirArchivo();
 		Grafo grafo = fm.leerInstancia();
@@ -51,31 +51,20 @@ public class CarteroConstructiva {
 				int j= 1;
 				int cantidadIteraciones = 0;
 				int iteracionesSinMejorar = 0;
-				
-//				for(int parametroGRASP: parametroIteracionesGraspRandom){
+
+				for (int ind = 0; ind < CANT_ITERACIONES_MAXIMA; ind++)
+				{
+					int parametroGRASP = ((Double)(Math.random() * CANT_ITERACIONES_MAXIMA)).intValue();
+					parametroIteracionesGraspRandom[ind] = parametroGRASP;
+				}
+				//MIENTRAS PARAMETRO DE ITERACIONES CONSTRUCTIVA HACER				
 				while (cantidadIteraciones < CANT_ITERACIONES_MAXIMA && iteracionesSinMejorar < CANT_ITERACIONES_SIN_MEJORAR){
-				//MIENTRAS PARAMETRO DE ITERACIONES CONSTRUCTIVA HACER
 					//1) HACER UNA COPIA DEL GRAFO
 					Grafo grafoCopia = ((Grafo)grafo.clone());
 					
-					
-					//FIXME PARA QUE VEAN LO QUE CAMBIE
-					
-					
-					//ESTO ME DEVUELVE UN RANDOM CUALQUIERA. PARA LO UNICO QUE SIRVE ESTE NUMERO, ES PARA VER DE MI LISTA
-					//DE NODOS A ORIENTAR, CON CUAL ME QUEDO. NO SE USA PARA OTRA COSA. ASI QUE ESTA BUENO QUE NO SEA SIEMPRE EL MISMO, QUE 
-					//SEA BIEN ALEATORIO
-					int parametroGRASP = ((Double)(Math.random() * 1000000)).intValue();
-					parametroIteracionesGraspRandom.add(parametroGRASP);
-
-					//int parametroGRASP = parametroIteracionesGraspRandom[cantidadIteraciones];
+					int parametroGRASP = parametroIteracionesGraspRandom[cantidadIteraciones];
 					//CUANDO TENGAMOS DECIDIDOS LOS VALORES DE ALFA E ITERACIONES LO DEJAMOS ALEATORIO. By Seba
-
-					//Y ADEMAS, ESTE RANDOM SE PUEDE USAR PARA CAMBIAR LA ORIENTACION DE LAS ARISTAS, ASI NOS QUEDA UNA ORIENTACION TOTALMENTE DISTINTA A LA ANTERIOR.
-					//CASO CONTRARIO, VOLVEMOS A PONER ESTO EN 1 Y COMO ATRIBUTO DE LA CLASE
 					TIPO_ORIENTACION_ARISTAS = parametroGRASP % 6 == 0 ? 1 : parametroGRASP % 6;
-					////FIXME PARA QUE VEAN LO QUE CAMBIE
-					
 					
 					//2) ORIENTAR LAS ARISTAS
 					grafoCopia.orientarTodasAristas(TIPO_ORIENTACION_ARISTAS, ALFA, parametroGRASP, decisionDefault);
