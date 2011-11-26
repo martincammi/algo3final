@@ -10,10 +10,11 @@ public class GeneradorGrafos {
 	
 	public static void main(String[] args) {
 	
-		generarGrafo();
+		//generarGrafo();
 		//System.out.println();
 		//generarGrafoMaloParaMatching();
 		//generaParametrosGrasp(200);
+		generarGrafoArcosYAristas();
 		System.out.println("finish");
 	}
 	
@@ -47,6 +48,61 @@ public class GeneradorGrafos {
 		{
 			System.out.println(aristas.get(i));
 		}
+	}
+	
+	private static void generarGrafoArcosYAristas()
+	{
+		Double maxGradoNodo;		//cuantos adyacentes tendra el nodo i
+		Double peso;				//peso de la arista
+		int cantidadAristas;		//el random puede dar menor que uno, por lo que, en esos casos, acomodo este valor a 1. Caso contrario lo paso solo a enteros al ramdom
+		List<String> aristas = new ArrayList<String>();
+		List<String> arcos = new ArrayList<String>();
+		int i, j;				
+		
+		for (i = 0; i < CANT_NODOS-1; i++)			
+		{
+			maxGradoNodo = Math.random() * (CANT_NODOS - (i+1));
+			
+			cantidadAristas = maxGradoNodo.intValue() < 1 ? 1: maxGradoNodo.intValue();
+			
+			//mando la primera a arista para asegurarme fuertementeConexo
+			peso = Math.random() * RANDOM_PESO;
+			if(peso < 1){
+				peso = 1.0;
+			}
+			aristas.add(i + " " + (i+1) + " " + peso.intValue());
+			for (j = 1; j < cantidadAristas; j++)
+			{
+				int segundaNodoArista = i+j+1;
+				//peso = Math.random() * RANDOM_PESO < 1 ? 1: Math.random() * RANDOM_PESO;
+				peso = Math.random() * RANDOM_PESO;
+				if(peso < 1){
+					peso = 1.0;
+				}
+				if(((Double)(Math.random() * 100)).intValue()%2==0){//arista o arco
+					aristas.add(i + " " + segundaNodoArista + " " + peso.intValue());
+				}else{
+					if(((Double)(Math.random() * 100)).intValue()%2==0){//ida o vuelta
+						arcos.add(i + " " + segundaNodoArista + " " + peso.intValue());
+					}else{
+						arcos.add(segundaNodoArista + " " + i + " " + peso.intValue());
+					}
+					
+				}
+				
+			}
+		}
+		
+		System.out.println(CANT_NODOS + " " + aristas.size() + " " + arcos.size());
+		for (i = 0; i < aristas.size(); i++)
+		{
+			System.out.println(aristas.get(i));
+		}
+		for (i = 0; i < arcos.size(); i++)
+		{
+			System.out.println(arcos.get(i));
+		}
+		
 	}
 	
 	private static void generarGrafoMaloParaMatching(){
