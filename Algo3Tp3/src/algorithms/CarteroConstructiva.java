@@ -13,7 +13,7 @@ public class CarteroConstructiva {
 	private int[] primos = {1,3,5,7,11,13,17,19,23};
 	static final float ALFA = (float) 0.8;  //CALCULA LA LISTA CON ESTE PARAMETRO. 
 	static int CANT_ITERACIONES_MAXIMA = 2000; 
-	static int CANT_ITERACIONES_SIN_MEJORAR = 114; // Ver si puede ser un porcentaje de la cantidad de nodos. Para Daniel si :p
+	static int CANT_ITERACIONES_SIN_MEJORAR = 300; // Ver si puede ser un porcentaje de la cantidad de nodos. Para Daniel si :p
 	static int TIPO_ORIENTACION_ARISTAS;
 	
 	public static void main(String[] args) throws IOException, CloneNotSupportedException {
@@ -117,6 +117,7 @@ public class CarteroConstructiva {
 				System.out.println("Circuito: ");
 //				System.out.println(sumaMejorSolucion);
 				System.out.println(circuitoEuleriano.size()-1);
+				fm.escribirArchivo(String.valueOf(circuitoEuleriano.size()-1), "Ej1.out");
 //				System.out.println(circuitoEuleriano);
 				ListIterator<Integer> li = circuitoEuleriano.listIterator();
 				int nodo1,nodo2 = li.next();
@@ -124,6 +125,7 @@ public class CarteroConstructiva {
 					Grafo.complex++;
 					nodo1 = nodo2;
 					nodo2 = li.next();
+					fm.escribirArchivo(nodo1+" "+nodo2+" "+grafo.getPesoAristas()[nodo1][nodo2], "Ej1.out");
 					System.out.println(nodo1+" "+nodo2+" "+grafo.getPesoAristas()[nodo1][nodo2]);
 				}
 				System.out.println("----");
