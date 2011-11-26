@@ -77,7 +77,7 @@ public class Grafo {
 	private List<Integer> encontrarNodoAOrientar(int tipoOrientacionAristas, float ALFA)
 	{
 		int gradoMaximo = encontrarGradoMaximo();
-		int grado = (int) ALFA * gradoMaximo;
+		int grado = ((Float)(ALFA * gradoMaximo)).intValue();
 		List<Integer> listaNodosAOrientar = new ArrayList<Integer>();
 		int i = 0;
 		//LOS DISTINTOS TIPOS DE GREEDY
@@ -88,7 +88,7 @@ public class Grafo {
 					Grafo.complex++;
 					//SIEMPRE TIENE QUE TENER ALGUNA ARISTA PARA ORIENTAR, QUE ESTAN EN EL ARREGLO adyacenciasNoOr
 					//T ADEMAS, LA DIFERENCIA DE DIN Y DOUT ES IGUAL A LA CANTIDAD ARISTAS NODO
-					if (Math.abs(din[i] - dout[i]) == adyacenciasNoOr[i].size() && adyacenciasNoOr[i].size() >= grado)
+					if (Math.abs(din[i] - dout[i]) == adyacenciasNoOr[i].size() && (din[i] + dout[i] >= grado) && adyacenciasNoOr[i].size() > 0)
 					{
 						listaNodosAOrientar.add(i);
 					}
