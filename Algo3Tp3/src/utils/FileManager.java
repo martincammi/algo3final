@@ -35,13 +35,12 @@ public class FileManager {
 		br = new BufferedReader(fr);
 	}
 	
-	private void borrarArchivo(String filename){
+	public void borrarArchivo(String filename){
 		File f = new File(filename);
 		f.delete();
 	}
-
+	
 	public void escribirArchivo(String data, String fileName) throws IOException {
-		borrarArchivo(fileName);
 		FileWriter fw = new FileWriter(fileName, true);
 		BufferedWriter bw = new BufferedWriter(fw);
 		bw.write(data + "\n");

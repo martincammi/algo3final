@@ -12,8 +12,8 @@ public class CarteroConstructiva {
 	private Grafo grafo;
 	private int[] primos = {1,3,5,7,11,13,17,19,23};
 	static final float ALFA = (float) 0.8;  //CALCULA LA LISTA CON ESTE PARAMETRO. 
-	static int CANT_ITERACIONES_MAXIMA = 20; 
-	static int CANT_ITERACIONES_SIN_MEJORAR = 10; // Ver si puede ser un porcentaje de la cantidad de nodos. Para Daniel si :p
+	static int CANT_ITERACIONES_MAXIMA = 2000; 
+	static int CANT_ITERACIONES_SIN_MEJORAR = 2000; // Ver si puede ser un porcentaje de la cantidad de nodos. Para Daniel si :p
 	static int TIPO_ORIENTACION_ARISTAS;
 	
 	public static void main(String[] args) throws IOException, CloneNotSupportedException {
@@ -26,6 +26,8 @@ public class CarteroConstructiva {
 		FileManager fm = new FileManager("Ej1.in");
 		fm.abrirArchivo();
 		Grafo grafo = fm.leerInstancia();
+		fm.borrarArchivo("El1.out");
+		fm.borrarArchivo("El1.log");
 		
 		//1 REALIZA UN BALANCEO ENTRE LOS GRADOS DE ENTRADA Y GRADOS DE SALIDA, 
 		//  CALCULANDO PRIMERO AL NODO DONDE SE CUMPLA (CANTIDAD ARISTAS NODO = DIN NODO - DOUT NODO) 
@@ -84,6 +86,7 @@ public class CarteroConstructiva {
 					int sumaSolucion = sumaPesosEjes + pesoBusquedaLocal;
 					cantidadIteraciones++;
 					if(sumaSolucion < sumaMejorSolucion){
+						fm.escribirArchivo("Iteración GRASP " + j + ": Mejoró la solución de "+sumaMejorSolucion+" a "+sumaSolucion, "Ej1.log");
 						System.out.println("Iteración GRASP " + j + ": Mejoró la solución de "+sumaMejorSolucion+" a "+sumaSolucion);
 						sumaMejorSolucion = sumaSolucion;
 						mejorGrafoSolucion = grafoCopia;
@@ -96,7 +99,8 @@ public class CarteroConstructiva {
 					else
 					{
 						iteracionesSinMejorar++;
-						System.out.println("Iteración GRASP " + j + ": No mejoró la solución en esta iteración");
+						fm.escribirArchivo("Iteración GRASP " + j + ": No se encontró una mejor solución en esta iteración", "Ej1.log");
+						System.out.println("Iteración GRASP " + j + ": No se encontró una mejor solución en esta iteración");
 					}
 					++j;
 				}
