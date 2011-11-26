@@ -127,11 +127,43 @@
 
 \newpage
 
+
+\section{Introducci\'on}
+
+	En 1736 Leonhard Euler public\'o un trabajo en el cual resolv\'ia el denominado \emph{problema de los puentes de K\"{o}nigsberg}. La ciudad de K\"{o}ningsberg, actual Kaliningrado, Rusia, está dividida por el r\'io Pregel en 4 zonas, dos orillas (A y B), la isla de Kneiphof (C) y otras dos partes divididas por el río. (D y F). Las orillas estaban conectadas mediante 7 puentes. El problema consistía partir de una orilla y recorrer todos los puentes, recorri\'endo una sola vez cada uno y volviendo al punto de partida.\\
+
+Este fu\'e el puntapié inicial para un tipo de problema que m'as adelante de modelar\'ia usando la teor\'ia de grafos. Este problema fue caracterizado por Euler y consist\'ia en encontrar un circuito que pasara por todas las aristas de un grafo una s\'ola vez volviendo al punto de partida.\\
+ 
+M\'as de doscientos a\~{n}os m\'as tarde en 1962 el matemático chino Kwan Mei-Koo publicó un paper en el que abordaba un problema ligeramente similar, propon\'ia que si un grafo no pose\'ia un circuito Euleriano, podria quizás encontrar el circuito m\'as corto que pasara por todas las aristas aunque repitiera algunas de ellas. Este problema fue luego nombrado como "Problema del cartero chino".
+
+\begin{center}
+\centering \includegraphics[scale=0.70]{img/KaliningradoBridges.jpg}\\
+\small{Imagen actual de la ciudad de Kaliningrado, en rojo figuran los puentes del problema original de K\"{o}nigsberg algunos cuales ya no existen hoy en d\'ia.}
+\end{center}	
+
+El problema tiene varias variantes, en este trabajo abordaremos la variante \emph{mixta} que consiste en intentar encontrar el m\'inimo circuito que pase por todas las aristas (no orientadas) y arcos (orientadas) de un grafo donde cada una tiene peso asignado.
+
 \section{Situaciones de la vida real}
+
+    El algoritmo del cartero chino tiene múltiples aplicaciones en la vida cotidiana por ser
+
+	\begin{itemize}
+	\item C\'alculo de rutas \'optimas para recorridos de camiones de basura: en donde los camiones deban recorrer las calles de una ciudad y volver al centro de tratamiento de basura. Las calles podr\'ian bien tener diferentes sentidos o sentidos únicos, y los pesos podr\'an corresponder a la cantidad de basura que deban recolectar en ciertas zonas.
+	\end{itemize}
+
+
 \section{Heuristica Constructiva}
 \section{Heuristica de busqueda Local}
 Nuestro algoritmo de busqueda local se basa en eliminar aristas y arcos agregados para igualar los grados de salida a los de entrada de algunos nodos y cambiarlos por un conjunto de aristas que cumplen la misma propiedad pero cuya suma es menor.
-Para ello 
+Para ello el algoritmo constructivo realiza los siguientes pasos dado un grafo mixto:
+
+1) Orientar todas las aristas no orientadas del grafo.
+2) Calcular un matching entre los nodos que tengan din != dout.
+3) Calcular el peso del camino m\'inimo entre los nodos del matching.
+
+4) Calcular los caminos m\'inimos entre cada par del matching y con ellos y armar el Circuito euleriano.
+
+
 \section{Metaheuristica Grasp}
 
 %\label{sec:problema1}
