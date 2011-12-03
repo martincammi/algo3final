@@ -39,7 +39,7 @@
 %\selectlanguage{spanish}
 \linespread{1.3}                    % interlineado equivalente al 1.5 l\'ineas de Word...
 \pagestyle{myheadings}              %encabezado personalizable con \markboth{}{}
-\markboth{}{Algoritmos III  - Trabajo Pr\'actico 2 - Cammi, Garbi, Kretschmayer}
+\markboth{}{Algoritmos III  - Trabajo Pr\'actico 3 - Cammi, Garbi, Kretschmayer}
 \headsep = 30pt                     % separaci\'on entre encabezado y comienzo del p\'arrafo
 
 %\addtolength{\oddsidemargin}{-2cm}	% configuracion IDEAL!!!
@@ -90,11 +90,11 @@
 	
 	\textbf{\underline{Desde l\'inea de comandos}}
 	\begin{itemize}
-			\item{Posicionarse en el directorio Algo3Tp2}
+			\item{Posicionarse en el directorio Algo3Tp3}
 			\item{Copiar all\'i el archivo de entrada para el problema i, por ejemplo Ej1.in}
 			\item{Ejecutar el comando: \emph{java -cp ./bin problema1.Ej1}}
 	\end{itemize}
-	Esto generar\'a el archivo Ej1.out con la soluci\'on en el mismo directorio Algo3Tp2.
+	Esto generar\'a el archivo Ej1.out con la soluci\'on en el mismo directorio Algo3Tp3.
 
 	\textbf{\underline{Desde el Eclipse}}
 	
@@ -103,7 +103,7 @@
 	\begin{itemize}
 			\item{Seleccionar File $\Rightarrow$ Import.}
 			\item{Seleccionar General $\Rightarrow$ Existing Projects into Workspace $\Rightarrow$ Next.}
-			\item{Seleccionar el directorio llamado Algo3Tp2.}
+			\item{Seleccionar el directorio llamado Algo3Tp3.}
 			\item{Finish.}
 	\end{itemize}
 	
@@ -119,11 +119,11 @@
 	Para ejecutar un problema:
 
 	\begin{itemize}
-			\item{Posicionarse en el directorio Algo3Tp2}
-			\item{Copiar en el directorio Algo3Tp2 el archivo de entrada para el problema i, por ejemplo Ej1.in}
+			\item{Posicionarse en el directorio Algo3Tp3}
+			\item{Copiar en el directorio Algo3Tp3 el archivo de entrada para el problema i, por ejemplo Ej1.in}
 			\item{Con bot\'on derecho Run As $\Rightarrow$ Java Application. Se ejecutar\'a el problema seleccionado.}
 	\end{itemize}
-	Esto generar\'a el archivo Ej1.out con la soluci\'on en el mismo directorio Algo3Tp2.
+	Esto generar\'a el archivo Ej1.out con la soluci\'on en el mismo directorio Algo3Tp3.
 
 \newpage
 
@@ -152,8 +152,26 @@ El problema tiene varias variantes, en este trabajo abordaremos la variante \emp
 	\end{itemize}
 
 
-\section{Heuristica Constructiva}
-\section{Heuristica de busqueda Local}
+\section{Heurística Constructiva}
+	Para la etapa constructiva, hemos realizado en primer lugar, una orientaci\'on de todas las aristas utilizando 5 maneras distintas, todas ellas con respecto a los grados de los nodos. Entonces, seg\'un un par\'ametro de entrada que indica cual de estas opciones usar\'a, encontrar\'a los nodos del grafo que cumplan lo siguiente, pas\'andole otro par\'ametro y buscar\'a: 
+	
+	\begin{itemize}
+	
+	\item Los nodos que tienen igual cantidad de aristas sin orientar que orientadas, y en caso de haber muchos, solo tomar\'a los primeros k nodos de ellos, donde k es el par\'ametro de entrada de la funci\'on.
+	\item Los nodos a partir de un cierto n\'umero, que es definido por el par\'ametro de entrada de la funci\'on.
+	\item Los nodos que tengan grado de nodo (sin orientar) mayor o igual al par\'ametro de entrada de la funci\'on.
+	\item Los nodos que tengan grado de entrada (orientado) mayor o igual al par\'ametro de entrada de la funci\'on.
+	\item Los nodos que tengan grado de salida (orientado) mayor o igual al par\'ametro de entrada de la funci\'on.
+ 
+  \end{itemize}
+  
+  En caso de no encontrar ning\'un nodo a orientar con estas opciones, encontr\'a los k primeros nodos (empezando desde 0), sea cual sea el grado de sus nodos.
+  Con cualquiera de estas posibilidades, siempre se intenta hacer un balance entre los grados que quedar\'an (solo quedar\'an grados de entrada y salida, ya que ser\'a completamente orientado). Esta decisión se basa, que luego le calcularemos el circuito Euleriano al grafo resultante, para poder encontrar un circuito que pase por todas las aristas. Una vez que tenemos todo el grafo orientado, realizamos luego una etapa de matching entre los nodos que quedan con diferentes grado de entrada y de salida, y balanceamos a todos los nodos, para que queden con iguales grados de entrada como de salida, y el grafo queda Euleriano. Este matching lo calculamos con la distancia m\'inima de entre cada uno de los nodos, pero en el grafo original, por lo que todas las aristas agregadas, tienen distancia m\'inima entre ellas.
+	
+\section{Heurística de busqueda Local}
+En nuestra b\'usqueda local, lo que realizaremos es cambiar el matching que hace entre los nodos, para obtener otro donde sea  m\'inimo y as\'i poder acercarnos mejor a la soluci\'on requerida. Notemos que, como los matching entre los nodos donde se ten\'ia que los grados de entrada y de salida no coincid\'ian se efect\'ua sobre el grafo original (y no con el orientado), esta es una soluci\'on \'optima para esa orientaci\'on. Luego, con el grafo totalmente orientado y Euleriano, simplemente se calcula el peso de todas las aristas, y llegamos al peso del camino requerido.\\
+
+//DESDE ACA ES LO QUE HABIA
 Nuestro algoritmo de busqueda local se basa en eliminar aristas y arcos agregados para igualar los grados de salida a los de entrada de algunos nodos y cambiarlos por un conjunto de aristas que cumplen la misma propiedad pero cuya suma es menor.
 Para ello el algoritmo constructivo realiza los siguientes pasos dado un grafo mixto:
 
@@ -162,7 +180,7 @@ Para ello el algoritmo constructivo realiza los siguientes pasos dado un grafo m
 3) Calcular el peso del camino m\'inimo entre los nodos del matching.
 
 4) Calcular los caminos m\'inimos entre cada par del matching y con ellos y armar el Circuito euleriano.
-
+//DESDE ACA ES LO QUE HABIA
 
 \section{Metaheuristica Grasp}
 
