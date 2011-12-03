@@ -183,9 +183,148 @@ Para ello el algoritmo constructivo realiza los siguientes pasos dado un grafo m
 //DESDE ACA ES LO QUE HABIA
 
 \section{Metaheuristica Grasp}
+\section{Complejidad}
+Complejidades donde $n$ es la cantidad de nodos, $m_{1}$ la cantidad de aristas, $m_{2}$ la cantidad de arcos y $m$ = $m_{1} + m_{2}$ \\
+\begin{itemize}
+	\item Inicializar grafo (lectura de archivo)
+	\begin{itemize}
+		\item Inicializar la matriz de pesos $O(n^{2})$
+		\item Inicializar las listas de adyacencias $O(n + m_{1} +m_{2})$
+	\end{itemize}
+	$O(n^{2} + m_{1} +m_{2}) \subseteq O(n^{2})$
+	\item fuertementeConexo
+	\begin{itemize}
+		\item Inicializacion de listas de adyacencias $O(n + m_{1} + m_{2})$
+		\item resetVisitados y checkVisitados recorren un array de bools de tamaño cantNodos $O(n)$
+		\item visitarNodos recorre recursivamente en DFS las adyacencias y marca los nodos que son accesibles desde el nodo $0$ $O(m_{1} + m_{2})$
+	\end{itemize}
+	$O(n + m_{1} + m_{2})$
+	\item Calcular Dantzig
+	\begin{itemize}	
+		\item Inicializacion de la matriz de pesos de caminos minimos $O(n^{2})$
+		\item 3 for anidados de $0$ a $n$ con operaciones de tiempo constante $O(n^{3})$
+	\end{itemize}
+	$O(n^{3})$
+	\item sumaPesosEjes recorre todas las aristas y arcos de los nodos $O(m_{1} + m_{2})$
+	\item Clonar el grafo $O(n^{2} + m_{1} + m_{2})$ para copiar las estructuras
+	\item orientarTodasAristas
+	\begin{itemize}
+		\item $m_{1}$ iteraciones de
+		\begin{itemize}
+			\item encontrarNodoAOrientar: Busca cuales nodos cumplen la condicion dada $O(n)$
+			\item eleccionNodoAOrientar: Elije segun el parametro pasado por cual nodo de la lista anterior va a continuar $O(n)$
+			\item orientarNodo $O(1)$
+		\end{itemize}
+		$O(1+ n+ n) subset O(n)$
+	\end{itemize}
+	$O(m_{1} * n)$
+	\item encontrarMatchingNodos
+	\begin{itemize}
+		\item inicializacion de arreglos de longitud $n$ $O(n)$
+		\item para cada exedente de $Din$ arma una pareja con un $Dout$ y lo agrega en una lista con el peso calculado con $Dantzig$ $O(\sum_{i=1}^{n}{|din(i)-dout(i)|}/2)$ $\subseteq$ $O(m)$
+	\end{itemize}
+	$O(m + n)$
+	\item encontrarMatchingDeMenorPeso: Dado un matching de tamaño $k$ devuelve el mejor matching que se puede obtener swapeando los destinos de solo dos items del matching original. $O(k^{2})$
+	\item pesoMatching recorre una lista de tamaño a lo sumo $m$ $O(m)$
+	\item agregarCaminosMatcheados
+	\begin{itemize}
+		\item inicializacion de matriz de tamaño $n*n$ $O(n^{2})$
+		\item Para cada eje $(i,j)$ del matching (a lo sumo $m$ ejes)
+		\begin{itemize}
+			\item Si no esta calculado el $Dijkstra$ para el nodo $i$ $\rightarrow$ Calcula $Dijkstra$ sobre el grafo original y lo guarda $O(n^{2})$
+			\item Recuperar el camino del $Dijkstra$ calculado para el nodo $i$ hasta el nodo $j$ $O(n)$
+		\end{itemize}
+		$O(n^{2})$ Si no esta calculado $Dijkstra$ (a lo sumo $n$ casos)\\
+		$O(n)$ Si ya esta calculado $Dijkstra$
+	\end{itemize}
+	$O(m*n + n*n^{2})$ como $O(m)$ $\subseteq$ $O(n^{2})$ $\Rightarrow$ $O(m*n + n^{3})$ $\subseteq$ $O(n^{3})$
+	\item Dijkstra
+	\begin{itemize}
+		\item Inicializacion de arreglos de int y bool de tamaño $n$ $O(n)$
+		\item Para cada nodo $i$ ($n$ elementos)
+		\begin{itemize}
+			\item Minvertex $O(n)$
+			\item Para cada adyacente del nodo $i$ actualiza el valor $O(d(i))$
+		\end{itemize}
+	\end{itemize}
+	$O(n + \sum_{i=1}^{n}{(d(i) + n)})$ $\subseteq$ $O(n + 2*m + n*n)$ $\subseteq$ $O(n^{2})$
+	\item encontrar circuito euleriano $O(2 * largo del circuito)$\\
+	Donde largo del circuito puede ser en peor caso $m*n$ cuando todos los nodos tiene matching y todos los caminos agregados tiene longitud $n$\\
+	$O(m*n)$
+\end{itemize}
+\newpage
 
-%\label{sec:problema1}
-%\subsection{Introducci\'on}
-	
+\begin{algorithm}
+	\caption{Main($grafo$)}
+	\begin{algorithmic}
+	\STATE Grafo $GrafoOriginal$ $\gets$ Inicializar con instancia
+	\IF{ es fuertemente Conexo $GrafoOriginal$}
+		\STATE $PesosCaminosMinimos$ $\gets$ calcularDantzig($GrafoOriginal$)
+		\STATE $SumaOriginalPesos$ $\gets$ sumaPesosEjes($GrafoOriginal$)
+		\STATE $SumaSolucionMejor$ $\gets$ $\infty$
+		\STATE $GrafoCopiaMejor$ $\gets$ $NULL$
+		\STATE $MatchingMejor$ $\gets$ $\emptyset$
+		\WHILE{ no se alcanzan $MaximoIteracionesGrasp$ $\lor$ $MaximoIteracionesSinMejoraGrasp$}
+			\STATE Grafo $GC$ $\gets$ copiarGrafo($GrafoOriginal$)
+			\STATE $ParametroGRASP$ $\gets$ Random
+			\STATE orientarTodasAristas($GC$,$ParametroGRASP$)
+			\STATE $matching$ $\gets$ encontrarMatchingNodos($GC$,$ParametroGRASP$)
+			\WHILE{ no se alcanza $MaximoIteracionesBusquedaLocal$ $\lor$ no se encontro un matching optimo}
+				\STATE $matching$ $\gets$ encontrarMatchingDeMenorPeso($matching$,$pesosCaminosMinimos$)
+			\ENDWHILE
+			\STATE $pesoMatching$ $\gets$ pesoMatching($matchingMejor$)
+			\STATE $sumaSolucion$ $\gets$ $pesoMatching + SumaOriginalPesos$
+			\IF{ mejoro la solucion }
+				\STATE $SumaSolucionMejor$ $\gets$ $sumaSolucion$
+				\STATE $GrafoCopiaMejor$ $\gets$ $GC$
+				\STATE $MatchingMejor$ $\gets$ $matching$
+			\ENDIF
+		\ENDWHILE
+		\STATE agregarCaminosMatcheados($GrafoCopiaMejor$,$MatchingMejor$,$GrafoOriginal$)
+		\STATE $circuito$ $\gets$ encontrarCircuitoEuleriano($GrafoCopiaMejor$)
+		\RETURN $circuito$
+	\ELSE
+		\RETURN No hay Tour porque el grafo no era fuertemente conexo
+	\ENDIF
+	\end{algorithmic}
+\end{algorithm}
 
+Complejidad:
+	\begin{itemize}
+	\item $O(n^{2})$ de inicializacion
+	\item $O(n + m_{1} + m_{2})$ de fuertementeConexo
+	\item $O(n^{3})$ de Dantzig
+	\item $O(m_{1} + m_{2})$ de sumarPesosEjes
+	\item $MaximoIteracionesGrasp$*
+	\begin{itemize}
+		\item $O(n^{2} + m_{1} + m_{2})$ de copiar el grafo
+		\item $O(m_{1} * n)$ de orientarTodasLasAristas
+		\item $O(m_{1} + m_{2} + n)$ de encontrarMatchingNodos
+		\item $MaximoIteracionesBusquedaLocal$*
+		\begin{itemize}
+			\item $O(m^{2})$ de encontrarMatchingDeMenorPeso
+		\end{itemize}
+		\item $O(m)$ de calcular peso del matching
+	\end{itemize}
+	\item $O(n^{3})$ de agregarCaminosMatcheados
+	\item $O(m*n)$ de encontrar el CircuitoEuleriano
+	\end{itemize}
+Para grafos que no son fuertemente conexos la complejidad es $O(n^{2} + m)$\\	
+Para las instancias interesantes del problema la complejidad esta dada por:
+$O(n^{2} + n + m + n^{3} + m + \\MaximoIteracionesGrasp*(n^{2} + m + m_{1} * n + m + n + MaximoIteracionesBusquedaLocal*(m^{2}) + m ) + n^{3} + m*n)$ $\subseteq$
+$O(n^{3} + m^{2} + m*n)$ $\subseteq$ $O(n^{3} + m^{2})$\\
+%Como sabemos que el grafo es fuertemente conexo $\Rightarrow$ $ O(n) \subseteq O(m)$ $\Rightarrow$ la complejidad es\\
+%$O(n^{3} + m^{2})$ $\subseteq$ $O(n*m^{2})$
+\\
+Definimos el tamaño de entrada como:
+	\begin{center}	
+	$T = log(n) + log(m_{1}) + log(m_{2}) + \sum_{i=1}^{m_{1} + m_{2}}{(log(arista_{i_{nodo1}})+log(arista_{i_{nodo2}}) + log(arista_{i_{peso}}))}$\\
+	Como $log(n) + log(m_{1}) + log(m_{2}) > 0 \Rightarrow$\\
+	$T > \sum_{i=1}^{m_{1} + m_{2}}{(log(arista_{i_{nodo1}})+log(arista_{i_{nodo2}}) + log(arista_{i_{peso}}))}$\\
+	Tambien sabemos que para cada eje $log(arista_{i_{nodo1}})+log(arista_{i_{nodo2}}) + log(arista_{i_{peso}}) > 1 \Rightarrow$\\
+	$T > \sum_{i=1}^{m_{1} + m_{2}}{1} = m_{1} + m_{2} = m$ \\
+	Sabemos que el grafo es fuertemente conexo asi que $n$ es del orden de $m$ $\Rightarrow$\\
+	$T > m \geq n$ \\
+	Dado la complejidad calculada y las cotas para $T$ vale $O(n^{3} + m^{2})$ $\subseteq$ $O(T^{3}+T^{2})$ $\subseteq$ $O(T^{3})$
+	\end{center}
 \end{document}

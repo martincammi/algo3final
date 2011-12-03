@@ -11,21 +11,25 @@ public class CarteroConstructiva {
 
 	private Grafo grafo;
 	private int[] primos = {1,3,5,7,11,13,17,19,23};
-	static final float ALFA = (float) 0.1;  //CALCULA LA LISTA CON ESTE PARAMETRO. 
+//PARAMETROS
+	static float ALFA = (float) 0.1;  //CALCULA LA LISTA CON ESTE PARAMETRO. 
 	static int CANT_ITERACIONES_MAXIMA = 200; 
-	static int CANT_ITERACIONES_SIN_MEJORAR = 10; // Ver si puede ser un porcentaje de la cantidad de nodos. Para Daniel si :p
-	static int TIPO_ORIENTACION_ARISTAS;
+	static int CANT_ITERACIONES_SIN_MEJORAR = 30; // Ver si puede ser un porcentaje de la cantidad de nodos. Para Daniel si :p
+	static int CANT_ITERACIONES_BUSQUEDA_LOCAL = 100;
+	
+	static int TIPO_ORIENTACION_ARISTAS = 1;
+	
 	
 	public static void main(String[] args) throws IOException, CloneNotSupportedException {
 
-//PARAMETROS
 		String decisionDefault = "E";  // S Mandar Default Salida, E Mandar Default Entrada
 
 		int[] parametroIteracionesGraspRandom= {435693, 344031, 460173, 227725, 430024, 132060, 352001, 211477, 515771, 747551, 504368, 760850, 978532, 751967, 184402, 418925, 461554, 994190, 473839, 59819, 633512, 213684, 127438, 481296, 923496, 682578, 179673, 185301, 94789, 299200, 628481, 507476, 832449, 394170, 131279, 433443, 579169, 265103, 411148, 22666, 569807, 117055, 990045, 349963, 386973, 653261, 941081, 270227, 388434, 34331, 583368, 113698, 41628, 303959, 430610, 627118, 541428, 665323, 248579, 90369, 84351, 184765, 776814, 558694, 825732, 597923, 526288, 607361, 855952, 898422, 77543, 788653, 497637, 300339, 472692, 250286, 847793, 983025, 619893, 609920, 767202, 750538, 110370, 232126, 453925, 367788, 485700, 512236, 328623, 871647, 787099, 635717, 206447, 597660, 168562, 552242, 633585, 11611, 462221, 580379, 826110, 690095, 846932, 141837, 864622, 955384, 190088, 613448, 670196, 737232, 207807, 180591, 815529, 207931, 320131, 877511, 409707, 616786, 965544, 707993, 135837, 536321, 183061, 854117, 17896, 424919, 470346, 501319, 646404, 9203, 282759, 734747, 402171, 494386, 50926, 294901, 683136, 21928, 263365, 719820, 261397, 111215, 985908, 546565, 675883, 45625, 171105, 796523, 633, 293227, 248470, 927049, 419530, 88475, 780399, 796243, 785342, 243661, 418782, 958144, 744320, 107508, 3756, 782382, 67085, 343190, 408760, 475373, 542441, 859163, 655009, 69334, 162753, 793611, 893659, 840972, 357902, 926922, 85419, 423411, 719354, 276488, 595056, 82949, 996741, 914285, 462158, 246494, 146391, 240029, 809742, 386024, 864581, 41372, 708736, 793196, 347859, 677478, 829047, 610208};//Random
 		FileManager fm = new FileManager("Ej.in");
 		fm.abrirArchivo();
-		String datasetFilename = "Ej_ALFA_"+ALFA+"_CANT_ITERACIONES_MAXIMA_"+CANT_ITERACIONES_MAXIMA+"_CANT_ITERACIONES_SIN_MEJORAR_"+CANT_ITERACIONES_SIN_MEJORAR+".dataset";
-		String logFilename = "Ej_ALFA_"+ALFA+"_CANT_ITERACIONES_MAXIMA_"+CANT_ITERACIONES_MAXIMA+"_CANT_ITERACIONES_SIN_MEJORAR_"+CANT_ITERACIONES_SIN_MEJORAR+".log";
+		String datasetFilename = "ALFA_"+ALFA+"_CANT_ITERACIONES_MAXIMA_"+CANT_ITERACIONES_MAXIMA+"_CANT_ITERACIONES_SIN_MEJORAR_"+CANT_ITERACIONES_SIN_MEJORAR+".dataset";
+		String logFilename = "ALFA_"+ALFA+"_CANT_ITERACIONES_MAXIMA_"+CANT_ITERACIONES_MAXIMA+"_CANT_ITERACIONES_SIN_MEJORAR_"+CANT_ITERACIONES_SIN_MEJORAR+".log";
+		//String outFilename = "ALFA_"+ALFA+"_CANT_ITERACIONES_MAXIMA_"+CANT_ITERACIONES_MAXIMA+"_CANT_ITERACIONES_SIN_MEJORAR_"+CANT_ITERACIONES_SIN_MEJORAR+".out";
 		String outFilename = "Ej.out";
 		Grafo grafo = fm.leerInstancia();
 		fm.borrarArchivo(outFilename);
@@ -47,8 +51,8 @@ public class CarteroConstructiva {
 			if(FuertementeConexo.fuertementeConexo(grafo)){
 				int[][] pesoCaminoMinimo = grafo.calcularDantzig();
 				int sumaPesosEjes = grafo.sumaPesosEjes();
-				String textoInstancia= "Instancia " + i + ": "+grafo.getCantNodos()+" Nodos "+grafo.getCantAristas()+" Aristas "+grafo.getCantArcos()+" Arcos";
-				System.out.println(textoInstancia);
+				String textoInstancia= "Instancia " + i + ": "+grafo.getCantNodos()+" Nodos "+grafo.getCantAristas()+" Aristas "+grafo.getCantArcos()+" Arcos\n Suma peso de los ejes: "+sumaPesosEjes;
+				//System.out.println(textoInstancia);
 				fm.escribirArchivo(textoInstancia, logFilename);
 				CarteroConstructiva cartero = new CarteroConstructiva(grafo);
 				
@@ -77,7 +81,12 @@ public class CarteroConstructiva {
 					List<Eje> unMatching = cartero.encontrarMatchingNodos(grafoCopia, aleatoriedad,pesoCaminoMinimo);
 					//int pesoMatching = pesoMatching(unMatching);
 					//3.1) Calcular de todos los vecinos el de menor matchingSolucion
-					List<Eje> matchingMinimo = cartero.encontrarMatchingDeMenorPeso(unMatching,pesoCaminoMinimo);
+					List<Eje> matchingMinimo = unMatching;
+					int iteracionesBL = 0;
+					while (iteracionesBL < CANT_ITERACIONES_BUSQUEDA_LOCAL){
+						matchingMinimo = cartero.encontrarMatchingDeMenorPeso(matchingMinimo,pesoCaminoMinimo);
+						iteracionesBL++;
+					}
 					int pesoBusquedaLocal = pesoMatching(matchingMinimo);
 					//System.out.println("Se mejoró el peso del mathcing de "+pesoMatching+" a "+pesoBusquedaLocal);
 					int sumaSolucion = sumaPesosEjes + pesoBusquedaLocal;
@@ -85,14 +94,14 @@ public class CarteroConstructiva {
 					if(sumaSolucion < sumaMejorSolucion){
 						String textoIteracionGraspMejoro = "Iteración GRASP " + j + ": Mejoró la solución de "+sumaMejorSolucion+" a "+sumaSolucion;
 						fm.escribirArchivo(textoIteracionGraspMejoro, logFilename);
-						System.out.println(textoIteracionGraspMejoro);
+						//System.out.println(textoIteracionGraspMejoro);
 						sumaMejorSolucion = sumaSolucion;
 						mejorGrafoSolucion = grafoCopia;
 						matchingSolucion = matchingMinimo;
 						iteracionesSinMejorar = 0;
 						if(unMatching.isEmpty()){
 							String textoSolOpt = "Solución Optima. El Grafo original es Euleriano";
-							System.out.println(textoSolOpt);
+							//System.out.println(textoSolOpt);
 							fm.escribirArchivo(textoSolOpt, logFilename);
 							break;//solucion optima
 						}
@@ -102,7 +111,7 @@ public class CarteroConstructiva {
 						iteracionesSinMejorar++;
 						String textoIteracionGraspNoMejoro = "Iteración GRASP " + j + ": No se encontró una mejor solución en esta iteración "+sumaSolucion;
 //						fm.escribirArchivo(textoIteracionGraspNoMejoro, logFilename);
-						System.out.println(textoIteracionGraspNoMejoro);
+						//System.out.println(textoIteracionGraspNoMejoro);
 					}
 					++j;
 				}
@@ -122,17 +131,16 @@ public class CarteroConstructiva {
 					nodo1 = nodo2;
 					nodo2 = li.next();
 					String textoCircuito= nodo1+" "+nodo2+" "+grafo.getPesoAristas()[nodo1][nodo2];
-
-					fm.escribirArchivo(textoCircuito, "Ej1.out");
+					fm.escribirArchivo(textoCircuito, outFilename);
 					//System.out.println(textoCircuito);
 				}
 				String textoComplejidadYParametros = "Nodos: "+grafo.getCantNodos()+" Aristas: "+grafo.getCantAristas()+" Arcos: "+grafo.getCantArcos()+" Repetidos: "+(circuitoEuleriano.size() -1 - (grafo.getCantAristas() + grafo.getCantArcos()));
 				String textoDataSet = grafo.getCantNodos()+"\t"+grafo.getCantAristas()+"\t"+grafo.getCantArcos()+"\t"+grafo.T+"\t"+Grafo.complex;
 				fm.escribirArchivo(textoComplejidadYParametros, logFilename);
 				fm.escribirArchivo(textoDataSet, datasetFilename);
-				System.out.println(textoComplejidadYParametros);
+				//System.out.println(textoComplejidadYParametros);
 				fm.escribirArchivo("----", logFilename);
-				System.out.println("----");
+				//System.out.println("----");
 
 			}else{
 				System.out.println("No existe solución porque el grafo no es fuertemente conexo");
@@ -212,12 +220,7 @@ public class CarteroConstructiva {
 			listaResultado = matching;
 		}
 		
-//		System.out.print("Vecino de Matching minimo: ");
-//		for (Eje ejeShow : listaResultado) {
-//			System.out.print("(" + ejeShow.getNodo1() + "," + ejeShow.getNodo2() + "," + ejeShow.getPeso() + "),");
-//		}
-//		System.out.println();
-		
+	
 		return listaResultado;
 	}
 	
@@ -230,8 +233,6 @@ public class CarteroConstructiva {
 		
 		int primo = getPrimeIndex(aleatoriedad);
 		int primo2 = primos[primo % primos.length];
-//		System.out.println("primo: " + primo);
-//		System.out.println("primo2: " + primo2);
 		
 		if(!grafo.todasDirigidas()){
 			System.out.println("ERROR: El grafo no es dirigido");
@@ -259,11 +260,6 @@ public class CarteroConstructiva {
 			}
 		}
 		
-//		int cantResult = 0;
-//		for (Integer nodoIn : nodosDin) {
-//			cantResult += dinExedente[nodoIn];
-//		}//Se puede eliminar todo esto?
-		
 		triplaInOutPeso = new ArrayList<Eje>();
 		
 		if(nodosDout.isEmpty()){
@@ -287,13 +283,8 @@ public class CarteroConstructiva {
 		int indexIn = primo % (nodosDin.size());
 		int indexOut = primo2 % (nodosDout.size());
 		
-//		System.out.println(nodosDin);
-//		System.out.println(nodosDout);
-		
 		while( nodosDin.size() > 0 && nodosDout.size() > 0){
 			Grafo.complex++;
-			//las listas nodoDin y nodoDout son mutuamente excluyentes.
-			//las listas nodoDin y nodoDout deberian tener la misma longitud.
 			
 			Integer nodoIn = nodosDin.get(indexIn);
 			Integer nodoOut = nodosDout.get(indexOut);
@@ -321,11 +312,6 @@ public class CarteroConstructiva {
 
 			i++;
 		}
-//		System.out.print("Matching: ");
-//		for (Eje eje : triplaInOutPeso) {
-//			System.out.print("(" + eje.getNodo1() + "," + eje.getNodo2() + "," + eje.getPeso() + "),");
-//		}
-//		System.out.println();
 		
 		return triplaInOutPeso;
 		
@@ -348,15 +334,20 @@ public class CarteroConstructiva {
 	}
 
 	private void agregarCaminosMatcheados(List<Eje> pares,Grafo gr) {
-		ListaInt[][] sol = new ListaInt[grafo.getCantNodos()][grafo.getCantNodos()];
+		int[][] sol = new int[grafo.getCantNodos()][grafo.getCantNodos()];
+		boolean[] inicializados = new boolean[grafo.getCantNodos()];
+		for(int i = 0;i < grafo.getCantNodos();++i){
+			inicializados[i] = false;
+		}
 		if(pares!=null){
 			for(Eje i:pares){
 				int nodo1=i.getNodo1(), nodo2=i.getNodo2();
-				if(sol[nodo1][nodo2] == null){
-					sol[nodo1][nodo2] = Dijkstra.getPath(grafo, Dijkstra.dijkstra(grafo, nodo1), nodo1, nodo2);
+				if(!inicializados[nodo1]){
+					inicializados[nodo1] = true;
+					sol[nodo1] = Dijkstra.dijkstra(grafo, nodo1);
 //					System.out.println("Dijkstra: "+sol[nodo1][nodo2]);
 				}
-				ListIterator<Integer> li = sol[nodo1][nodo2].listIterator(1);
+				ListIterator<Integer> li = Dijkstra.getPath(grafo, sol[nodo1], nodo1, nodo2).listIterator(1);
 //				System.out.println("Arcos Agregados:");
 				while(li.hasNext()){
 					Grafo.complex++;
