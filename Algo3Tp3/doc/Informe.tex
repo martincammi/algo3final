@@ -161,6 +161,16 @@ El problema tiene varias variantes, en este trabajo abordaremos la variante \emp
 
 	El \emph{algoritmo contructivo} se encargar\'a de tomar un grafo mixto y orientar sus aristas no orientadas y al mismo tiempo establecer un matching inicial.\\ Un matching consiste en agrupar pares de nodos ${(v,w)}$ tales que $d_{in} v > 0$ y $d_{out} w > 0$.
 
+\begin{center}
+\centering \includegraphics[scale=0.30]{img/Matching.png}\\
+\small{En el grafo, los nodos 1 y 3 est\'an desbalanceados con respecto a $d_{in} y d_{out}$, m\'as a\'un $d_{in} 3 > d_{out} 3 y d_{out} 1 > d_{in} 1$ con lo cual pueden formar parte de un matching: [(1,3)]}
+\end{center}
+
+\begin{center}
+\centering \includegraphics[scale=0.30]{img/Matching2.png}\\
+\small{En el grafo, los nodos 0, 2, 3 y 4 est\'an desbalanceados con respecto a $d_{in} y d_{out}$, un matching posible para equiparar sus $d_{in} y  d_{out}$ ser\'ia: [(0,2)(3,4)]}
+\end{center}
+
 	Para ello ideamos diferentes m\'etodos para la orientaci\'on de todas las aristas y fuimos experimentando con 5 m\'etodos distintos, todos ellos bas\'andose en los grados de los nodos para la elecci\'on de un nodo con el cual empezar a orientar sus aristas. Los m\'etodos elegir:\\
 	
   \begin{itemize}
@@ -188,28 +198,57 @@ MENCIONAR DANTZIG
 \newpage	
 \section{Heurística de b\'usqueda Local}
 
-	El algoritmo de b\'usqueda local se encargar\'a dado uno un grafo orientado completamente de generar una vecindad basada en un intercambio de matching de la cual tomar un vecino.
-	Un matching consiste en agrupar pares de nodos ${(v,w)}$ tales que $d_{in} v > 0$ y $d_{out} w > 0$.
+	El algoritmo de b\'usqueda local se encargar\'a, dado uno un grafo orientado completamente y un matching inicial, de generar una vecindad. Un matching consiste en agrupar pares de nodos ${(v,w)}$ tales que $d_{in} v > 0$ y $d_{out} w > 0$.
+
+Lo que realizaremos es cambiar el matching que hace entre los nodos (intercambiando los nodos de dos pares por vez) para obtener otro matching que sea una soluci\'on vecina. Calculamos as\'i todas las posibles soluciones y luego calculamos la que sea m\'inima y as\'i poder acercarnos a una soluci\'on mejor.\\
+
+Notemos que, como los matching entre los nodos donde se ten\'ia que los grados de entrada y de salida no coincid\'ian se efect\'ua sobre el grafo original (y no con el orientado), esta es una soluci\'on \'optima para esa orientaci\'on. Luego, con el grafo totalmente orientado y Euleriano, calculamos el peso de todas las aristas, y llegamos al peso del camino requerido.\\
+
+
+\newpage
+De esta manera una vecindad dado un matching inicial ser\'ia:
 
 \begin{center}
-\centering \includegraphics[scale=0.30]{img/Matching.png}\\
-\small{En el grafo, los nodos 1 y 3 est\'an desbalanceados con respecto a $d_{in} y d_{out}$, m\'as a\'un $d_{in} 3 > d_{out} 3 y d_{out} 1 > d_{in} 1$ con lo cual pueden formar parte de un matching: [(1,3)]}
+\centering \includegraphics[scale=0.30]{img/MatchingVecindad.png}\\
+\small{Una soluci\'on es vecina de otra si y solo si los matchings de ambas soluciones difieren s\'olo en un intercambio entre dos pares de matchings, as\'i, en el Vecino 1 se han intercambiado los pares (0,1) y (2,3) del matching original, en el Vecino 2 los pares (0,5) y (4,5) y en el Vecino 3 los pares (2,3) y (4,5)}
 \end{center}
 
-En nuestra b\'usqueda local, lo que realizaremos es cambiar el matching que hace entre los nodos, para obtener otro donde sea  m\'inimo y as\'i poder acercarnos mejor a la soluci\'on requerida. Notemos que, como los matching entre los nodos donde se ten\'ia que los grados de entrada y de salida no coincid\'ian se efect\'ua sobre el grafo original (y no con el orientado), esta es una soluci\'on \'optima para esa orientaci\'on. Luego, con el grafo totalmente orientado y Euleriano, simplemente se calcula el peso de todas las aristas, y llegamos al peso del camino requerido.\\
-
-//DESDE ACA ES LO QUE HABIA
-Nuestro algoritmo de busqueda local se basa en eliminar aristas y arcos agregados para igualar los grados de salida a los de entrada de algunos nodos y cambiarlos por un conjunto de aristas que cumplen la misma propiedad pero cuya suma es menor.
-Para ello el algoritmo constructivo realiza los siguientes pasos dado un grafo mixto:
-
-1) Orientar todas las aristas no orientadas del grafo.
-2) Calcular un matching entre los nodos que tengan din != dout.
-3) Calcular el peso del camino m\'inimo entre los nodos del matching.
-
-4) Calcular los caminos m\'inimos entre cada par del matching y con ellos y armar el Circuito euleriano.
-//DESDE ACA ES LO QUE HABIA
-
+\newpage
 \section{Metaheuristica Grasp}
+
+\section{pseudo-Algoritmo}
+
+El siguiente es un pseudo-c\'odigo del algoritmo heur\'istico que realizamos para obtener el circuito Euleriano:\\
+
+\noindent{\textbf{Algoritmo GRASP}}\\
+Mientras no se superen las I iteraciones totales y las J iteraciones sin mejorar de GRASP hacer:
+
+\begin{itemize}
+	\item \textbf{Algoritmo Constructivo}
+		\begin{itemize}
+			\item 1) Calular Dantzig sobre el grafo.
+			\item 2) Orientar todas las aristas no orientadas del grafo.
+			\item 3) Obtener un matching inicial entre los nodos que tengan din != dout.
+		\end{itemize}
+	\textbf{Fin Algoritmo Constructivo}
+
+	\item \textbf{Algoritmo B\'usqueda Local}\\
+	\emph{Mientras} no se superen K iteraciones y no se haya encontrado un matching \'optimo hacer
+	\begin{itemize}
+		\item 4) Obtener los matchings vecinos y quedarse con el m\'inimo vecino
+	\end{itemize}
+	\emph{Fin Mientras}\\
+	\textbf{Fin Algoritmo B\'usqueda Local}
+
+	\item 5) Calcular los caminos mínimos entre los nodos del matching.
+	\item 6) Calcular el circuito Euleriano\\
+
+
+\end{itemize}
+
+
+\newpage
+
 \section{Complejidad}
 Complejidades donde $n$ es la cantidad de nodos, $m_{1}$ la cantidad de aristas, $m_{2}$ la cantidad de arcos y $m$ = $m_{1} + m_{2}$ \\
 \begin{itemize}
@@ -219,10 +258,10 @@ Complejidades donde $n$ es la cantidad de nodos, $m_{1}$ la cantidad de aristas,
 		\item Inicializar las listas de adyacencias $O(n + m_{1} +m_{2})$
 	\end{itemize}
 	$O(n^{2} + m_{1} +m_{2}) \subseteq O(n^{2})$
-	\item fuertementeConexo
+	\item FuertementeConexo
 	\begin{itemize}
 		\item Inicializacion de listas de adyacencias $O(n + m_{1} + m_{2})$
-		\item resetVisitados y checkVisitados recorren un array de bools de tamaño cantNodos $O(n)$
+		\item resetVisitados y checkVisitados recorren un array de bools de tamaño n. $O(n)$
 		\item visitarNodos recorre recursivamente en DFS las adyacencias y marca los nodos que son accesibles desde el nodo $0$ $O(m_{1} + m_{2})$
 	\end{itemize}
 	$O(n + m_{1} + m_{2})$
@@ -316,6 +355,7 @@ Complejidades donde $n$ es la cantidad de nodos, $m_{1}$ la cantidad de aristas,
 	\end{algorithmic}
 \end{algorithm}
 
+\newpage
 Complejidad:
 	\begin{itemize}
 	\item $O(n^{2})$ de inicializacion
@@ -354,4 +394,11 @@ Definimos el tamaño de entrada como:
 	$T > m \geq n$ \\
 	Dado la complejidad calculada y las cotas para $T$ vale $O(n^{3} + m^{2})$ $\subseteq$ $O(T^{3}+T^{2})$ $\subseteq$ $O(T^{3})$
 	\end{center}
+
+\newpage
+
+\section{Tests}
+
+\section{Gr\'aficos}
+
 \end{document}
