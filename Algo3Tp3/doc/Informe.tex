@@ -143,32 +143,59 @@ M\'as de doscientos a\~{n}os m\'as tarde en 1962 el matemático chino Kwan Mei-Ko
 
 El problema tiene varias variantes, en este trabajo abordaremos la variante \emph{mixta} que consiste en intentar encontrar el m\'inimo circuito que pase por todas las aristas (no orientadas) y arcos (orientadas) de un grafo donde cada una tiene peso asignado.
 
+\newpage
 \section{Situaciones de la vida real}
 
     El algoritmo del cartero chino tiene múltiples aplicaciones en la vida cotidiana por ser
 
 	\begin{itemize}
-	\item C\'alculo de rutas \'optimas para recorridos de camiones de basura: en donde los camiones deban recorrer las calles de una ciudad y volver al centro de tratamiento de basura. Las calles podr\'ian bien tener diferentes sentidos o sentidos únicos, y los pesos podr\'an corresponder a la cantidad de basura que deban recolectar en ciertas zonas.
+	\item \emph{Camiones de basura}: en donde los camiones deban recorrer las calles de una ciudad y volver al centro de tratamiento de basura. Las calles estar\'ian representadas por aristas y las intersecciones por v\'ertices. Las calles podr\'ian bien tener diferentes sentidos o sentidos únicos, y los pesos podr\'ian corresponder a la cantidad de basura que deban recolectar en ciertas zonas (ej zonas industriales)
 	\end{itemize}
 
-
-\section{Heurística Constructiva}
-	Para la etapa constructiva, hemos realizado en primer lugar, una orientaci\'on de todas las aristas utilizando 5 maneras distintas, todas ellas con respecto a los grados de los nodos. Entonces, seg\'un un par\'ametro de entrada que indica cual de estas opciones usar\'a, encontrar\'a los nodos del grafo que cumplan lo siguiente, pas\'andole otro par\'ametro y buscar\'a: 
-	
 	\begin{itemize}
+	\item \emph{Reparto de Volantes:} C\'alculo de ruta \'optima que pase por todas las calles de una ciudad al menos una vez para poder repartir volantes se publicidad. Las calles estar\'ian representadas por aristas y las intersecciones por v\'ertices. Podr\'ia asignarse un peso de 1 a cada arista siendo que no tiene mayor complejidad repartir volantes en una u otra cuadra.
+	\end{itemize}
+
+\newpage
+\section{Heurística Constructiva}
+
+	El \emph{algoritmo contructivo} se encargar\'a de tomar un grafo mixto y orientar sus aristas no orientadas y al mismo tiempo establecer un matching inicial.\\ Un matching consiste en agrupar pares de nodos ${(v,w)}$ tales que $d_{in} v > 0$ y $d_{out} w > 0$.
+
+	Para ello ideamos diferentes m\'etodos para la orientaci\'on de todas las aristas y fuimos experimentando con 5 m\'etodos distintos, todos ellos bas\'andose en los grados de los nodos para la elecci\'on de un nodo con el cual empezar a orientar sus aristas. Los m\'etodos elegir:\\
 	
-	\item Los nodos que tienen igual cantidad de aristas sin orientar que orientadas, y en caso de haber muchos, solo tomar\'a los primeros k nodos de ellos, donde k es el par\'ametro de entrada de la funci\'on.
-	\item Los nodos a partir de un cierto n\'umero, que es definido por el par\'ametro de entrada de la funci\'on.
-	\item Los nodos que tengan grado de nodo (sin orientar) mayor o igual al par\'ametro de entrada de la funci\'on.
-	\item Los nodos que tengan grado de entrada (orientado) mayor o igual al par\'ametro de entrada de la funci\'on.
-	\item Los nodos que tengan grado de salida (orientado) mayor o igual al par\'ametro de entrada de la funci\'on.
- 
+  \begin{itemize}
+	\item 1) Los nodos que tienen igual cantidad de aristas sin orientar que orientadas, y en caso de haber muchos, solo tomar\'a los primeros k nodos de ellos, donde k es un par\'ametro de entrada de la funci\'on.
+	\item 2) Los nodos a partir de un cierto n\'umero, que es definido por el par\'ametro de entrada de la funci\'on.
+	\item 3) Los nodos que tengan grado de nodo (sin orientar) mayor o igual al ALFA* nodoGradoMaximo.
+	\item 4) Los nodos que tengan grado de entrada (orientado) mayor o igual al ALFA* nodoGradoMaximo..
+	\item 5) Los nodos que tengan grado de salida (orientado) mayor o igual al ALFA* nodoGradoMaximo.
   \end{itemize}
-  
-  En caso de no encontrar ning\'un nodo a orientar con estas opciones, encontr\'a los k primeros nodos (empezando desde 0), sea cual sea el grado de sus nodos.
-  Con cualquiera de estas posibilidades, siempre se intenta hacer un balance entre los grados que quedar\'an (solo quedar\'an grados de entrada y salida, ya que ser\'a completamente orientado). Esta decisión se basa, que luego le calcularemos el circuito Euleriano al grafo resultante, para poder encontrar un circuito que pase por todas las aristas. Una vez que tenemos todo el grafo orientado, realizamos luego una etapa de matching entre los nodos que quedan con diferentes grado de entrada y de salida, y balanceamos a todos los nodos, para que queden con iguales grados de entrada como de salida, y el grafo queda Euleriano. Este matching lo calculamos con la distancia m\'inima de entre cada uno de los nodos, pero en el grafo original, por lo que todas las aristas agregadas, tienen distancia m\'inima entre ellas.
-	
-\section{Heurística de busqueda Local}
+
+Se entiende como \emph{nodoGradoMaximo} al nodo de mayor grado, contando aristas no orientadas.\\
+
+Con cualquiera de estas posibilidades, siempre se intenta hacer un balance entre los grados que quedar\'an (solo quedar\'an grados de entrada y salida, ya que ser\'a completamente orientado). Realizando pequeñas pruebas terminamos optando por el m\'etodo n\'umero 3) ya que por ejemplo con el m\'etodo n\'umero 1) no pod\'iamos asegurar que siempre existieran tales nodos que cumplieran la condici\'on.\\
+
+El segundo m\'etodo se basaba en el parametro para darle la longitud a la lista y no armaba la lista en base al cumplmiento de una condició\'on (ej porcentaje de ALFA)\\
+
+El cuarto y quinto m\'etodo se buscan los nodos que tengan din o dout >= a la proporcion ALFA, pero esta proporcion estaba basada en el grado no orientado del m\'as grande y est\'abamos comparando grados no orientados contra grados orientados que no tenian necesariamente que tener relaci\'on.\\
+
+Eligiendo el m\'etodo 3), en caso de no encontrar ning\'un nodo a orientar con estas opciones, encontr\'a los k primeros nodos (empezando desde 0), sea cual sea el grado de sus nodos. (donde k es el ALFA* nodoGradoMaximo)\\
+
+Una vez que tenemos todo el grafo orientado, realizamos luego una etapa de matching entre los nodos que quedan con diferentes grado de entrada y de salida, y balanceamos a todos los nodos, para que queden con iguales grados de entrada como de salida, y el grafo quede Euleriano. Este matching lo calculamos con la distancia m\'inima de entre cada uno de los nodos, pero en el grafo original, por lo que todas las aristas agregadas, tienen distancia m\'inima entre ellas.\\
+
+MENCIONAR DANTZIG
+
+\newpage	
+\section{Heurística de b\'usqueda Local}
+
+	El algoritmo de b\'usqueda local se encargar\'a dado uno un grafo orientado completamente de generar una vecindad basada en un intercambio de matching de la cual tomar un vecino.
+	Un matching consiste en agrupar pares de nodos ${(v,w)}$ tales que $d_{in} v > 0$ y $d_{out} w > 0$.
+
+\begin{center}
+\centering \includegraphics[scale=0.30]{img/Matching.png}\\
+\small{En el grafo, los nodos 1 y 3 est\'an desbalanceados con respecto a $d_{in} y d_{out}$, m\'as a\'un $d_{in} 3 > d_{out} 3 y d_{out} 1 > d_{in} 1$ con lo cual pueden formar parte de un matching: [(1,3)]}
+\end{center}
+
 En nuestra b\'usqueda local, lo que realizaremos es cambiar el matching que hace entre los nodos, para obtener otro donde sea  m\'inimo y as\'i poder acercarnos mejor a la soluci\'on requerida. Notemos que, como los matching entre los nodos donde se ten\'ia que los grados de entrada y de salida no coincid\'ian se efect\'ua sobre el grafo original (y no con el orientado), esta es una soluci\'on \'optima para esa orientaci\'on. Luego, con el grafo totalmente orientado y Euleriano, simplemente se calcula el peso de todas las aristas, y llegamos al peso del camino requerido.\\
 
 //DESDE ACA ES LO QUE HABIA
