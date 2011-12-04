@@ -17,7 +17,7 @@ public class CarteroConstructiva {
 	static int CANT_ITERACIONES_SIN_MEJORAR = 30; // Ver si puede ser un porcentaje de la cantidad de nodos. Para Daniel si :p
 	static int CANT_ITERACIONES_BUSQUEDA_LOCAL = 100;
 	
-	static int TIPO_ORIENTACION_ARISTAS = 1;
+	static int TIPO_ORIENTACION_ARISTAS = 3;
 	
 	
 	public static void main(String[] args) throws IOException, CloneNotSupportedException {
@@ -71,8 +71,7 @@ public class CarteroConstructiva {
 					int parametroGRASP = ((Double)(Math.random() * 1000000)).intValue();
 					//int parametroGRASP = parametroIteracionesGraspRandom[cantidadIteraciones];
 					//CUANDO TENGAMOS DECIDIDOS LOS VALORES DE ALFA E ITERACIONES LO DEJAMOS ALEATORIO. By Seba
-					TIPO_ORIENTACION_ARISTAS = parametroGRASP % 6 == 0 ? 1 : parametroGRASP % 6;
-					
+					//TIPO_ORIENTACION_ARISTAS = parametroGRASP % 6 == 0 ? 1 : parametroGRASP % 6;
 					//2) ORIENTAR LAS ARISTAS
 					grafoCopia.orientarTodasAristas(TIPO_ORIENTACION_ARISTAS, ALFA, parametroGRASP, decisionDefault);
 
