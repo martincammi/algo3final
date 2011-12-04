@@ -383,6 +383,33 @@ public class Grafo {
 		return adyacenciasOr[nodo];
 	}
 	
+	@Override
+	public String toString() {
+
+		StringBuffer sb = new StringBuffer();
+		ArrayList listVisitados = new ArrayList();
+		
+		for (int i = 0; i < adyacenciasNoOr.length; i++) {
+			ListaInt ady = adyacenciasNoOr[i];
+			listVisitados.add(i);
+			for (Integer nodo2 : ady) {
+				if(!listVisitados.contains(nodo2)){
+					sb.append("[" + i + "," + nodo2 + "," + pesosEjes[i][nodo2] +"]");
+				}
+			}
+		}
+		sb.append("\n");
+		
+		for (int i = 0; i < adyacenciasOr.length; i++) {
+			ListaInt ady = adyacenciasOr[i];
+			for (Integer nodo2 : ady) {
+				sb.append("(" + i + "," + nodo2 + ","+ pesosEjes[i][nodo2] + ")");
+			}
+		}
+		
+		return sb.toString();
+	}
+	
 	public void showGrafo(){
 		System.out.println("CantNodos: "+this.cantNodos);
 		System.out.println("CantAristas: "+this.cantAristas);
