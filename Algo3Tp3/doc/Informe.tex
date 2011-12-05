@@ -6,7 +6,7 @@
 
 %Info sobre este documento
 \author{Mart\'n Cammi}
-\title{Trabajo Pr\'actico de Algoritmos y Estucturas de datos III}
+\title{Trabajo Pr\'actico de Algor\'itmos y Estucturas de datos III}
 
 %\usepackage{infostyle}                                                  % provee un look & feel similar a un documento Word
 \usepackage[top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry}  % m\'argenes
@@ -19,7 +19,7 @@
 \usepackage{amssymb}
 \usepackage[pdfcreator={TexLive!, LaTeX2e con TeXnicCenter},
 			pdfauthor={Grupo: "1"},
-			pdftitle={Algoritmos III - Trabajo Pr\'actico 2},
+			pdftitle={Algoritmos III - Trabajo Pr\'actico 3},
 			pdfsubject={Trabajo Pr\'actico 1},
 			pdfkeywords={Prismas, Esferas, Punto de corte, puente, pizza},
 			pdfstartview=FitH,            % Fits the width of the page to the window
@@ -39,7 +39,7 @@
 %\selectlanguage{spanish}
 \linespread{1.3}                    % interlineado equivalente al 1.5 l\'ineas de Word...
 \pagestyle{myheadings}              %encabezado personalizable con \markboth{}{}
-\markboth{}{Algoritmos III  - Trabajo Pr\'actico 3 - Cammi, Garbi, Kretschmayer}
+\markboth{}{Algor\'itmos III  - Trabajo Pr\'actico 3 - Cammi, Garbi, Kretschmayer}
 \headsep = 30pt                     % separaci\'on entre encabezado y comienzo del p\'arrafo
 
 %\addtolength{\oddsidemargin}{-2cm}	% configuracion IDEAL!!!
@@ -59,7 +59,7 @@
 
 \begin{document}
 
-\materia{Algoritmos y Estucturas de datos III}
+\materia{Algor\'itmos y Estucturas de datos III}
 \submateria{Segundo Cuatrimestre de 2011}
 \titulo{Trabajo Pr\'actico 3}
 \subtitulo{Cartero Chino en grafo mixto.}
@@ -146,7 +146,7 @@ El problema tiene varias variantes, en este trabajo abordaremos la variante \emp
 \newpage
 \section{Situaciones de la vida real}
 
-    El algoritmo del cartero chino tiene múltiples aplicaciones en la vida cotidiana por ser
+    El algor\'itmo del cartero chino tiene múltiples aplicaciones en la vida cotidiana por ser
 
 	\begin{itemize}
 	\item \emph{Camiones de basura}: en donde los camiones deban recorrer las calles de una ciudad y volver al centro de tratamiento de basura. Las calles estar\'ian representadas por aristas y las intersecciones por v\'ertices. Las calles podr\'ian bien tener diferentes sentidos o sentidos únicos, y los pesos podr\'ian corresponder a la cantidad de basura que deban recolectar en ciertas zonas (ej zonas industriales)
@@ -159,16 +159,16 @@ El problema tiene varias variantes, en este trabajo abordaremos la variante \emp
 \newpage
 \section{Heurística Constructiva}
 
-	El \emph{algoritmo contructivo} se encargar\'a de tomar un grafo mixto y orientar sus aristas no orientadas y al mismo tiempo establecer un matching inicial.\\ Un matching consiste en agrupar pares de nodos ${(v,w)}$ tales que $d_{in} v > 0$ y $d_{out} w > 0$.
+	El \emph{algor\'itmo contructivo} se encargar\'a de tomar un grafo mixto y orientar sus aristas no orientadas y al mismo tiempo establecer un matching inicial.\\ Un matching consiste en agrupar pares de nodos ${(v,w)}$ tales que $d_{in} v > 0$ y $d_{out} w > 0$.
 
 \begin{center}
 \centering \includegraphics[scale=0.30]{img/Matching.png}\\
-\small{En el grafo, los nodos 1 y 3 est\'an desbalanceados con respecto a $d_{in} y d_{out}$, m\'as a\'un $d_{in} 3 > d_{out} 3 y d_{out} 1 > d_{in} 1$ con lo cual pueden formar parte de un matching: [(1,3)]}
+\small{En el grafo, los nodos 1 y 3 est\'an desbalanceados con respecto a $d_{in}$ y $d_{out}$, m\'as a\'un $d_{in} 3 > d_{out} 3$ y $d_{out} 1 > d_{in} 1$ con lo cual pueden formar parte de un matching: [(1,3)]}
 \end{center}
 
 \begin{center}
 \centering \includegraphics[scale=0.30]{img/Matching2.png}\\
-\small{En el grafo, los nodos 0, 2, 3 y 4 est\'an desbalanceados con respecto a $d_{in} y d_{out}$, un matching posible para equiparar sus $d_{in} y  d_{out}$ ser\'ia: [(0,2)(3,4)]}
+\small{En el grafo, los nodos 0, 2, 3 y 4 est\'an desbalanceados con respecto a $d_{in}$ y $d_{out}$, un matching posible para equiparar sus $d_{in}$ y $d_{out}$ ser\'ia: [(0,2)(3,4)]}
 \end{center}
 
 	Para ello ideamos diferentes m\'etodos para la orientaci\'on de todas las aristas y fuimos experimentando con 5 m\'etodos distintos, todos ellos bas\'andose en los grados de los nodos para la elecci\'on de un nodo con el cual empezar a orientar sus aristas. Los m\'etodos elegir:\\
@@ -187,23 +187,21 @@ Con cualquiera de estas posibilidades, siempre se intenta hacer un balance entre
 
 El segundo m\'etodo se basaba en el parametro para darle la longitud a la lista y no armaba la lista en base al cumplmiento de una condició\'on (ej porcentaje de ALFA)\\
 
-El cuarto y quinto m\'etodo se buscan los nodos que tengan din o dout >= a la proporcion ALFA, pero esta proporcion estaba basada en el grado no orientado del m\'as grande y est\'abamos comparando grados no orientados contra grados orientados que no tenian necesariamente que tener relaci\'on.\\
+El cuarto y quinto m\'etodo se buscan los nodos que tengan din o dout $\geq$ a la proporcion ALFA, pero esta proporcion estaba basada en el grado no orientado del m\'as grande y est\'abamos comparando grados no orientados contra grados orientados que no tenian necesariamente que tener relaci\'on.\\
 
 Eligiendo el m\'etodo 3), en caso de no encontrar ning\'un nodo a orientar con estas opciones, encontr\'a los k primeros nodos (empezando desde 0), sea cual sea el grado de sus nodos. (donde k es el ALFA* nodoGradoMaximo)\\
 
-Una vez que tenemos todo el grafo orientado, realizamos luego una etapa de matching entre los nodos que quedan con diferentes grado de entrada y de salida, y balanceamos a todos los nodos, para que queden con iguales grados de entrada como de salida, y el grafo quede Euleriano. Este matching lo calculamos con la distancia m\'inima de entre cada uno de los nodos, pero en el grafo original, por lo que todas las aristas agregadas, tienen distancia m\'inima entre ellas.\\
+Una vez que tenemos todo el grafo orientado, realizamos luego una etapa de matching entre los nodos que quedan con diferentes grado de entrada y de salida, y balanceamos a todos los nodos, para que queden con iguales grados de entrada como de salida, y el grafo quede Euleriano. Este matching lo calculamos con el peso del camino minimo de entre cada uno de los nodos calculado sobre el grafo original utilizando Dantzig, ya que en esta etapa del algor\'itmo solo nos interesa saber el peso del camino m\'inimo y no como esta compuesto.\\
 
-MENCIONAR DANTZIG
 
 \newpage	
 \section{Heurística de b\'usqueda Local}
 
-	El algoritmo de b\'usqueda local se encargar\'a, dado uno un grafo orientado completamente y un matching inicial, de generar una vecindad. Un matching consiste en agrupar pares de nodos ${(v,w)}$ tales que $d_{in} v > 0$ y $d_{out} w > 0$.
+	El algor\'itmo de b\'usqueda local se encargar\'a, dado uno un grafo orientado completamente, un matching inicial y el grafo original, de buscar en la vecindad un mejor matching. Un matching consiste en agrupar pares de nodos ${(v,w)}$ tales que $d_{in} v > 0$ y $d_{out} w > 0$.
 
 Lo que realizaremos es cambiar el matching que hace entre los nodos (intercambiando los nodos de dos pares por vez) para obtener otro matching que sea una soluci\'on vecina. Calculamos as\'i todas las posibles soluciones y luego calculamos la que sea m\'inima y as\'i poder acercarnos a una soluci\'on mejor.\\
 
 Notemos que, como los matching entre los nodos donde se ten\'ia que los grados de entrada y de salida no coincid\'ian se efect\'ua sobre el grafo original (y no con el orientado), esta es una soluci\'on \'optima para esa orientaci\'on. Luego, con el grafo totalmente orientado y Euleriano, calculamos el peso de todas las aristas, y llegamos al peso del camino requerido.\\
-
 
 \newpage
 De esta manera una vecindad dado un matching inicial ser\'ia:
@@ -216,29 +214,55 @@ De esta manera una vecindad dado un matching inicial ser\'ia:
 \newpage
 \section{Metaheuristica Grasp}
 
-\section{pseudo-Algoritmo}
+Esta etapa del algor\'itmo realiza varias iteraciones de los algor\'itmos de las heurísticas constructiva y de búsqueda local, decidiendo mediante experimentacíon el nivel de aleatoriedad agregado al algor\'itmo constructivo, el tamaño de la vecindad a visitar y la cantidad de veces que se intentar una solución nueva.\\
 
-El siguiente es un pseudo-c\'odigo del algoritmo heur\'istico que realizamos para obtener el circuito Euleriano:\\
+El parametro $ALFA$ es un valor entre $0$ y $1$ que le dá al algor\'itmo constructivo su nivel de aleatoriedad. Originalmente el algor\'itmo constructivo elije el nodo de mayor grado para orientar, aplicandole $GRASP$ se buscan todos los que tengan $grado > ALFA*GradoMaximo$ y con un valor aleatorio se elije cual se utilizará.\\
+El parametro $CANT\_ITERACIONES\_MAXIMA$ define el máximo de veces que se construirá una solución inicial.\\
+El parametro $CANT\_ITERACIONES\_SIN\_MEJORAR$ se usa como condición de corte, si no se pudo encontrar una solución mejor en tantas iteraciones de $GRASP$ se corta la ejecución y se devuelve la mejor hasta el momento.\\
+El parametro $CANT\_ITERACIONES\_BUSQUEDA\_LOCAL$ define el tamaño maximo que tendra la vecindad ya que este puede ser exponencial en el tamaño del matching.\\
 
-\noindent{\textbf{Algoritmo GRASP}}\\
+Como no tenemos el valor real de la solución óptima, medimos la calidad de las soluciones como el porcentaje de peso agregado en la solución con respecto al peso total de las aristas del grafo original.\\
+
+El valor decidido para $ALFA$ fue $0,1$.\\
+\begin{center}
+\centering \includegraphics[scale=0.40]{img/VariacionAlfa.jpg}\\
+\centering \includegraphics[scale=0.40]{img/VariacionAlfaComplejidad.jpg}\\
+\small{Como se puede observar en las gráficos de las mediciones tomadas para las mismas instancias con distintos valores para $ALFA$, se obtuvieron los mejores resultados para el valor $0,1$ y las complejidades practica para ese valor son bastante razonables.}
+\end{center}	
+
+El valor decidido para $CANT\_ITERACIONES\_SIN\_MEJORAR$ fue $10$.\\
+\begin{center}
+\centering \includegraphics[scale=0.40]{img/VariacionItSinMejora.jpg}\\
+\centering \includegraphics[scale=0.40]{img/VariacionItSinMejoraComplejidad.jpg}\\
+\small{Tomamos esta decisión ya que obsevamos que la complejidad crece mucho y la mejora de la solución no es muy significativa}
+\end{center}
+
+El valor decidido para $CANT\_ITERACIONES\_MAXIMA$ fue $200$, ya que en ninguno de los casos evaluados llegó a cortar por esa cota.
+El valor decidido para $CANT\_ITERACIONES\_BUSQUEDA\_LOCAL$ fue $50$.
+
+\section{pseudo-algor\'itmo}
+
+El siguiente es un pseudo-c\'odigo del algor\'itmo heur\'istico que realizamos para obtener el circuito Euleriano:\\
+
+\noindent{\textbf{algor\'itmo GRASP}}\\
 Mientras no se superen las I iteraciones totales y las J iteraciones sin mejorar de GRASP hacer:
 
 \begin{itemize}
-	\item \textbf{Algoritmo Constructivo}
+	\item \textbf{Algor\'itmo Constructivo}
 		\begin{itemize}
 			\item 1) Calular Dantzig sobre el grafo.
 			\item 2) Orientar todas las aristas no orientadas del grafo.
 			\item 3) Obtener un matching inicial entre los nodos que tengan din != dout.
 		\end{itemize}
-	\textbf{Fin Algoritmo Constructivo}
+	\textbf{Fin Algor\'itmo Constructivo}
 
-	\item \textbf{Algoritmo B\'usqueda Local}\\
+	\item \textbf{Algor\'itmo B\'usqueda Local}\\
 	\emph{Mientras} no se superen K iteraciones y no se haya encontrado un matching \'optimo hacer
 	\begin{itemize}
 		\item 4) Obtener los matchings vecinos y quedarse con el m\'inimo vecino
 	\end{itemize}
 	\emph{Fin Mientras}\\
-	\textbf{Fin Algoritmo B\'usqueda Local}
+	\textbf{Fin Algor\'itmo B\'usqueda Local}
 
 	\item 5) Calcular los caminos mínimos entre los nodos del matching.
 	\item 6) Calcular el circuito Euleriano\\
@@ -261,7 +285,7 @@ Complejidades donde $n$ es la cantidad de nodos, $m_{1}$ la cantidad de aristas,
 	\item FuertementeConexo
 	\begin{itemize}
 		\item Inicializacion de listas de adyacencias $O(n + m_{1} + m_{2})$
-		\item resetVisitados y checkVisitados recorren un array de bools de tamaño n. $O(n)$
+		\item resetVisitados y checkVisitados recorren un array de bools de tamaño $n$. $O(n)$
 		\item visitarNodos recorre recursivamente en DFS las adyacencias y marca los nodos que son accesibles desde el nodo $0$ $O(m_{1} + m_{2})$
 	\end{itemize}
 	$O(n + m_{1} + m_{2})$
@@ -377,7 +401,7 @@ Complejidad:
 	\item $O(m*n)$ de encontrar el CircuitoEuleriano
 	\end{itemize}
 Para grafos que no son fuertemente conexos la complejidad es $O(n^{2} + m)$\\	
-Para las instancias interesantes del problema la complejidad esta dada por:
+Para las instancias interesantes del problema la complejidad esta dada por:\\
 $O(n^{2} + n + m + n^{3} + m + \\MaximoIteracionesGrasp*(n^{2} + m + m_{1} * n + m + n + MaximoIteracionesBusquedaLocal*(m^{2}) + m ) + n^{3} + m*n)$ $\subseteq$
 $O(n^{3} + m^{2} + m*n)$ $\subseteq$ $O(n^{3} + m^{2})$\\
 %Como sabemos que el grafo es fuertemente conexo $\Rightarrow$ $ O(n) \subseteq O(m)$ $\Rightarrow$ la complejidad es\\

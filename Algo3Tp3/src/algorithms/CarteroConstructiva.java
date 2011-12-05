@@ -14,8 +14,8 @@ public class CarteroConstructiva {
 //PARAMETROS
 	static float ALFA = (float) 0.1;  //CALCULA LA LISTA CON ESTE PARAMETRO. 
 	static int CANT_ITERACIONES_MAXIMA = 200; 
-	static int CANT_ITERACIONES_SIN_MEJORAR = 30; // Ver si puede ser un porcentaje de la cantidad de nodos. Para Daniel si :p
-	static int CANT_ITERACIONES_BUSQUEDA_LOCAL = 100;
+	static int CANT_ITERACIONES_SIN_MEJORAR = 10; // Ver si puede ser un porcentaje de la cantidad de nodos. Para Daniel si :p
+	static int CANT_ITERACIONES_BUSQUEDA_LOCAL = 50;
 	
 	static int TIPO_ORIENTACION_ARISTAS = 3;
 	
@@ -27,9 +27,10 @@ public class CarteroConstructiva {
 		int[] parametroIteracionesGraspRandom= {435693, 344031, 460173, 227725, 430024, 132060, 352001, 211477, 515771, 747551, 504368, 760850, 978532, 751967, 184402, 418925, 461554, 994190, 473839, 59819, 633512, 213684, 127438, 481296, 923496, 682578, 179673, 185301, 94789, 299200, 628481, 507476, 832449, 394170, 131279, 433443, 579169, 265103, 411148, 22666, 569807, 117055, 990045, 349963, 386973, 653261, 941081, 270227, 388434, 34331, 583368, 113698, 41628, 303959, 430610, 627118, 541428, 665323, 248579, 90369, 84351, 184765, 776814, 558694, 825732, 597923, 526288, 607361, 855952, 898422, 77543, 788653, 497637, 300339, 472692, 250286, 847793, 983025, 619893, 609920, 767202, 750538, 110370, 232126, 453925, 367788, 485700, 512236, 328623, 871647, 787099, 635717, 206447, 597660, 168562, 552242, 633585, 11611, 462221, 580379, 826110, 690095, 846932, 141837, 864622, 955384, 190088, 613448, 670196, 737232, 207807, 180591, 815529, 207931, 320131, 877511, 409707, 616786, 965544, 707993, 135837, 536321, 183061, 854117, 17896, 424919, 470346, 501319, 646404, 9203, 282759, 734747, 402171, 494386, 50926, 294901, 683136, 21928, 263365, 719820, 261397, 111215, 985908, 546565, 675883, 45625, 171105, 796523, 633, 293227, 248470, 927049, 419530, 88475, 780399, 796243, 785342, 243661, 418782, 958144, 744320, 107508, 3756, 782382, 67085, 343190, 408760, 475373, 542441, 859163, 655009, 69334, 162753, 793611, 893659, 840972, 357902, 926922, 85419, 423411, 719354, 276488, 595056, 82949, 996741, 914285, 462158, 246494, 146391, 240029, 809742, 386024, 864581, 41372, 708736, 793196, 347859, 677478, 829047, 610208};//Random
 		FileManager fm = new FileManager("Ej.in");
 		fm.abrirArchivo();
-		String datasetFilename = "ALFA_"+ALFA+"_CANT_ITERACIONES_MAXIMA_"+CANT_ITERACIONES_MAXIMA+"_CANT_ITERACIONES_SIN_MEJORAR_"+CANT_ITERACIONES_SIN_MEJORAR+".dataset";
-		String logFilename = "ALFA_"+ALFA+"_CANT_ITERACIONES_MAXIMA_"+CANT_ITERACIONES_MAXIMA+"_CANT_ITERACIONES_SIN_MEJORAR_"+CANT_ITERACIONES_SIN_MEJORAR+".log";
-		//String outFilename = "ALFA_"+ALFA+"_CANT_ITERACIONES_MAXIMA_"+CANT_ITERACIONES_MAXIMA+"_CANT_ITERACIONES_SIN_MEJORAR_"+CANT_ITERACIONES_SIN_MEJORAR+".out";
+		String filename = "ALFA_"+ALFA+"_CANT_ITERACIONES_MAXIMA_"+CANT_ITERACIONES_MAXIMA+"_CANT_ITERACIONES_SIN_MEJORAR_"+CANT_ITERACIONES_SIN_MEJORAR+"_CANT_ITERACIONES_BUSQUEDA_LOCAL_"+CANT_ITERACIONES_BUSQUEDA_LOCAL;
+		String datasetFilename = filename+".dataset";
+		String logFilename = filename+".log";
+		//String outFilename = filename+".out";
 		String outFilename = "Ej.out";
 		Grafo grafo = fm.leerInstancia();
 		fm.borrarArchivo(outFilename);
@@ -43,7 +44,7 @@ public class CarteroConstructiva {
 		//4 ORIENTA PRIMERO AL QUE TENGA MAYOR GRADO DE ENTRADA (DIN)
 		//5 ORIENTA PRIMERO AL QUE TENGA MAYOR SALIDA DE ENTRADA (DOUT)
 
-		String textoParametros = "ALFA: "+ALFA+"\nCANT_ITERACIONES_MAXIMA: "+CANT_ITERACIONES_MAXIMA+"\nCANT_ITERACIONES_SIN_MEJORAR: "+CANT_ITERACIONES_SIN_MEJORAR+"\n";
+		String textoParametros = "ALFA: "+ALFA+"\nCANT_ITERACIONES_MAXIMA: "+CANT_ITERACIONES_MAXIMA+"\nCANT_ITERACIONES_SIN_MEJORAR: "+CANT_ITERACIONES_SIN_MEJORAR+"\nCANT_ITERACIONES_BUSQUEDA_LOCAL: "+CANT_ITERACIONES_BUSQUEDA_LOCAL+"\n";
 		fm.escribirArchivo(textoParametros, logFilename);
 		int i = 1;
 		while (grafo != null)
@@ -131,16 +132,12 @@ public class CarteroConstructiva {
 					nodo2 = li.next();
 					String textoCircuito= nodo1+" "+nodo2+" "+grafo.getPesoAristas()[nodo1][nodo2];
 					fm.escribirArchivo(textoCircuito, outFilename);
-					//System.out.println(textoCircuito);
 				}
 				String textoComplejidadYParametros = "Nodos: "+grafo.getCantNodos()+" Aristas: "+grafo.getCantAristas()+" Arcos: "+grafo.getCantArcos()+" Repetidos: "+(circuitoEuleriano.size() -1 - (grafo.getCantAristas() + grafo.getCantArcos()));
 				String textoDataSet = grafo.getCantNodos()+"\t"+grafo.getCantAristas()+"\t"+grafo.getCantArcos()+"\t"+grafo.T+"\t"+Grafo.complex;
 				fm.escribirArchivo(textoComplejidadYParametros, logFilename);
 				fm.escribirArchivo(textoDataSet, datasetFilename);
-				//System.out.println(textoComplejidadYParametros);
 				fm.escribirArchivo("----", logFilename);
-				//System.out.println("----");
-
 			}else{
 				System.out.println("No existe solución porque el grafo no es fuertemente conexo");
 			}
