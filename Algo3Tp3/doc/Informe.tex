@@ -78,7 +78,7 @@
 
 
 \textbf{Ejecuci\'on del TP}
-\label{sec:ejecucion}
+\label{sec:ejecución}
 
 	\subsection{Lenguaje utilizado}
 		
@@ -177,7 +177,7 @@ El problema tiene varias variantes, en este trabajo abordaremos la variante \emp
 	\item 1) Los nodos que tienen igual cantidad de aristas sin orientar que orientadas, y en caso de haber muchos, solo tomar\'a los primeros k nodos de ellos, donde k es un par\'ametro de entrada de la funci\'on.
 	\item 2) Los nodos a partir de un cierto n\'umero, que es definido por el par\'ametro de entrada de la funci\'on.
 	\item 3) Los nodos que tengan grado de nodo (sin orientar) mayor o igual al ALFA* nodoGradoMaximo.
-	\item 4) Los nodos que tengan grado de entrada (orientado) mayor o igual al ALFA* nodoGradoMaximo..
+	\item 4) Los nodos que tengan grado de entrada (orientado) mayor o igual al ALFA* nodoGradoMaximo.
 	\item 5) Los nodos que tengan grado de salida (orientado) mayor o igual al ALFA* nodoGradoMaximo.
   \end{itemize}
 
@@ -187,11 +187,11 @@ Con cualquiera de estas posibilidades, siempre se intenta hacer un balance entre
 
 El segundo m\'etodo se basaba en el parametro para darle la longitud a la lista y no armaba la lista en base al cumplimiento de una condici\'on (ej porcentaje de ALFA) decidimos descartarlo también\\
 
-En el cuarto y quinto m\'etodo se buscan los nodos que tengan $din$ o $dout$ mayor o igual a la proporcion ALFA, pero esta proporcion estaba basada en el grado no orientado del nodo con mayor grado y est\'abamos comparando grados no orientados contra grados orientados que no tenian necesariamente que tener relaci\'on.\\
+En el cuarto y quinto m\'etodo se buscan los nodos que tengan $d_{in}$ o $d_{out}$ mayor o igual a la proporción ALFA, pero esta proporción estaba basada en el grado no orientado del nodo con mayor grado y est\'abamos comparando grados no orientados contra grados orientados que no tenian necesariamente que tener relaci\'on.\\
 
 Eligiendo el m\'etodo 3), podemos asegurarnos de siempre encontrar al menos un nodo ya que buscaremos aquellos que tengan grado mayor o igual a ALFA * nodoGradoMaximo donde el nodo de mayor grado estar\'a implicitamente incluido ya que ALFA es un valor entre 0 y 1 que denota un porcentaje del nodoGradoMaximo.\\
 
-Una vez que tenemos todo el grafo orientado, realizamos luego una etapa de matching entre los nodos que quedan con diferentes grado de entrada y de salida, y balanceamos a todos los nodos, para que queden con iguales grados de entrada como de salida, y el grafo quede Euleriano. Este matching lo calculamos con el peso del camino minimo entre cada uno de los nodos, calculado sobre el grafo original utilizando Dantzig, ya que en esta etapa del algoritmo solo nos interesa saber el peso del camino m\'inimo y no como esta compuesto.\\
+Una vez que tenemos todo el grafo orientado, realizamos luego una etapa de matching entre los nodos que quedan con diferentes grado de entrada y de salida, y balanceamos a todos los nodos, para que queden con iguales grados de entrada como de salida, y el grafo quede Euleriano. Este matching lo calculamos con el peso del camino mínimo entre cada uno de los nodos, calculado sobre el grafo original utilizando Dantzig, ya que en esta etapa del algoritmo solo nos interesa saber el peso del camino m\'inimo y no como esta compuesto.\\
 
 
 \newpage	
@@ -207,15 +207,15 @@ Esta definici\'on de vecindad tiene un tamaño de $\frac{k \cdot (k-1)}{2}$ donde
 
 
 \begin{center}
-	$\displaystyle{\frac{\displaystyle\sum_{i=1}^{n}{|din(i)-dout(i)|}}{2}}$\\
+	$\displaystyle{\frac{\displaystyle\sum_{i=1}^{n}{|d_{in}(i)-d_{out}(i)|}}{2}}$\\
 \end{center}
 
 \begin{center}
-	$\displaystyle{\frac{\displaystyle\sum_{1 \leq i \leq n / din > dout}^{}{din(i)-dout(i)} + \displaystyle\sum_{1 \leq i \leq n / dout > din}^{}{dout(i)-din(i)} }{2}} \leq$\\
+	$\displaystyle{\frac{\displaystyle\sum_{1 \leq i \leq n / d_{in} > d_{out}}^{}{d_{in}(i)-d_{out}(i)} + \displaystyle\sum_{1 \leq i \leq n / d_{out} > d_{in}}^{}{d_{out}(i)-d_{in}(i)} }{2}} \leq$\\
 \end{center}
 
 \begin{center}
-	$\displaystyle{\frac{\displaystyle\sum_{1 \leq i \leq n / din > dout}^{}{din(i)} + \displaystyle\sum_{1 \leq i \leq n / dout > din}^{}{dout(i)} }{2}} \leq $\\
+	$\displaystyle{\frac{\displaystyle\sum_{1 \leq i \leq n / d_{in} > d_{out}}^{}{d_{in}(i)} + \displaystyle\sum_{1 \leq i \leq n / d_{out} > d_{in}}^{}{d_{out}(i)} }{2}} \leq $\\
 \end{center}
 
 \begin{center}
@@ -238,6 +238,7 @@ Un ejemplo de una vecindad dado un matching inicial ser\'ia la siguiente:
 \section{Metaheuristica Grasp}
 
 Esta etapa del algoritmo realiza varias iteraciones de los algoritmos de las heurísticas constructiva y de búsqueda local, decidiendo mediante experimentacíon el nivel de aleatoriedad agregado al algoritmo constructivo, el tamaño de la vecindad a visitar y la cantidad de veces que se intentar\'a una solución nueva.\\
+\noindent El parametro $ALFA$ es un valor perteneciente al intervalo $(0,1)$ y define el nivel de aleatoriedad del algoritmo constructivo.\\
 
 \noindent El parametro $CANT\_ITERACIONES\_MAXIMA$ define el máximo de veces que se construirá una solución inicial.\\
 
@@ -288,7 +289,7 @@ Mientras no se superen las $I$ iteraciones totales y las $J$ iteraciones sin mej
 		\begin{itemize}
 			\item 1) Calular Dantzig sobre el grafo.
 			\item 2) Orientar todas las aristas no orientadas del grafo.
-			\item 3) Obtener un matching inicial entre los nodos que tengan din $\neq$ dout.
+			\item 3) Obtener un matching inicial entre los nodos que tengan $d_{in}$ $\neq$ $d_{out}$.
 		\end{itemize}
 	\textbf{Fin Algoritmo Constructivo}
 
@@ -320,14 +321,14 @@ Complejidades donde $n$ es la cantidad de nodos, $m_{1}$ la cantidad de aristas,
 	En total: $O(n^{2} + m_{1} +m_{2}) \subseteq O(n^{2})$
 	\item FuertementeConexo
 	\begin{itemize}
-		\item Inicializacion de listas de adyacencias $O(n + m_{1} + m_{2})$
+		\item Inicialización de listas de adyacencias $O(n + m_{1} + m_{2})$
 		\item resetVisitados y checkVisitados recorren un array de bools de tamaño $n$. $O(n)$
 		\item visitarNodos recorre recursivamente en DFS las adyacencias y marca los nodos que son accesibles desde el nodo $0$. $O(m_{1} + m_{2})$
 	\end{itemize}
 	En total: $O(n + m_{1} + m_{2})$
 	\item Calcular Dantzig
 	\begin{itemize}	
-		\item Inicializacion de la matriz de pesos de caminos minimos $O(n^{2})$
+		\item Inicialización de la matriz de pesos de caminos mínimos $O(n^{2})$
 		\item 3 for anidados de $0$ a $n$ con operaciones de tiempo constante $O(n^{3})$
 	\end{itemize}
 	En total: $O(n^{3})$
@@ -337,7 +338,7 @@ Complejidades donde $n$ es la cantidad de nodos, $m_{1}$ la cantidad de aristas,
 	\begin{itemize}
 		\item $m_{1}$ iteraciones de
 		\begin{itemize}
-			\item encontrarNodoAOrientar: Busca cuales nodos cumplen la condicion dada $O(n)$
+			\item encontrarNodoAOrientar: Busca cuales nodos cumplen la condición dada $O(n)$
 			\item eleccionNodoAOrientar: Elije segun el parametro pasado por cual nodo de la lista anterior va a continuar $O(n)$
 			\item orientarNodo $O(1)$
 		\end{itemize}
@@ -348,7 +349,7 @@ Complejidades donde $n$ es la cantidad de nodos, $m_{1}$ la cantidad de aristas,
 	\item encontrarMatchingNodos
 	\begin{itemize}
 		\item Inicialización de arreglos de longitud $n$ $O(n)$
-		\item para cada exedente de $Din$ arma una pareja con un $Dout$ y lo agrega en una lista con el peso calculado con $Dantzig$ $O(\frac{\sum_{i=1}^{n}{|din(i)-dout(i)|}}{2})$ $\subseteq$ $O(m)$
+		\item para cada exedente de $D_{in}$ arma una pareja con un $D_{out}$ y lo agrega en una lista con el peso calculado con $Dantzig$ $O(\frac{\sum_{i=1}^{n}{|d_{in}(i)-d_{out}(i)|}}{2})$ $\subseteq$ $O(m)$
 	\end{itemize}
 	En total: $O(m + n)$
 	\item encontrarMatchingDeMenorPeso: Dado un matching de tamaño $k$ devuelve el mejor matching que se puede obtener intercambiando los destinos de solo dos items del matching original. \\En total: $O(k^{2})$
@@ -368,7 +369,7 @@ Complejidades donde $n$ es la cantidad de nodos, $m_{1}$ la cantidad de aristas,
 	En total: $O(m*n + n*n^{2})$ como $O(m)$ $\subseteq$ $O(n^{2})$ $\Rightarrow$ $O(m*n + n^{3})$ $\subseteq$ $O(n^{3})$
 	\item Dijkstra
 	\begin{itemize}
-		\item Inicializacion de arreglos de int y bool de tamaño $n$. $O(n)$
+		\item Inicialización de arreglos de int y bool de tamaño $n$. $O(n)$
 		\item Para cada nodo $i$ ($n$ elementos)
 		\begin{itemize}
 			\item Minvertex $O(n)$
@@ -420,7 +421,7 @@ Complejidades donde $n$ es la cantidad de nodos, $m_{1}$ la cantidad de aristas,
 
 Complejidad:
 	\begin{itemize}
-	\item $O(n^{2})$ de inicializacion
+	\item $O(n^{2})$ de inicialización
 	\item $O(n + m_{1} + m_{2})$ de fuertementeConexo
 	\item $O(n^{3})$ de Dantzig
 	\item $O(m_{1} + m_{2})$ de sumarPesosEjes
