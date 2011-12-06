@@ -240,31 +240,36 @@ El parametro $CANT\_ITERACIONES\_MAXIMA$ define el máximo de veces que se constr
 El parametro $CANT\_ITERACIONES\_SIN\_MEJORAR$ se usa como condición de corte, si no se pudo encontrar una solución mejor en tantas iteraciones de $GRASP$ se corta la ejecución y se devuelve la mejor hasta el momento.\\
 El parametro $CANT\_ITERACIONES\_BUSQUEDA\_LOCAL$ define el tamaño maximo que tendra la vecindad ya que este puede ser exponencial en el tamaño del matching.\\
 
-Como no tenemos el valor real de la solución óptima, medimos la calidad de las soluciones como el porcentaje de peso agregado en la solución con respecto al peso total de las aristas del grafo original.\\
+Como no tenemos el valor real de la solución óptima, medimos la calidad de las soluciones como el porcentaje de peso agregado en la solución con respecto al peso total de las aristas del grafo original. $\left(\frac{PesoCircuito - PesoAristas(G)}{PesoAristas(G)}\right)*100$\\
+Las instancias utilizadas para tomar las mediciones fueron grafos de 100 a 500 nodos generadas pseudo-aleatoriamente.\\
 
 El valor decidido para $ALFA$ fue $0,1$.\\
 \begin{center}
 \centering \includegraphics[scale=0.40]{img/VariacionAlfa.jpg}\\
+\small{Este gr\'afico muestra la calidad de las soluciones con respecto a los valores para $ALFA$ testeados.}
 \centering \includegraphics[scale=0.40]{img/VariacionAlfaComplejidad.jpg}\\
-\small{Como se puede observar en las gráficos de las mediciones tomadas para las mismas instancias con distintos valores para $ALFA$, se obtuvieron los mejores resultados para el valor $0,1$ y las complejidades practica para ese valor son bastante razonables.}
-\end{center}	
+\small{Este gr\'afico muestra la cantidad de operaciones realizadas para los los valores de $ALFA$ testeados.}
+\end{center}
+Como se puede observar en las gráficos de las mediciones tomadas para las mismas instancias con distintos valores para $ALFA$, se obtuvieron los mejores resultados para el valor $0,1$ y las complejidades practica para ese valor son bastante razonables.\\
 
 El valor decidido para $CANT\_ITERACIONES\_SIN\_MEJORAR$ fue $10$.\\
 \begin{center}
 \centering \includegraphics[scale=0.40]{img/VariacionItSinMejora.jpg}\\
+\small{El gr\'afico muestra la calidad de las soluciones con respecto a los los valores para $CANT\_ITERACIONES\_SIN\_MEJORAR$ testeados}
 \centering \includegraphics[scale=0.40]{img/VariacionItSinMejoraComplejidad.jpg}\\
-\small{Tomamos esta decisión ya que obsevamos que la complejidad crece mucho y la mejora de la solución no es muy significativa}
+\small{Este gr\'afico muestra la cantidad de operaciones realizadas para los los valores de $CANT\_ITERACIONES\_SIN\_MEJORAR$ testeados.}
 \end{center}
+Decidimos darle el valor $10$ a $CANT\_ITERACIONES\_SIN\_MEJORAR$ ya que en las mediciones tomadas se observa un incremento considerable en la cantidad de operaciones, mientras que las soluciones no mejoran de manera significativa.\\
 
-El valor decidido para $CANT\_ITERACIONES\_MAXIMA$ fue $200$, ya que en ninguno de los casos evaluados llegó a cortar por esa cota.
-El valor decidido para $CANT\_ITERACIONES\_BUSQUEDA\_LOCAL$ fue $50$.
+El valor decidido para $CANT\_ITERACIONES\_MAXIMA$ fue $200$, ya que en ninguno de los casos evaluados llegó a cortar por esa cota.\\
+%El valor decidido para $CANT\_ITERACIONES\_BUSQUEDA\_LOCAL$ fue $50$.\\
 
 \section{pseudo-algor\'itmo}
 
 El siguiente es un pseudo-c\'odigo del algor\'itmo heur\'istico que realizamos para obtener el circuito Euleriano:\\
 
 \noindent{\textbf{algor\'itmo GRASP}}\\
-Mientras no se superen las I iteraciones totales y las J iteraciones sin mejorar de GRASP hacer:
+Mientras no se superen las $I$ iteraciones totales y las $J$ iteraciones sin mejorar de $GRASP$ hacer:
 
 \begin{itemize}
 	\item \textbf{Algor\'itmo Constructivo}
@@ -276,7 +281,7 @@ Mientras no se superen las I iteraciones totales y las J iteraciones sin mejorar
 	\textbf{Fin Algor\'itmo Constructivo}
 
 	\item \textbf{Algor\'itmo B\'usqueda Local}\\
-	\emph{Mientras} no se superen K iteraciones y no se haya encontrado un matching \'optimo hacer
+	\emph{Mientras} no se superen $K$ iteraciones y no se haya encontrado un matching \'optimo hacer
 	\begin{itemize}
 		\item 4) Obtener los matchings vecinos y quedarse con el m\'inimo vecino
 	\end{itemize}
@@ -331,7 +336,7 @@ Complejidades donde $n$ es la cantidad de nodos, $m_{1}$ la cantidad de aristas,
 	\item encontrarMatchingNodos
 	\begin{itemize}
 		\item Inicializacion de arreglos de longitud $n$ $O(n)$
-		\item para cada exedente de $Din$ arma una pareja con un $Dout$ y lo agrega en una lista con el peso calculado con $Dantzig$ $O(\sum_{i=1}^{n}{|din(i)-dout(i)|}/2)$ $\subseteq$ $O(m)$
+		\item para cada exedente de $Din$ arma una pareja con un $Dout$ y lo agrega en una lista con el peso calculado con $Dantzig$ $O(\frac{\sum_{i=1}^{n}{|din(i)-dout(i)|}}{2})$ $\subseteq$ $O(m)$
 	\end{itemize}
 	En total: $O(m + n)$
 	\item encontrarMatchingDeMenorPeso: Dado un matching de tamaño $k$ devuelve el mejor matching que se puede obtener swapeando los destinos de solo dos items del matching original. \\En total: $O(k^{2})$
