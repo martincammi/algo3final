@@ -22,24 +22,24 @@ public class TestingBusquedaLocal {
 			}
 		}
 				
-		pesoCaminoMinimo[0][1] = 2;
-		pesoCaminoMinimo[2][3] = 2;
-		pesoCaminoMinimo[4][5] = 3;
-		pesoCaminoMinimo[6][7] = 3;
+		pesoCaminoMinimo[0][1] = 1;
+		pesoCaminoMinimo[2][3] = 1;
+		pesoCaminoMinimo[4][5] = 5;
+		pesoCaminoMinimo[6][7] = 5;
 		
-		pesoCaminoMinimo[0][3] = 1;
-		pesoCaminoMinimo[2][1] = 1;
-		pesoCaminoMinimo[4][7] = 1;
-		pesoCaminoMinimo[6][5] = 1;
+		//pesoCaminoMinimo[0][3] = 1;
+		//pesoCaminoMinimo[2][1] = 1;
+		pesoCaminoMinimo[4][7] = 2;
+		pesoCaminoMinimo[6][5] = 2;
 		
 		List<Eje> matchingMinimo = new ArrayList<Eje>();
 		
-		matchingMinimo.add(new Eje(0,1,2));
-		matchingMinimo.add(new Eje(2,3,2));
-		matchingMinimo.add(new Eje(4,5,3));
-		matchingMinimo.add(new Eje(6,7,3));
+		matchingMinimo.add(new Eje(0,1,1));
+		matchingMinimo.add(new Eje(2,3,1));
+		matchingMinimo.add(new Eje(4,5,5));
+		matchingMinimo.add(new Eje(6,7,5));
 		
-		MutableBoolean mejoro = new MutableBoolean();
+		MutableBoolean1 mejoro = new MutableBoolean1();
 		
 		int iteracionesBL = 0;
 		
@@ -62,7 +62,7 @@ public class TestingBusquedaLocal {
 	
 	//La búsqueda local queda para el de búsqueda local
 	//BUSQUEDA LOCAL SOBRE MATCHING EN LAS VECINDADES Los vecinos
-	public static List<Eje> encontrarMatchingDeMenorPeso(List<Eje> matching, int[][] pesosMin, MutableBoolean mejoro){
+	public static List<Eje> encontrarMatchingDeMenorPeso(List<Eje> matching, int[][] pesosMin, MutableBoolean1 mejoro){
 		
 		List<Eje> listaResultado = new ArrayList<Eje>();
 		
@@ -74,9 +74,17 @@ public class TestingBusquedaLocal {
 		Eje eje2;
 		int swapIndex1 = 0;
 		int swapIndex2 = 0;
-		int minimoInicial = 0;
+		int sumaInicial = 0;
+		int minimoActual = 0;
 		int posibleMinimo;
+		int valorLocal; 
 		boolean primeraVez = true;
+		
+		for (Eje eje3 : matching) {
+			sumaInicial += eje3.getPeso();
+		}
+		
+		minimoActual = sumaInicial;
 		
 		for (int i = 0; i < matching.size(); i++) {
 			
@@ -86,18 +94,32 @@ public class TestingBusquedaLocal {
 				Grafo.complex++;
 				eje2 = matching.get(j);
 
-				if(primeraVez){
-					minimoInicial = eje.getPeso() + eje2.getPeso();
-					primeraVez = false;
-				}
+//				if(primeraVez){
+//					minimoInicial = eje.getPeso() + eje2.getPeso();
+//					primeraVez = false;
+//				}
 				
 				posibleMinimo = pesosMin[eje.getNodo1()][eje2.getNodo2()] + pesosMin[eje2.getNodo1()][eje.getNodo2()];
-				
-				if(posibleMinimo < minimoInicial){
-					minimoInicial = posibleMinimo;
+				valorLocal = pesosMin[eje.getNodo1()][eje.getNodo2()] + pesosMin[eje2.getNodo1()][eje2.getNodo2()];
+
+				if(posibleMinimo < valorLocal){
+					if(sumaInicial - valorLocal + posibleMinimo < minimoActual){
+						System.out.println("Encontro mejora de " + posibleMinimo + "a" + minimoActual);
+						sumaInicial = posibleMinimo;
+						swapIndex1 = i;
+						swapIndex2 = j;
+					}
+					sumaInicial = posibleMinimo;
 					swapIndex1 = i;
 					swapIndex2 = j;
 				}
+					
+//				if(posibleMinimo <= minimoInicial){
+//					System.out.println("Encontro mejora de " + posibleMinimo + "a" + minimoInicial);
+//					minimoInicial = posibleMinimo;
+//					swapIndex1 = i;
+//					swapIndex2 = j;
+//				}
 			}
 		}
 		
@@ -137,12 +159,12 @@ public class TestingBusquedaLocal {
 		return listaResultado;
 	}
 	
-	public static class MutableBoolean{
+	public static class MutableBoolean1{
 		
 		boolean flag;
 		
-		public MutableBoolean(){
-			flag = false;
+		public MutableBoolean1(){
+			flag = true;
 		}
 
 		public void True(){

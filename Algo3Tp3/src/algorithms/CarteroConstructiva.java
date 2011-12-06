@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import java.util.ListIterator;
+
+
 import utils.*;
 
 public class CarteroConstructiva {
@@ -15,7 +17,7 @@ public class CarteroConstructiva {
 	static float ALFA = (float) 0.1;  //CALCULA LA LISTA CON ESTE PARAMETRO. 
 	static int CANT_ITERACIONES_MAXIMA = 200; 
 	static int CANT_ITERACIONES_SIN_MEJORAR = 10; // Ver si puede ser un porcentaje de la cantidad de nodos. Para Daniel si :p
-	static int CANT_ITERACIONES_BUSQUEDA_LOCAL = 50;
+	static int CANT_ITERACIONES_BUSQUEDA_LOCAL = 500;
 	
 	static int TIPO_ORIENTACION_ARISTAS = 3;
 	
@@ -24,7 +26,7 @@ public class CarteroConstructiva {
 
 		String decisionDefault = "E";  // S Mandar Default Salida, E Mandar Default Entrada
 
-		int[] parametroIteracionesGraspRandom= {435693, 344031, 460173, 227725, 430024, 132060, 352001, 211477, 515771, 747551, 504368, 760850, 978532, 751967, 184402, 418925, 461554, 994190, 473839, 59819, 633512, 213684, 127438, 481296, 923496, 682578, 179673, 185301, 94789, 299200, 628481, 507476, 832449, 394170, 131279, 433443, 579169, 265103, 411148, 22666, 569807, 117055, 990045, 349963, 386973, 653261, 941081, 270227, 388434, 34331, 583368, 113698, 41628, 303959, 430610, 627118, 541428, 665323, 248579, 90369, 84351, 184765, 776814, 558694, 825732, 597923, 526288, 607361, 855952, 898422, 77543, 788653, 497637, 300339, 472692, 250286, 847793, 983025, 619893, 609920, 767202, 750538, 110370, 232126, 453925, 367788, 485700, 512236, 328623, 871647, 787099, 635717, 206447, 597660, 168562, 552242, 633585, 11611, 462221, 580379, 826110, 690095, 846932, 141837, 864622, 955384, 190088, 613448, 670196, 737232, 207807, 180591, 815529, 207931, 320131, 877511, 409707, 616786, 965544, 707993, 135837, 536321, 183061, 854117, 17896, 424919, 470346, 501319, 646404, 9203, 282759, 734747, 402171, 494386, 50926, 294901, 683136, 21928, 263365, 719820, 261397, 111215, 985908, 546565, 675883, 45625, 171105, 796523, 633, 293227, 248470, 927049, 419530, 88475, 780399, 796243, 785342, 243661, 418782, 958144, 744320, 107508, 3756, 782382, 67085, 343190, 408760, 475373, 542441, 859163, 655009, 69334, 162753, 793611, 893659, 840972, 357902, 926922, 85419, 423411, 719354, 276488, 595056, 82949, 996741, 914285, 462158, 246494, 146391, 240029, 809742, 386024, 864581, 41372, 708736, 793196, 347859, 677478, 829047, 610208};//Random
+		//int[] parametroIteracionesGraspRandom= {435693, 344031, 460173, 227725, 430024, 132060, 352001, 211477, 515771, 747551, 504368, 760850, 978532, 751967, 184402, 418925, 461554, 994190, 473839, 59819, 633512, 213684, 127438, 481296, 923496, 682578, 179673, 185301, 94789, 299200, 628481, 507476, 832449, 394170, 131279, 433443, 579169, 265103, 411148, 22666, 569807, 117055, 990045, 349963, 386973, 653261, 941081, 270227, 388434, 34331, 583368, 113698, 41628, 303959, 430610, 627118, 541428, 665323, 248579, 90369, 84351, 184765, 776814, 558694, 825732, 597923, 526288, 607361, 855952, 898422, 77543, 788653, 497637, 300339, 472692, 250286, 847793, 983025, 619893, 609920, 767202, 750538, 110370, 232126, 453925, 367788, 485700, 512236, 328623, 871647, 787099, 635717, 206447, 597660, 168562, 552242, 633585, 11611, 462221, 580379, 826110, 690095, 846932, 141837, 864622, 955384, 190088, 613448, 670196, 737232, 207807, 180591, 815529, 207931, 320131, 877511, 409707, 616786, 965544, 707993, 135837, 536321, 183061, 854117, 17896, 424919, 470346, 501319, 646404, 9203, 282759, 734747, 402171, 494386, 50926, 294901, 683136, 21928, 263365, 719820, 261397, 111215, 985908, 546565, 675883, 45625, 171105, 796523, 633, 293227, 248470, 927049, 419530, 88475, 780399, 796243, 785342, 243661, 418782, 958144, 744320, 107508, 3756, 782382, 67085, 343190, 408760, 475373, 542441, 859163, 655009, 69334, 162753, 793611, 893659, 840972, 357902, 926922, 85419, 423411, 719354, 276488, 595056, 82949, 996741, 914285, 462158, 246494, 146391, 240029, 809742, 386024, 864581, 41372, 708736, 793196, 347859, 677478, 829047, 610208};//Random
 		FileManager fm = new FileManager("Ej.in");
 		fm.abrirArchivo();
 		String filename = "ALFA_"+ALFA+"_CANT_ITERACIONES_MAXIMA_"+CANT_ITERACIONES_MAXIMA+"_CANT_ITERACIONES_SIN_MEJORAR_"+CANT_ITERACIONES_SIN_MEJORAR+"_CANT_ITERACIONES_BUSQUEDA_LOCAL_"+CANT_ITERACIONES_BUSQUEDA_LOCAL;
@@ -52,9 +54,11 @@ public class CarteroConstructiva {
 			if(FuertementeConexo.fuertementeConexo(grafo)){
 				int[][] pesoCaminoMinimo = grafo.calcularDantzig();
 				int sumaPesosEjes = grafo.sumaPesosEjes();
-				String textoInstancia= "Instancia " + i + ": "+grafo.getCantNodos()+" Nodos "+grafo.getCantAristas()+" Aristas "+grafo.getCantArcos()+" Arcos\n Suma peso de los ejes: "+sumaPesosEjes;
-				//System.out.println(textoInstancia);
-				fm.escribirArchivo(textoInstancia, logFilename);
+				System.out.println("Instancia " + i + ": ");
+				System.out.println(grafo.toString());
+				int ejesTotales = grafo.getCantAristas() + grafo.getCantArcos();
+				System.out.println("cantNodos " + grafo.cantNodos + ": ");
+				System.out.println("cantEjes " + ejesTotales + ": ");
 				CarteroConstructiva cartero = new CarteroConstructiva(grafo);
 				
 				List<Eje> matchingSolucion = null;
@@ -82,11 +86,22 @@ public class CarteroConstructiva {
 					//int pesoMatching = pesoMatching(unMatching);
 					//3.1) Calcular de todos los vecinos el de menor matchingSolucion
 					List<Eje> matchingMinimo = unMatching;
+
 					int iteracionesBL = 0;
-					while (iteracionesBL < CANT_ITERACIONES_BUSQUEDA_LOCAL){
-						matchingMinimo = cartero.encontrarMatchingDeMenorPeso(matchingMinimo,pesoCaminoMinimo);
+					MutableBoolean mejoro = new MutableBoolean();
+					
+					System.out.println("matching inicial: " + pesoMatching(unMatching));
+					
+					int mejoraAux = pesoMatching(unMatching);
+					while (iteracionesBL < CANT_ITERACIONES_BUSQUEDA_LOCAL && mejoro.getValue()){
+						matchingMinimo = cartero.encontrarMatchingDeMenorPeso(matchingMinimo, pesoCaminoMinimo, mejoro);
+						if(pesoMatching(matchingMinimo) < mejoraAux){
+							System.out.println(iteracionesBL + ") encontró mejor matching: " + pesoMatching(matchingMinimo) + " " + (mejoraAux - pesoMatching(matchingMinimo)));
+							mejoraAux = pesoMatching(matchingMinimo);
+						}
 						iteracionesBL++;
 					}
+					
 					int pesoBusquedaLocal = pesoMatching(matchingMinimo);
 					//System.out.println("Se mejoró el peso del mathcing de "+pesoMatching+" a "+pesoBusquedaLocal);
 					int sumaSolucion = sumaPesosEjes + pesoBusquedaLocal;
@@ -109,7 +124,7 @@ public class CarteroConstructiva {
 					else
 					{
 						iteracionesSinMejorar++;
-						String textoIteracionGraspNoMejoro = "Iteración GRASP " + j + ": No se encontró una mejor solución en esta iteración "+sumaSolucion;
+						//String textoIteracionGraspNoMejoro = "Iteración GRASP " + j + ": No se encontró una mejor solución en esta iteración "+sumaSolucion;
 //						fm.escribirArchivo(textoIteracionGraspNoMejoro, logFilename);
 						//System.out.println(textoIteracionGraspNoMejoro);
 					}
@@ -147,7 +162,7 @@ public class CarteroConstructiva {
 	}	
 	//La búsqueda local queda para el de búsqueda local
 	//BUSQUEDA LOCAL SOBRE MATCHING EN LAS VECINDADES Los vecinos
-	public List<Eje> encontrarMatchingDeMenorPeso(List<Eje> matching, int[][] pesosMin){
+	public List<Eje> encontrarMatchingDeMenorPeso(List<Eje> matching, int[][] pesosMin, MutableBoolean mejoro){
 		
 		List<Eje> listaResultado = new ArrayList<Eje>();
 		
@@ -159,9 +174,17 @@ public class CarteroConstructiva {
 		Eje eje2;
 		int swapIndex1 = 0;
 		int swapIndex2 = 0;
-		int minimoInicial = 0;
+		int sumaInicial = 0;
+		int minimoActual = 0;
 		int posibleMinimo;
-		boolean primeraVez = true;
+		int valorLocal; 
+		//boolean primeraVez = true;
+		
+		for (Eje eje3 : matching) {
+			sumaInicial += eje3.getPeso();
+		}
+		
+		minimoActual = sumaInicial;
 		
 		for (int i = 0; i < matching.size(); i++) {
 			
@@ -171,24 +194,39 @@ public class CarteroConstructiva {
 				Grafo.complex++;
 				eje2 = matching.get(j);
 
-				if(primeraVez){
-					minimoInicial = eje.getPeso() + eje2.getPeso();
-					primeraVez = false;
-				}
+//				if(primeraVez){
+//					minimoInicial = eje.getPeso() + eje2.getPeso();
+//					primeraVez = false;
+//				}
 				
 				posibleMinimo = pesosMin[eje.getNodo1()][eje2.getNodo2()] + pesosMin[eje2.getNodo1()][eje.getNodo2()];
-				
-				if(posibleMinimo <= minimoInicial){
-					minimoInicial = posibleMinimo;
+				valorLocal = pesosMin[eje.getNodo1()][eje.getNodo2()] + pesosMin[eje2.getNodo1()][eje2.getNodo2()];
+
+				if(posibleMinimo < valorLocal){
+					if(sumaInicial - valorLocal + posibleMinimo < minimoActual){
+						//System.out.println("Encontro mejora de " + posibleMinimo + "a" + minimoActual);
+						sumaInicial = posibleMinimo;
+						swapIndex1 = i;
+						swapIndex2 = j;
+					}
+					sumaInicial = posibleMinimo;
 					swapIndex1 = i;
 					swapIndex2 = j;
 				}
+					
+//				if(posibleMinimo <= minimoInicial){
+//					System.out.println("Encontro mejora de " + posibleMinimo + "a" + minimoInicial);
+//					minimoInicial = posibleMinimo;
+//					swapIndex1 = i;
+//					swapIndex2 = j;
+//				}
 			}
 		}
 		
 		//SI NO HAY NADA PARA SWAPEAR, DEVOLVE EL MISMO MATCHING. EL TEMA QUE ANTES SWAPEABA POSICION 0 CON POSICION 0 y AGREGABA ALGUNA ARISTA
 		if (swapIndex1 != swapIndex2)
 		{
+			mejoro.True();
 			eje = new Eje(matching.get(swapIndex1)); 
 			eje2 = new Eje(matching.get(swapIndex2));
 			
@@ -213,6 +251,7 @@ public class CarteroConstructiva {
 		
 		else
 		{
+			mejoro.False();
 			listaResultado = matching;
 		}
 		
@@ -236,8 +275,8 @@ public class CarteroConstructiva {
 		}
 		
 		List<Eje> triplaInOutPeso;
-		List<Integer> nodosDin = new ArrayList();
-		List<Integer> nodosDout = new ArrayList();
+		List<Integer> nodosDin = new ArrayList<Integer>();
+		List<Integer> nodosDout = new ArrayList<Integer>();
 		ListaInt[] orientados = grafo.adyacenciasOr;
 		
 		int dinExedente[] = new int[grafo.getCantNodos()];
