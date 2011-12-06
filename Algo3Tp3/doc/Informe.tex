@@ -197,14 +197,34 @@ Una vez que tenemos todo el grafo orientado, realizamos luego una etapa de match
 \newpage	
 \section{Heurística de b\'usqueda Local}
 
-	El algor\'itmo de b\'usqueda local se encargar\'a, dado uno un grafo orientado completamente, un matching inicial y el grafo original, de buscar en la vecindad un mejor matching. Un matching consiste en agrupar pares de nodos ${(v,w)}$ tales que $d_{in} v > 0$ y $d_{out} w > 0$.
+	El algor\'itmo de b\'usqueda local se encargar\'a, dado uno un grafo orientado completamente, un matching inicial y el grafo original, de buscar en la vecindad un mejor matching. Un matching consiste en agrupar pares de nodos ${(v,w)}$ tales que $d_{in} v > 0$ y $d_{out} w > 0$.\\
 
-Lo que realizaremos es cambiar el matching que hace entre los nodos (intercambiando los nodos de dos pares por vez) para obtener otro matching que sea una soluci\'on vecina. Calculamos as\'i todas las posibles soluciones y luego calculamos la que sea m\'inima y as\'i poder acercarnos a una soluci\'on mejor.\\
+Lo que haermos para conseguir una soluci\'on vecina es intercambiar en un matching dos pares de nodos para obtener as\'i un nuevo matching. Calculamos de esta manera todas las posibles soluciones vecinas intercambiando solo nodos entre dos pares y luego de todas ellas obtenemos la que sea m\'inima y as\'i poder acercarnos a una soluci\'on mejor.\\
 
-Notemos que, como los matching entre los nodos donde se ten\'ia que los grados de entrada y de salida no coincid\'ian se efect\'ua sobre el grafo original (y no con el orientado), esta es una soluci\'on \'optima para esa orientaci\'on. Luego, con el grafo totalmente orientado y Euleriano, calculamos el peso de todas las aristas, y llegamos al peso del camino requerido.\\
+Esta definici\'on de vecindad tiene un tamaño de $k^{2}$ donde $k$ es la cantidad de pares en el matching. Esto puede verse ya que para el intercambio de un par con otro existen $k-1$ posibilidades de otros pares. A su vez como la cantidad de pares en el matching es est\'a determinada por la diferencia de grados de entrada y salida de los nodos \'esta equivale a\\
+
+\begin{center}
+	$\displaystyle{\frac{\displaystyle\sum_{i=1}^{n}{|din(i)-dout(i)|}}{2}}$\\
+\end{center}
+
+\begin{center}
+	$\displaystyle{\frac{\displaystyle\sum_{1 \leq i \leq n / din > dout}^{}{din(i)-dout(i)} + \displaystyle\sum_{1 \leq i \leq n / dout > din}^{}{dout(i)-din(i)} }{2}} \leq$\\
+\end{center}
+
+\begin{center}
+	$\displaystyle{\frac{\displaystyle\sum_{1 \leq i \leq n / din > dout}^{}{din(i)} + \displaystyle\sum_{1 \leq i \leq n / dout > din}^{}{dout(i)} }{2}} \leq $\\
+\end{center}
+
+\begin{center}
+	$\displaystyle{\frac{m + m}{2} = \frac{2 \cdot m}{2} = m} $\\
+\end{center}
+
+Asi que una vecindad tiene a lo sumo $m$ elementos.\\
+
+A su vez la cantidad de posibles matchings diferentes que pueden existir es del orden de $k!$ ya en la elecci\'on de los pares para un nodo determinado existen $k-1$ posibilidades para su par, una vez establecido para el siguiente nodo habr\'a $k-2$ posibles pares y as\'i sucesivamente.
 
 \newpage
-De esta manera una vecindad dado un matching inicial ser\'ia:
+Un ejemplo de una vecindad dado un matching inicial ser\'ia la siguiente:
 
 \begin{center}
 \centering \includegraphics[scale=0.30]{img/MatchingVecindad.png}\\
@@ -216,7 +236,6 @@ De esta manera una vecindad dado un matching inicial ser\'ia:
 
 Esta etapa del algor\'itmo realiza varias iteraciones de los algor\'itmos de las heurísticas constructiva y de búsqueda local, decidiendo mediante experimentacíon el nivel de aleatoriedad agregado al algor\'itmo constructivo, el tamaño de la vecindad a visitar y la cantidad de veces que se intentar una solución nueva.\\
 
-El parametro $ALFA$ es un valor entre $0$ y $1$ que le dá al algor\'itmo constructivo su nivel de aleatoriedad. Originalmente el algor\'itmo constructivo elije el nodo de mayor grado para orientar, aplicandole $GRASP$ se buscan todos los que tengan $grado > ALFA*GradoMaximo$ y con un valor aleatorio se elije cual se utilizará.\\
 El parametro $CANT\_ITERACIONES\_MAXIMA$ define el máximo de veces que se construirá una solución inicial.\\
 El parametro $CANT\_ITERACIONES\_SIN\_MEJORAR$ se usa como condición de corte, si no se pudo encontrar una solución mejor en tantas iteraciones de $GRASP$ se corta la ejecución y se devuelve la mejor hasta el momento.\\
 El parametro $CANT\_ITERACIONES\_BUSQUEDA\_LOCAL$ define el tamaño maximo que tendra la vecindad ya que este puede ser exponencial en el tamaño del matching.\\
@@ -252,7 +271,7 @@ Mientras no se superen las I iteraciones totales y las J iteraciones sin mejorar
 		\begin{itemize}
 			\item 1) Calular Dantzig sobre el grafo.
 			\item 2) Orientar todas las aristas no orientadas del grafo.
-			\item 3) Obtener un matching inicial entre los nodos que tengan din != dout.
+			\item 3) Obtener un matching inicial entre los nodos que tengan din $\neq$ dout.
 		\end{itemize}
 	\textbf{Fin Algor\'itmo Constructivo}
 
@@ -281,20 +300,20 @@ Complejidades donde $n$ es la cantidad de nodos, $m_{1}$ la cantidad de aristas,
 		\item Inicializar la matriz de pesos $O(n^{2})$
 		\item Inicializar las listas de adyacencias $O(n + m_{1} +m_{2})$
 	\end{itemize}
-	$O(n^{2} + m_{1} +m_{2}) \subseteq O(n^{2})$
+	En total: $O(n^{2} + m_{1} +m_{2}) \subseteq O(n^{2})$
 	\item FuertementeConexo
 	\begin{itemize}
 		\item Inicializacion de listas de adyacencias $O(n + m_{1} + m_{2})$
 		\item resetVisitados y checkVisitados recorren un array de bools de tamaño $n$. $O(n)$
 		\item visitarNodos recorre recursivamente en DFS las adyacencias y marca los nodos que son accesibles desde el nodo $0$ $O(m_{1} + m_{2})$
 	\end{itemize}
-	$O(n + m_{1} + m_{2})$
+	En total: $O(n + m_{1} + m_{2})$
 	\item Calcular Dantzig
 	\begin{itemize}	
 		\item Inicializacion de la matriz de pesos de caminos minimos $O(n^{2})$
 		\item 3 for anidados de $0$ a $n$ con operaciones de tiempo constante $O(n^{3})$
 	\end{itemize}
-	$O(n^{3})$
+	En total: $O(n^{3})$
 	\item sumaPesosEjes recorre todas las aristas y arcos de los nodos $O(m_{1} + m_{2})$
 	\item Clonar el grafo $O(n^{2} + m_{1} + m_{2})$ para copiar las estructuras
 	\item orientarTodasAristas
@@ -307,18 +326,20 @@ Complejidades donde $n$ es la cantidad de nodos, $m_{1}$ la cantidad de aristas,
 		\end{itemize}
 		$O(1+ n+ n) subset O(n)$
 	\end{itemize}
-	$O(m_{1} * n)$
+	En total: $O(m_{1} * n)$
+\newpage
 	\item encontrarMatchingNodos
 	\begin{itemize}
-		\item inicializacion de arreglos de longitud $n$ $O(n)$
+		\item Inicializacion de arreglos de longitud $n$ $O(n)$
 		\item para cada exedente de $Din$ arma una pareja con un $Dout$ y lo agrega en una lista con el peso calculado con $Dantzig$ $O(\sum_{i=1}^{n}{|din(i)-dout(i)|}/2)$ $\subseteq$ $O(m)$
 	\end{itemize}
-	$O(m + n)$
-	\item encontrarMatchingDeMenorPeso: Dado un matching de tamaño $k$ devuelve el mejor matching que se puede obtener swapeando los destinos de solo dos items del matching original. $O(k^{2})$
-	\item pesoMatching recorre una lista de tamaño a lo sumo $m$ $O(m)$
+	En total: $O(m + n)$
+	\item encontrarMatchingDeMenorPeso: Dado un matching de tamaño $k$ devuelve el mejor matching que se puede obtener swapeando los destinos de solo dos items del matching original. \\En total: $O(k^{2})$
+	\item pesoMatching recorre una lista de tamaño a lo sumo \\
+	En total: $m$ $O(m)$
 	\item agregarCaminosMatcheados
 	\begin{itemize}
-		\item inicializacion de matriz de tamaño $n*n$ $O(n^{2})$
+		\item Inicializacion de matriz de tamaño $n*n$ $O(n^{2})$
 		\item Para cada eje $(i,j)$ del matching (a lo sumo $m$ ejes)
 		\begin{itemize}
 			\item Si no esta calculado el $Dijkstra$ para el nodo $i$ $\rightarrow$ Calcula $Dijkstra$ sobre el grafo original y lo guarda $O(n^{2})$
@@ -327,7 +348,7 @@ Complejidades donde $n$ es la cantidad de nodos, $m_{1}$ la cantidad de aristas,
 		$O(n^{2})$ Si no esta calculado $Dijkstra$ (a lo sumo $n$ casos)\\
 		$O(n)$ Si ya esta calculado $Dijkstra$
 	\end{itemize}
-	$O(m*n + n*n^{2})$ como $O(m)$ $\subseteq$ $O(n^{2})$ $\Rightarrow$ $O(m*n + n^{3})$ $\subseteq$ $O(n^{3})$
+	En total: $O(m*n + n*n^{2})$ como $O(m)$ $\subseteq$ $O(n^{2})$ $\Rightarrow$ $O(m*n + n^{3})$ $\subseteq$ $O(n^{3})$
 	\item Dijkstra
 	\begin{itemize}
 		\item Inicializacion de arreglos de int y bool de tamaño $n$ $O(n)$
@@ -337,10 +358,10 @@ Complejidades donde $n$ es la cantidad de nodos, $m_{1}$ la cantidad de aristas,
 			\item Para cada adyacente del nodo $i$ actualiza el valor $O(d(i))$
 		\end{itemize}
 	\end{itemize}
-	$O(n + \sum_{i=1}^{n}{(d(i) + n)})$ $\subseteq$ $O(n + 2*m + n*n)$ $\subseteq$ $O(n^{2})$
+	En total: $O(n + \sum_{i=1}^{n}{(d(i) + n)})$ $\subseteq$ $O(n + 2*m + n*n)$ $\subseteq$ $O(n^{2})$
 	\item encontrar circuito euleriano $O(2 * largo del circuito)$\\
 	Donde largo del circuito puede ser en peor caso $m*n$ cuando todos los nodos tiene matching y todos los caminos agregados tiene longitud $n$\\
-	$O(m*n)$
+	En total: $O(m*n)$
 \end{itemize}
 \newpage
 
@@ -380,6 +401,7 @@ Complejidades donde $n$ es la cantidad de nodos, $m_{1}$ la cantidad de aristas,
 \end{algorithm}
 
 \newpage
+
 Complejidad:
 	\begin{itemize}
 	\item $O(n^{2})$ de inicializacion
@@ -410,11 +432,20 @@ $O(n^{3} + m^{2} + m*n)$ $\subseteq$ $O(n^{3} + m^{2})$\\
 Definimos el tamaño de entrada como:
 	\begin{center}	
 	$T = log(n) + log(m_{1}) + log(m_{2}) + \sum_{i=1}^{m_{1} + m_{2}}{(log(arista_{i_{nodo1}})+log(arista_{i_{nodo2}}) + log(arista_{i_{peso}}))}$\\
+	\end{center}
+
 	Como $log(n) + log(m_{1}) + log(m_{2}) > 0 \Rightarrow$\\
+	\begin{center}
 	$T > \sum_{i=1}^{m_{1} + m_{2}}{(log(arista_{i_{nodo1}})+log(arista_{i_{nodo2}}) + log(arista_{i_{peso}}))}$\\
+	\end{center}
+
 	Tambien sabemos que para cada eje $log(arista_{i_{nodo1}})+log(arista_{i_{nodo2}}) + log(arista_{i_{peso}}) > 1 \Rightarrow$\\
+	\begin{center}
 	$T > \sum_{i=1}^{m_{1} + m_{2}}{1} = m_{1} + m_{2} = m$ \\
+	\end{center}
 	Sabemos que el grafo es fuertemente conexo asi que $n$ es del orden de $m$ $\Rightarrow$\\
+
+	\begin{center}
 	$T > m \geq n$ \\
 	Dado la complejidad calculada y las cotas para $T$ vale $O(n^{3} + m^{2})$ $\subseteq$ $O(T^{3}+T^{2})$ $\subseteq$ $O(T^{3})$
 	\end{center}
