@@ -401,7 +401,7 @@ Complejidades donde $n$ es la cantidad de nodos, $m_{1}$ la cantidad de aristas,
 			\ENDWHILE
 			\STATE $pesoMatching$ $\gets$ pesoMatching($matching$)
 			\STATE $sumaSolucion$ $\gets$ $pesoMatching + SumaOriginalPesos$
-			\IF{ mejor\'o la solucion }
+			\IF{ mejor\'o la soluci\'on }
 				\STATE $SumaSolucionMejor$ $\gets$ $sumaSolucion$
 				\STATE $GrafoCopiaMejor$ $\gets$ $GC$
 				\STATE $MatchingMejor$ $\gets$ $matching$
@@ -471,7 +471,7 @@ Definimos el tama\~{n}o de entrada como:
 
 \section{Conclusiones}
 
-	Es interesante trabajar con problemas para los cuales un algoritmo exacto no sea una opci\'on en materia de tiempo. En el dise\~{n}o de este algoritmo heur\'istico nos dimos cuenta que el an\'alisis de los par\'ametros y que valores asignarle no es sencillo. Realizando las mediciones nos encontramos con grafos que con ciertos valores de los parámetros se encontraban mejores soluciones que otros, pero a su vez, estos mismos valores no mejoraban considerablemente las soluciones de otros grafos.\\
+	Es interesante trabajar con problemas para los cuales un algoritmo exacto no sea una opci\'on en materia de tiempo. En el dise\~{n}o de este algoritmo heur\'istico nos dimos cuenta que el an\'alisis de los par\'ametros y que valores asignarle no es sencillo. Realizando las mediciones nos encontramos con grafos que con ciertos valores de los par\'ametros se encontraban mejores soluciones que otros, pero a su vez, estos mismos valores no mejoraban considerablemente las soluciones de otros grafos.\\
 
 No solo eso, el algoritmo deb\'ia terminar en un tiempo considerable, y un aumento en la complejidad pod\'ia hacer decidirnos por sacrificar una soluci\'on levemente mejor por obtener un algorimo m\'as r\'apido. As\'i por ejemplo terminamos decidiendo para el par\'ametro ALFA que nos determinaba la amplitud de la vecindad un valor relativamente bajo justificaba ya la calidad de las soluciones que obten\'iamos opuestamente a utilizar un ALFA algo mayor que, mejorando la soluci\'on levemente, aumentaba la complejidad de manera considerable.\\
 
