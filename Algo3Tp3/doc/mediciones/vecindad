@@ -1,0 +1,3 @@
+Lo que definimos como vecindad es a modo te\'orico, son los matchings completos sobre el grafo bipartito que contiene en la primer particion $V_{1}$, tantas repeticiones de los nodos que tienen exedente de $din$ como exedente tengan y analogamente en la segunda particion $V_{2}$, los nodos con el mismo criterio para $dout$, y tiene todos los arcos con origen en los elementos de $V_{1}$ y destino en cada elemento de $V_{2}$\\
+Decimos que dos matchings $a$ y $b$ son vecinos directos cuando se puede llegar de uno a otro swapeando solo los destinos de dos elementos de uno entre s\'i, reduciendo asi la vecindad que visitaremos en cada iteracion de la busqueda local.\\
+

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<jGNUplot_config>
+    <version>0.1.2</version>
+    <plot_tile/>
+    <plot_type>TWO_DIM</plot_type>
+    <max_x_range/>
+    <min_x_range/>
+    <max_y_range/>
+    <min_y_range/>
+    <min_z_range/>
+    <min_z_range/>
+    <x_label>ALFA Testeado</x_label>
+    <y_label>Peso agregado con respecto a las aristas originales (%)</y_label>
+    <z_label>Peso agregado con respecto a las aristas originales (%)</z_label>
+    <logscale_x_axis>false</logscale_x_axis>
+    <logscale_y_axis>false</logscale_y_axis>
+    <logscale_z_axis>false</logscale_z_axis>
+    <pre_plot_string>set key bottom center outside box</pre_plot_string>
+    <datasets>
+        <dataset id="0">
+            <class>jgp.JGPDataSet</class>
+            <filename>/home/seba/NetBeansProjects/Algo3TP3/doc/DataParaGraficos/m1_alfa</filename>
+            <datastring>3:5</datastring>
+            <dataset_title>Mediciones de Calidad de Solución</dataset_title>
+            <color>auto</color>
+            <style>linespoints</style>
+            <add_style_opt>pointsize 2</add_style_opt>
+            <do_plot>true</do_plot>
+            <pre_process_program/>
+        </dataset>
+        <dataset id="1">
+            <class>jgp.JGPDataSet</class>
+            <filename>./DataParaGraficos/m2_alfa</filename>
+            <datastring>3:5</datastring>
+            <dataset_title>Mediciones de Calidad de Solución</dataset_title>
+            <color>auto</color>
+            <style>linespoints</style>
+            <add_style_opt>pointsize 2</add_style_opt>
+            <do_plot>true</do_plot>
+            <pre_process_program/>
+        </dataset>
+        <dataset id="2">
+            <class>jgp.JGPDataSet</class>
+            <filename>./DataParaGraficos/m3_alfa</filename>
+            <datastring>3:5</datastring>
+            <dataset_title>Mediciones de Calidad de Solución</dataset_title>
+            <color>auto</color>
+            <style>linespoints</style>
+            <add_style_opt>pointsize 2</add_style_opt>
+            <do_plot>true</do_plot>
+            <pre_process_program/>
+        </dataset>
+        <dataset id="3">
+            <class>jgp.JGPDataSet</class>
+            <filename>./DataParaGraficos/m4_alfa</filename>
+            <datastring>3:5</datastring>
+            <dataset_title>Mediciones de Calidad de Solución</dataset_title>
+            <color>auto</color>
+            <style>linespoints</style>
+            <add_style_opt>pointsize 2</add_style_opt>
+            <do_plot>true</do_plot>
+            <pre_process_program/>
+        </dataset>
+        <dataset id="4">
+            <class>jgp.JGPDataSet</class>
+            <filename>./DataParaGraficos/m5_alfa</filename>
+            <datastring>3:5</datastring>
+            <dataset_title>Mediciones de Calidad de Solución</dataset_title>
+            <color>auto</color>
+            <style>linespoints</style>
+            <add_style_opt>pointsize 2</add_style_opt>
+            <do_plot>true</do_plot>
+            <pre_process_program/>
+        </dataset>
+        <dataset id="5">
+            <class>jgp.JGPDataSet</class>
+            <filename>./DataParaGraficos/m6_alfa</filename>
+            <datastring>3:5</datastring>
+            <dataset_title>Mediciones de Calidad de Solución</dataset_title>
+            <color>auto</color>
+            <style>linespoints</style>
+            <add_style_opt>pointsize 2</add_style_opt>
+            <do_plot>true</do_plot>
+            <pre_process_program/>
+        </dataset>
+        <dataset id="6">
+            <class>jgp.JGPDataSet</class>
+            <filename>./DataParaGraficos/m7_alfa</filename>
+            <datastring>3:5</datastring>
+            <dataset_title>Mediciones de Calidad de Solución</dataset_title>
+            <color>auto</color>
+            <style>linespoints</style>
+            <add_style_opt>pointsize 2</add_style_opt>
+            <do_plot>true</do_plot>
+            <pre_process_program/>
+        </dataset>
+        <dataset id="7">
+            <class>jgp.JGPDataSet</class>
+            <filename>./DataParaGraficos/m8_alfa</filename>
+            <datastring>3:5</datastring>
+            <dataset_title>Mediciones de Calidad de Solución</dataset_title>
+            <color>auto</color>
+            <style>linespoints</style>
+            <add_style_opt>pointsize 2</add_style_opt>
+            <do_plot>true</do_plot>
+            <pre_process_program/>
+        </dataset>
+        <dataset id="8">
+            <class>jgp.JGPDataSet</class>
+            <filename>./DataParaGraficos/m9_alfa</filename>
+            <datastring>3:5</datastring>
+            <dataset_title>Mediciones de Calidad de Solución</dataset_title>
+            <color>auto</color>
+            <style>linespoints</style>
+            <add_style_opt>pointsize 2</add_style_opt>
+            <do_plot>true</do_plot>
+            <pre_process_program/>
+        </dataset>
+    </datasets>
+    <labels/>
+    <variables/>
+</jGNUplot_config>
