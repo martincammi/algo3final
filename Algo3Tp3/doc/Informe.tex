@@ -230,7 +230,7 @@ Un ejemplo de una vecindad dado un matching inicial ser\'ia la siguiente:
 
 \begin{center}
 \centering \includegraphics[scale=0.30]{img/MatchingVecindad.png}\\
-\small{Una soluci\'on es vecina de otra si y solo si los matchings de ambas soluciones difieren s\'olo en un intercambio entre dos pares de matchings, as\'i, en el Vecino 1 se han intercambiado los pares (0,1) y (2,3) del matching original, en el Vecino 2 los pares (0,1) y (4,5) y en el Vecino 3 los pares (2,3) y (4,5)}
+\small{Una soluci\'on es vecina de otra si y solo si los matchings de ambas soluciones difieren s\'olo en un intercambio entre dos pares de matchings, as\'i, en el Vecino 1 se han intercambiado los pares (0,1) y (2,3) del matching original, en el Vecino 2 los pares (0,1) y (4,5) y en el Vecino 3 los pares (2,3) y (4,5).}
 \end{center}
 
 \newpage
@@ -243,7 +243,7 @@ Esta etapa del algoritmo realiza varias iteraciones de los algoritmos de las heu
 
 \noindent El parametro $CANT\_ITERACIONES\_SIN\_MEJORAR$ se usa como condici\'on de corte, si no se pudo encontrar una soluci\'on mejor en cierta cantidad de iteraciones de $GRASP$ se corta la ejecuci\'on y se devuelve la mejor hasta el momento.\\
 
-\noindent El parametro $CANT\_ITERACIONES\_BUSQUEDA\_LOCAL$ define el tama\~{n}o m\'aximo que tendra la vecindad ya que este puede ser exponencial en el tama\~{n}o del matching.\\
+\noindent El parametro $CANT\_ITERACIONES\_BUSQUEDA\_LOCAL$ define el tama\~{n}o m\'aximo que tendr\'a la vecindad ya que este puede ser exponencial en el tama\~{n}o del matching.\\
 
 
 Como no tenemos el valor real de la soluci\'on \'optima, medimos la calidad de las soluciones como el porcentaje de peso agregado por el algoritmo en la soluci\'on con respecto al peso total de las aristas del grafo original. $\left(\frac{PesoCircuito - PesoAristas(G)}{PesoAristas(G)}\right)*100$\\
@@ -396,12 +396,12 @@ Complejidades donde $n$ es la cantidad de nodos, $m_{1}$ la cantidad de aristas,
 			\STATE $ParametroGRASP$ $\gets$ Random
 			\STATE orientarTodasAristas($GC$,$ParametroGRASP$)
 			\STATE $matching$ $\gets$ encontrarMatchingNodos($GC$,$ParametroGRASP$)
-			\WHILE{ no se alcanza $MaximoIteracionesBusquedaLocal$ $\land$ no se encontro un matching \'optimo}
+			\WHILE{ no se alcanza $MaximoIteracionesBusquedaLocal$ $\land$ no se encontr\'o un matching \'optimo}
 				\STATE $matching$ $\gets$ encontrarMatchingDeMenorPeso($matching$, $pesosCaminosMinimos$)
 			\ENDWHILE
 			\STATE $pesoMatching$ $\gets$ pesoMatching($matching$)
 			\STATE $sumaSolucion$ $\gets$ $pesoMatching + SumaOriginalPesos$
-			\IF{ mejoro la solucion }
+			\IF{ mejoró la solucion }
 				\STATE $SumaSolucionMejor$ $\gets$ $sumaSolucion$
 				\STATE $GrafoCopiaMejor$ $\gets$ $GC$
 				\STATE $MatchingMejor$ $\gets$ $matching$
