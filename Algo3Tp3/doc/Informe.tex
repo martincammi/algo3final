@@ -261,7 +261,7 @@ Las instancias utilizadas para tomar las mediciones fueron grafos de 100 a 500 n
 Como se puede observar en los gr\'aficos de las mediciones tomadas para las mismas instancias con distintos valores para $ALFA$, se obtuvieron los mejores resultados para el valor $0,1$ y las complejidades pr\'acticas para ese valor son bastante razonables. El valor decidido para $ALFA$ fue entonces de $0,1$.\\
 
 \newpage
-\subsection{Gr\'aficos de cantidad de iteraciones}
+\subsection{Gr\'aficos de cantidad de iteraciones GRASP sin mejora}
 
 \begin{center}
 \centering \includegraphics[scale=0.40]{img/VariacionItSinMejora.jpg}\\
@@ -272,6 +272,19 @@ Como se puede observar en los gr\'aficos de las mediciones tomadas para las mism
 \small{Este gr\'afico muestra la cantidad de operaciones realizadas para los los valores de $CANT\_ITERACIONES\_SIN\_MEJORAR$ testeados.}\\
 \end{center}
 Decidimos darle el valor $10$ a $CANT\_ITERACIONES\_SIN\_MEJORAR$ ya que en las mediciones tomadas se observa un incremento considerable en la cantidad de operaciones, mientras que las soluciones no mejoran de manera significativa.\\
+
+\newpage
+\subsection{Gr\'aficos de cantidad de iteraciones de Búsqueda Local}
+\begin{center}
+\centering \includegraphics[scale=0.40]{img/VariacionItBL.jpg}\\
+\small{El gr\'afico muestra la calidad de las soluciones con respecto a los los valores para $CANT\_ITERACIONES\_BUSQUEDA\_LOCAL$ testeados}\\
+\end{center}
+\begin{center}
+\centering \includegraphics[scale=0.40]{img/VariacionItBLComplejidad.jpg}\\
+\small{Este gr\'afico muestra la cantidad de operaciones realizadas para los los valores de $CANT\_ITERACIONES\_BUSQUEDA\_LOCAL$ testeados.}\\
+\end{center}
+Decidimos darle el valor $100$ a $CANT\_ITERACIONES\_BUSQUEDA\_LOCAL$ ya que observamos en los tests que, al igual que ocurr\'ia con el parametro anterior, las soluciones no mejoran sugestivamente mientras que la complejidad si lo hace.\\
+
 
 El valor decidido para $CANT\_ITERACIONES\_MAXIMA$ fue $200$, ya que en ninguno de los casos evaluados lleg\'o a cortar por esa cota.\\
 %El valor decidido para $CANT\_ITERACIONES\_BUSQUEDA\_LOCAL$ fue $50$.\\
@@ -467,6 +480,14 @@ Definimos el tama\~{n}o de entrada como:
 	Dado la complejidad calculada y las cotas para $T$ vale $O(n^{3} + m^{2})$ $\subseteq$ $O(T^{3}+T^{2})$ $\subseteq$ $O(T^{3})$
 	\end{center}
 \newpage
+
+\begin{center}
+\centering \includegraphics[scale=0.40]{img/CalculoComplejidad.jpg}\\
+\small{El gr\'afico muestra la cantidad de operaciones realizadas (Escala logar\'itmica) en relaci\'on con el tama\~{n}o de la entrada medido en bist.}\\
+\end{center}
+
+En el grafico de complejidades se puede observar como las mediciones quedan contenidas por la funci\'on que representa la complejidad te\'orica calculada con respecto al tamaño de la entrada
+
 
 
 \section{Conclusiones}
