@@ -1,0 +1,33 @@
+
+
+
+grep '^1\s50' mediciones_total > m1_alfa
+grep '^2\s50' mediciones_total > m2_alfa
+grep '^3\s50' mediciones_total > m3_alfa
+grep '^4\s50' mediciones_total > m4_alfa
+grep '^5\s50' mediciones_total > m5_alfa
+grep '^6\s50' mediciones_total > m6_alfa
+grep '^7\s50' mediciones_total > m7_alfa
+grep '^8\s50' mediciones_total > m8_alfa
+grep '^9\s50' mediciones_total > m9_alfa
+grep '^1\s[0-9][0-9]\s0\.1' mediciones_total > m1_itsinmejora
+grep '^2\s[0-9][0-9]\s0\.1' mediciones_total > m2_itsinmejora
+grep '^3\s[0-9][0-9]\s0\.1' mediciones_total > m3_itsinmejora
+grep '^4\s[0-9][0-9]\s0\.1' mediciones_total > m4_itsinmejora
+grep '^5\s[0-9][0-9]\s0\.1' mediciones_total > m5_itsinmejora
+grep '^6\s[0-9][0-9]\s0\.1' mediciones_total > m6_itsinmejora
+grep '^7\s[0-9][0-9]\s0\.1' mediciones_total > m7_itsinmejora
+grep '^8\s[0-9][0-9]\s0\.1' mediciones_total > m8_itsinmejora
+grep '^9\s[0-9][0-9]\s0\.1' mediciones_total > m9_itsinmejora
+grep '^1\s[0-9][0-9]\s0\.1' medtotal > m1_bl
+grep '^2\s[0-9][0-9]\s0\.1' medtotal > m2_bl
+grep '^3\s[0-9][0-9]\s0\.1' medtotal > m3_bl
+grep '^4\s[0-9][0-9]\s0\.1' medtotal > m4_bl
+grep '^5\s[0-9][0-9]\s0\.1' medtotal > m5_bl
+grep '^6\s[0-9][0-9]\s0\.1' medtotal > m6_bl
+grep '^7\s[0-9][0-9]\s0\.1' medtotal > m7_bl
+grep '^8\s[0-9][0-9]\s0\.1' medtotal > m8_bl
+grep '^9\s[0-9][0-9]\s0\.1' medtotal > m9_bl
+
+
+
