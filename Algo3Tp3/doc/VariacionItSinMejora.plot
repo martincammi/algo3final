@@ -1,7 +1,7 @@
 set key off
 set term jpeg
 set out "img/VariacionItSinMejora.jpg"
-set title "" 
+set title "Calidad de las soluciones con respecto a la variación de\n la cantidad de iteraciones sin mejorar" 
 set xlabel "Max iteraciones sin mejora testeado" 
 set ylabel "Peso agregado (%)\nRespecto a las aristas originales"
 set zlabel ""

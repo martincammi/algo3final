@@ -1,7 +1,7 @@
 set key off
 set term jpeg
 set out "img/VariacionAlfa.jpg"
-set title "" 
+set title "Calidad de las soluciones con respecto a la variación de ALFA"
 set xlabel "ALFA Testeado" 
 set ylabel "Peso agregado (%)\nRespecto a las aristas originales" 
 set zlabel "" 

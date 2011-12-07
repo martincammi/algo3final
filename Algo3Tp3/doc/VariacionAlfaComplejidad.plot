@@ -1,7 +1,7 @@
 set key off
 set term jpeg
 set out "img/VariacionAlfaComplejidad.jpg"
-set title "" 
+set title "Cantidad de operaciones de las soluciones\n con respecto a la variación de ALFA" 
 set xlabel "ALFA Testeado" 
 set ylabel "Cantidad de operaciones" 
 set zlabel "" 

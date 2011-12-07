@@ -1,7 +1,7 @@
 set key off
 set term jpeg
 set out "img/VariacionItSinMejoraComplejidad.jpg"
-set title "" 
+set title "Cantidad de operaciones de las soluciones con respecto a la variación \n de la cantidad de iteraciones sin mejorar" 
 set xlabel "Max iteraciones sin mejora testeado" 
 set ylabel "Cantidad de operaciones" 
 set zlabel ""
