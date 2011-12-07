@@ -131,7 +131,7 @@
 
 	En 1736 Leonhard Euler public\'o un trabajo en el cual resolv\'ia el denominado \emph{problema de los puentes de K\"{o}nigsberg}. La ciudad de K\"{o}ningsberg, actual Kaliningrado, Rusia, est\'a dividida por el r\'io Pregel en 4 zonas, dos orillas (A y B), la isla de Kneiphof (C) y otras dos partes divididas por el r\'io (D y F). Las orillas estaban conectadas mediante 7 puentes. El problema consist\'ia en partir de una orilla y recorrer todos los puentes, recorri\'endo una sola vez cada uno y volviendo al punto de partida.\\
 
-Este fue el puntapie inicial para un tipo de problema que m\'as adelante se modelar\'ia usando la teor\'ia de grafos. Este problema fue caracterizado por Euler y consist\'ia en encontrar un circuito que pasara por todas las aristas de un grafo una sola vez volviendo al punto de partida.\\
+Este fue el puntapi\'e inicial para un tipo de problema que m\'as adelante se modelar\'ia usando la teor\'ia de grafos. Este problema fue caracterizado por Euler y consist\'ia en encontrar un circuito que pasara por todas las aristas de un grafo una sola vez volviendo al punto de partida.\\
  
 M\'as de doscientos a\~{n}os m\'as tarde en 1962 el matem\'atico chino Kwan Mei-Koo public\'o un paper en el que abordaba un problema ligeramente similar, donde propon\'ia que si un grafo no pose\'ia un circuito Euleriano, podr\'ia quiz\'as encontrar el circuito m\'as corto que pasara por todas las aristas aunque repitiera algunas de ellas. Este problema fue luego nombrado como "Problema del cartero chino".
 
@@ -198,7 +198,7 @@ Una vez que tenemos todo el grafo orientado, realizamos luego una etapa de match
 
 	El algoritmo de b\'usqueda local se encargar\'a, dado uno un grafo orientado completamente, un matching inicial y el grafo original, de buscar en la vecindad el mejor matching.\\
 
-Un Matching est\'a compuestos por pares de la forma (nodoOrigen, nodoDestino).
+Un Matching est\'a compuesto por pares de la forma (nodoOrigen, nodoDestino).
 
 Lo que haremos para conseguir una soluci\'on vecina es intercambiar en un matching los nodos destinos de dos pares para obtener as\'i un nuevo matching. Calculamos de esta manera todas las posibles soluciones vecinas intercambiando solo los nodos destinos de dos pares y luego de todas ellas obtenemos la que sea m\'inima y as\'i poder acercarnos a una soluci\'on mejor.\\
 
@@ -396,7 +396,7 @@ Complejidades donde $n$ es la cantidad de nodos, $m_{1}$ la cantidad de aristas,
 			\STATE $ParametroGRASP$ $\gets$ Random
 			\STATE orientarTodasAristas($GC$,$ParametroGRASP$)
 			\STATE $matching$ $\gets$ encontrarMatchingNodos($GC$,$ParametroGRASP$)
-			\WHILE{ no se alcanza $MaximoIteracionesBusquedaLocal$ $\land$ no se encontro un matching �ptimo}
+			\WHILE{ no se alcanza $MaximoIteracionesBusquedaLocal$ $\land$ no se encontro un matching \'optimo}
 				\STATE $matching$ $\gets$ encontrarMatchingDeMenorPeso($matching$, $pesosCaminosMinimos$)
 			\ENDWHILE
 			\STATE $pesoMatching$ $\gets$ pesoMatching($matching$)
@@ -456,7 +456,7 @@ Definimos el tama\~{n}o de entrada como:
 	$T > \displaystyle\sum_{i=1}^{m_{1} + m_{2}}{(log(eje_{i_{nodo1}})+log(eje_{i_{nodo2}}) + log(eje_{i_{peso}}))}$\\
 	\end{center}
 
-	\noindent Tambien sabemos que para cada eje $log(eje_{i_{nodo1}})+log(eje_{i_{nodo2}}) + log(eje_{i_{peso}}) > 1$ porque se necesitan al menos un bit para representar a cada eje $\Rightarrow$\\
+	\noindent Tambi\'en sabemos que para cada eje $log(eje_{i_{nodo1}})+log(eje_{i_{nodo2}}) + log(eje_{i_{peso}}) > 1$ porque se necesitan al menos un bit para representar a cada eje $\Rightarrow$\\
 	\begin{center}
 	$T > \displaystyle\sum_{i=1}^{m_{1} + m_{2}}{1} = m_{1} + m_{2} = m$ \\
 	\end{center}
