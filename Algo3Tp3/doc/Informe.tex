@@ -184,7 +184,7 @@ Se entiende como \emph{nodoGradoMaximo} al nodo de mayor grado, contando aristas
 
 Con cualquiera de estas posibilidades, siempre se intenta hacer un balance entre los grados que quedar\'an (solo quedar\'an grados de entrada y salida, ya que ser\'a completamente orientado). Realizando peque\~{n}as pruebas terminamos optando por el m\'etodo n\'umero 3) ya que por ejemplo con el m\'etodo n\'umero 1) no pod\'iamos asegurar que siempre existieran tales nodos que cumplieran la condici\'on.\\
 
-El segundo m\'etodo se basaba en el parametro para darle la longitud a la lista y no armaba la lista en base al cumplimiento de una condici\'on (ej porcentaje de ALFA) decidimos descartarlo tambi\'en.\\
+El segundo m\'etodo se basa en encontrar los primeros ALFA * nodoGradoMaximo nodos, pero nos estaba dando nodos que pod\'ia tener grados menores que ALFA * nodoGradoMaximo, por lo que descartamos tambi\'en esta opci\'on.\\
 
 En el cuarto y quinto m\'etodo se buscan los nodos que tengan $d_{in}$ o $d_{out}$ mayor o igual a la proporci\'on ALFA, pero esta proporci\'on estaba basada en el grado no orientado del nodo con mayor grado y est\'abamos comparando grados no orientados contra grados orientados que no ten\'ian necesariamente que tener relaci\'on.\\
 
