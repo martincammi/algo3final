@@ -82,7 +82,7 @@
 
 	\subsection{Lenguaje utilizado}
 		
-		El lenguaje utilizado para el trabajo pr\'actico ha sido \emph{Java}, compilando con la versi\'on 1.5 de la Virtual Machine.
+		El lenguaje utilizado para el trabajo pr\'actico ha sido \emph{Java}, compilado con la versi\'on 1.5 de la Virtual Machine.
 		
 		El trabajo se acompa\~{n}a con los fuentes de la soluci\'on que puede importarse en IDE de Eclipse o ejecutarse desde l\'inea de comandos.
 
@@ -107,11 +107,10 @@
 			\item{Finish.}
 	\end{itemize}
 	
-	Desde la vista de \textbf{Package Explorer} bajo el paquete \textbf{src} aparecer\'an tres paquetes m�s y dentro de cada uno de ellos los siguientes archivos de java:\\
+	Desde la vista de \textbf{Package Explorer} bajo el paquete \textbf{src} aparecer\'an tres paquetes m\'as y dentro de cada uno de ellos los siguientes archivos de java:\\
 
 	\begin{center}
-		%\includegraphics[scale=0.65]{others/packageExplorer.png}\\
-		COLOCAR IMAGEN CORRECTA
+		\includegraphics[scale=0.65]{others/packageExplorer.png}
 	\end{center}
 
 \newpage
@@ -130,15 +129,15 @@
 
 \section{Introducci\'on}
 
-	En 1736 Leonhard Euler public\'o un trabajo en el cual resolv\'ia el denominado \emph{problema de los puentes de K\"{o}nigsberg}. La ciudad de K\"{o}ningsberg, actual Kaliningrado, Rusia, est� dividida por el r\'io Pregel en 4 zonas, dos orillas (A y B), la isla de Kneiphof (C) y otras dos partes divididas por el r�o. (D y F). Las orillas estaban conectadas mediante 7 puentes. El problema consist�a partir de una orilla y recorrer todos los puentes, recorri\'endo una sola vez cada uno y volviendo al punto de partida.\\
+	En 1736 Leonhard Euler public\'o un trabajo en el cual resolv\'ia el denominado \emph{problema de los puentes de K\"{o}nigsberg}. La ciudad de K\"{o}ningsberg, actual Kaliningrado, Rusia, est\'a dividida por el r\'io Pregel en 4 zonas, dos orillas (A y B), la isla de Kneiphof (C) y otras dos partes divididas por el r\'io (D y F). Las orillas estaban conectadas mediante 7 puentes. El problema consist\'ia en partir de una orilla y recorrer todos los puentes, recorri\'endo una sola vez cada uno y volviendo al punto de partida.\\
 
-Este fu\'e el puntapi� inicial para un tipo de problema que m'as adelante de modelar\'ia usando la teor\'ia de grafos. Este problema fue caracterizado por Euler y consist\'ia en encontrar un circuito que pasara por todas las aristas de un grafo una s\'ola vez volviendo al punto de partida.\\
+Este fue el puntapie inicial para un tipo de problema que m\'as adelante se modelar\'ia usando la teor\'ia de grafos. Este problema fue caracterizado por Euler y consist\'ia en encontrar un circuito que pasara por todas las aristas de un grafo una sola vez volviendo al punto de partida.\\
  
-M\'as de doscientos a\~{n}os m\'as tarde en 1962 el matem�tico chino Kwan Mei-Koo public� un paper en el que abordaba un problema ligeramente similar, propon\'ia que si un grafo no pose\'ia un circuito Euleriano, podria quiz�s encontrar el circuito m\'as corto que pasara por todas las aristas aunque repitiera algunas de ellas. Este problema fue luego nombrado como "Problema del cartero chino".
+M\'as de doscientos a\~{n}os m\'as tarde en 1962 el matem\'atico chino Kwan Mei-Koo public\'o un paper en el que abordaba un problema ligeramente similar, donde propon\'ia que si un grafo no pose\'ia un circuito Euleriano, podr\'ia quiz\'as encontrar el circuito m\'as corto que pasara por todas las aristas aunque repitiera algunas de ellas. Este problema fue luego nombrado como "Problema del cartero chino".
 
 \begin{center}
 \centering \includegraphics[scale=0.70]{img/KaliningradoBridges.jpg}\\
-\small{Imagen actual de la ciudad de Kaliningrado, en rojo figuran los puentes del problema original de K\"{o}nigsberg algunos cuales ya no existen hoy en d\'ia.}
+\small{Im\'agen actual de la ciudad de Kaliningrado, en rojo figuran los puentes del problema original de K\"{o}nigsberg, algunos de los cuales ya no existen hoy en d\'ia.}
 \end{center}	
 
 El problema tiene varias variantes, en este trabajo abordaremos la variante \emph{mixta} que consiste en intentar encontrar el m\'inimo circuito que pase por todas las aristas (no orientadas) y arcos (orientadas) de un grafo donde cada una tiene peso asignado.
@@ -146,20 +145,20 @@ El problema tiene varias variantes, en este trabajo abordaremos la variante \emp
 \newpage
 \section{Situaciones de la vida real}
 
-    El algoritmo del cartero chino tiene m�ltiples aplicaciones en la vida cotidiana por ser
+    El algoritmo del cartero chino tiene m\'ultiples aplicaciones en la vida cotidiana, como por ejemplo:
 
 	\begin{itemize}
-	\item \emph{Camiones de basura}: en donde los camiones deban recorrer las calles de una ciudad y volver al centro de tratamiento de basura. Las calles estar\'ian representadas por aristas y las intersecciones por v\'ertices. Las calles podr\'ian bien tener diferentes sentidos o sentidos �nicos, y los pesos podr\'ian corresponder a la cantidad de basura que deban recolectar en ciertas zonas (ej zonas industriales)
+	\item \emph{Camiones de basura}: en donde los camiones deban recorrer las calles de una ciudad y volver al centro de tratamiento de basura. Las calles estar\'ian representadas por aristas y las intersecciones por v\'ertices. Las calles podr\'ian bien tener diferentes sentidos o sentidos \'unicos, y los pesos podr\'ian corresponder a la cantidad de basura que deben recolectar en ciertas zonas (ej zonas industriales).
 	\end{itemize}
 
 	\begin{itemize}
-	\item \emph{Reparto de Volantes:} C\'alculo de ruta \'optima que pase por todas las calles de una ciudad al menos una vez para poder repartir volantes se publicidad. Las calles estar\'ian representadas por aristas y las intersecciones por v\'ertices. Podr\'ia asignarse un peso de 1 a cada arista siendo que no tiene mayor complejidad repartir volantes en una u otra cuadra.
+	\item \emph{Reparto de Volantes:} C\'alculo de ruta \'optima que pase por todas las calles de una ciudad al menos una vez para poder repartir volantes de publicidad. Las calles estar\'ian representadas por aristas y las intersecciones por v\'ertices. Podr\'ia asignarse un peso de 1 a cada arista siendo que no tiene mayor complejidad repartir volantes en una u otra cuadra.
 	\end{itemize}
 
 \newpage
-\section{Heur�stica Constructiva}
+\section{Heur\'istica Constructiva}
 
-	El \emph{algoritmo contructivo} se encargar\'a de tomar un grafo mixto y orientar sus aristas no orientadas y al mismo tiempo establecer un matching inicial.\\ Un matching consiste en agrupar pares de nodos ${(v,w)}$ tales que $d_{in}(v) > d_{out}(v)$ y\\ $d_{out}(w) > d_{in}(w)$.
+	El \emph{algoritmo constructivo} se encargar\'a de tomar un grafo mixto y orientar sus aristas no orientadas y al mismo tiempo establecer un matching inicial.\\ Un matching consiste en agrupar pares de nodos ${(v,w)}$ tales que $d_{in}(v) > d_{out}(v)$ y\\ $d_{out}(w) > d_{in}(w)$.
 
 \begin{center}
 \centering \includegraphics[scale=0.30]{img/Matching.png}\\
@@ -174,8 +173,8 @@ El problema tiene varias variantes, en este trabajo abordaremos la variante \emp
 	Para ello ideamos diferentes m\'etodos para la orientaci\'on de todas las aristas y fuimos experimentando con 5 m\'etodos distintos, todos ellos bas\'andose en los grados de los nodos para la elecci\'on de un nodo con el cual empezar a orientar sus aristas. Los m\'etodos elegir:\\
 	
   \begin{itemize}
-	\item 1) Los nodos que tienen igual cantidad de aristas sin orientar que orientadas, y en caso de haber muchos, solo tomar\'a los primeros k nodos de ellos, donde k es un par\'ametro de entrada de la funci\'on.
-	\item 2) Los nodos a partir de un cierto n\'umero, que es definido por el par\'ametro de entrada de la funci\'on.
+	\item 1) Los nodos que tienen igual cantidad de aristas sin orientar que orientadas, y que la suma de sus grados de entrada y salida sea mayor o igual a ALFA* nodoGradoMaximo.
+	\item 2) Los nodos a partir de un cierto n\'umero, que viene como par\'ametro, y pondr\'a como m\'aximo ALFA* nodoGradoMaximo nodos.
 	\item 3) Los nodos que tengan grado de nodo (sin orientar) mayor o igual al ALFA* nodoGradoMaximo.
 	\item 4) Los nodos que tengan grado de entrada (orientado) mayor o igual al ALFA* nodoGradoMaximo.
 	\item 5) Los nodos que tengan grado de salida (orientado) mayor o igual al ALFA* nodoGradoMaximo.
@@ -183,27 +182,27 @@ El problema tiene varias variantes, en este trabajo abordaremos la variante \emp
 
 Se entiende como \emph{nodoGradoMaximo} al nodo de mayor grado, contando aristas no orientadas.\\
 
-Con cualquiera de estas posibilidades, siempre se intenta hacer un balance entre los grados que quedar\'an (solo quedar\'an grados de entrada y salida, ya que ser\'a completamente orientado). Realizando peque�as pruebas terminamos optando por el m\'etodo n\'umero 3) ya que por ejemplo con el m\'etodo n\'umero 1) no pod\'iamos asegurar que siempre existieran tales nodos que cumplieran la condici\'on.\\
+Con cualquiera de estas posibilidades, siempre se intenta hacer un balance entre los grados que quedar\'an (solo quedar\'an grados de entrada y salida, ya que ser\'a completamente orientado). Realizando peque\~{n}as pruebas terminamos optando por el m\'etodo n\'umero 3) ya que por ejemplo con el m\'etodo n\'umero 1) no pod\'iamos asegurar que siempre existieran tales nodos que cumplieran la condici\'on.\\
 
-El segundo m\'etodo se basaba en el parametro para darle la longitud a la lista y no armaba la lista en base al cumplimiento de una condici\'on (ej porcentaje de ALFA) decidimos descartarlo tambi�n\\
+El segundo m\'etodo se basaba en el parametro para darle la longitud a la lista y no armaba la lista en base al cumplimiento de una condici\'on (ej porcentaje de ALFA) decidimos descartarlo tambi\'en.\\
 
-En el cuarto y quinto m\'etodo se buscan los nodos que tengan $d_{in}$ o $d_{out}$ mayor o igual a la proporci�n ALFA, pero esta proporci�n estaba basada en el grado no orientado del nodo con mayor grado y est\'abamos comparando grados no orientados contra grados orientados que no tenian necesariamente que tener relaci\'on.\\
+En el cuarto y quinto m\'etodo se buscan los nodos que tengan $d_{in}$ o $d_{out}$ mayor o igual a la proporci\'on ALFA, pero esta proporci\'on estaba basada en el grado no orientado del nodo con mayor grado y est\'abamos comparando grados no orientados contra grados orientados que no ten\'ian necesariamente que tener relaci\'on.\\
 
-Eligiendo el m\'etodo 3), podemos asegurarnos de siempre encontrar al menos un nodo ya que buscaremos aquellos que tengan grado mayor o igual a ALFA * nodoGradoMaximo donde el nodo de mayor grado estar\'a implicitamente incluido ya que ALFA es un valor entre 0 y 1 que denota un porcentaje del nodoGradoMaximo.\\
+Eligiendo el m\'etodo 3), podemos asegurarnos de siempre encontrar al menos un nodo ya que buscaremos aquellos que tengan grado mayor o igual a ALFA * nodoGradoMaximo donde el nodo de mayor grado estar\'a impl\'icitamente inclu\'ido ya que ALFA es un valor entre 0 y 1 que denota un porcentaje del nodoGradoMaximo.\\
 
-Una vez que tenemos todo el grafo orientado, realizamos luego una etapa de matching entre los nodos que quedan con diferentes grado de entrada y de salida, y balanceamos a todos los nodos, para que queden con iguales grados de entrada como de salida, y el grafo quede Euleriano. Este matching lo calculamos con el peso del camino m�nimo entre cada uno de los nodos, calculado sobre el grafo original utilizando Dantzig, ya que en esta etapa del algoritmo solo nos interesa saber el peso del camino m\'inimo y no como esta compuesto.\\
+Una vez que tenemos todo el grafo orientado, realizamos luego una etapa de matching entre los nodos que quedan con diferentes grado de entrada y de salida, y balanceamos a todos los nodos, para que queden con iguales grados de entrada como de salida, y el grafo quede Euleriano. Este matching lo calculamos con el peso del camino m\'inimo entre cada uno de los nodos, calculado sobre el grafo original utilizando Dantzig, ya que en esta etapa del algoritmo solo nos interesa saber el peso del camino m\'inimo y no como esta compuesto.\\
 
 
 \newpage	
-\section{Heur�stica de b\'usqueda Local}
+\section{Heur\'istica de b\'usqueda Local}
 
 	El algoritmo de b\'usqueda local se encargar\'a, dado uno un grafo orientado completamente, un matching inicial y el grafo original, de buscar en la vecindad el mejor matching.\\
 
-Un Matching est\'a compuestos pares de la forma (nodoOrigen, nodoDestino).
+Un Matching est\'a compuestos por pares de la forma (nodoOrigen, nodoDestino).
 
 Lo que haremos para conseguir una soluci\'on vecina es intercambiar en un matching los nodos destinos de dos pares para obtener as\'i un nuevo matching. Calculamos de esta manera todas las posibles soluciones vecinas intercambiando solo los nodos destinos de dos pares y luego de todas ellas obtenemos la que sea m\'inima y as\'i poder acercarnos a una soluci\'on mejor.\\
 
-Esta definici\'on de vecindad tiene un tama�o de $\frac{k \cdot (k-1)}{2}$ donde $k$ es la cantidad de pares en el matching. Esto puede verse ya que para el intercambio de un par con otro existen $k-1$ posibilidades de otros pares. A su vez como la cantidad de pares en el matching es est\'a determinada por la diferencia de grados de entrada y salida de los nodos \'esta equivale a\\
+Esta definici\'on de vecindad tiene un tama\~{n}o de $\frac{k \cdot (k-1)}{2}$ donde $k$ es la cantidad de pares en el matching. Esto puede verse ya que para el intercambio de un par con otro existen $k-1$ posibilidades de otros pares. A su vez como la cantidad de pares en el matching es est\'a determinada por la diferencia de grados de entrada y salida de los nodos \'esta equivale a\\
 
 
 \begin{center}
@@ -235,23 +234,23 @@ Un ejemplo de una vecindad dado un matching inicial ser\'ia la siguiente:
 \end{center}
 
 \newpage
-\section{Metaheuristica Grasp}
+\section{Metaheur\'istica Grasp}
 
-Esta etapa del algoritmo realiza varias iteraciones de los algoritmos de las heur�sticas constructiva y de b�squeda local, decidiendo mediante experimentac�on el nivel de aleatoriedad agregado al algoritmo constructivo, el tama�o de la vecindad a visitar y la cantidad de veces que se intentar\'a una soluci�n nueva.\\
+Esta etapa del algoritmo realiza varias iteraciones de los algoritmos de las heur\'isticas constructiva y de b\'usqueda local, decidiendo mediante experimentaci\'on el nivel de aleatoriedad agregado al algoritmo constructivo, el tama\~{n}o de la vecindad a visitar y la cantidad de veces que se intentar\'a una soluci\'on nueva.\\
 \noindent El parametro $ALFA$ es un valor perteneciente al intervalo $(0,1)$ y define el nivel de aleatoriedad del algoritmo constructivo.\\
 
-\noindent El parametro $CANT\_ITERACIONES\_MAXIMA$ define el m�ximo de veces que se construir� una soluci�n inicial.\\
+\noindent El parametro $CANT\_ITERACIONES\_MAXIMA$ define el m\'aximo de veces que se construir\'a una soluci\'on inicial.\\
 
-\noindent El parametro $CANT\_ITERACIONES\_SIN\_MEJORAR$ se usa como condici�n de corte, si no se pudo encontrar una soluci�n mejor en cierta cantidad de iteraciones de $GRASP$ se corta la ejecuci�n y se devuelve la mejor hasta el momento.\\
+\noindent El parametro $CANT\_ITERACIONES\_SIN\_MEJORAR$ se usa como condici\'on de corte, si no se pudo encontrar una soluci\'on mejor en cierta cantidad de iteraciones de $GRASP$ se corta la ejecuci\'on y se devuelve la mejor hasta el momento.\\
 
-\noindent El parametro $CANT\_ITERACIONES\_BUSQUEDA\_LOCAL$ define el tama�o m\'aximo que tendra la vecindad ya que este puede ser exponencial en el tama�o del matching.\\
+\noindent El parametro $CANT\_ITERACIONES\_BUSQUEDA\_LOCAL$ define el tama\~{n}o m\'aximo que tendra la vecindad ya que este puede ser exponencial en el tama\~{n}o del matching.\\
 
 
-Como no tenemos el valor real de la soluci�n �ptima, medimos la calidad de las soluciones como el porcentaje de peso agregado por el algoritmo en la soluci�n con respecto al peso total de las aristas del grafo original. $\left(\frac{PesoCircuito - PesoAristas(G)}{PesoAristas(G)}\right)*100$\\
+Como no tenemos el valor real de la soluci\'on \'optima, medimos la calidad de las soluciones como el porcentaje de peso agregado por el algoritmo en la soluci\'on con respecto al peso total de las aristas del grafo original. $\left(\frac{PesoCircuito - PesoAristas(G)}{PesoAristas(G)}\right)*100$\\
 Las instancias utilizadas para tomar las mediciones fueron grafos de 100 a 500 nodos generadas pseudo-aleatoriamente.\\
 
 \newpage
-\subsection{Gr�ficos de variaci�n de ALFA}
+\subsection{Gr\'aficos de variaci\'on de ALFA}
 
 \begin{center}
 \centering \includegraphics[scale=0.40]{img/VariacionAlfa.jpg}\\
@@ -259,10 +258,10 @@ Las instancias utilizadas para tomar las mediciones fueron grafos de 100 a 500 n
 \centering \includegraphics[scale=0.40]{img/VariacionAlfaComplejidad.jpg}\\
 \small{Este gr\'afico muestra la cantidad de operaciones realizadas para los los valores de $ALFA$ testeados.}
 \end{center}
-Como se puede observar en los gr�ficos de las mediciones tomadas para las mismas instancias con distintos valores para $ALFA$, se obtuvieron los mejores resultados para el valor $0,1$ y las complejidades pr\'acticas para ese valor son bastante razonables. El valor decidido para $ALFA$ fue entonces de $0,1$.\\
+Como se puede observar en los gr\'aficos de las mediciones tomadas para las mismas instancias con distintos valores para $ALFA$, se obtuvieron los mejores resultados para el valor $0,1$ y las complejidades pr\'acticas para ese valor son bastante razonables. El valor decidido para $ALFA$ fue entonces de $0,1$.\\
 
 \newpage
-\subsection{Gr�ficos de cantidad de iteraciones}
+\subsection{Gr\'aficos de cantidad de iteraciones}
 
 \begin{center}
 \centering \includegraphics[scale=0.40]{img/VariacionItSinMejora.jpg}\\
@@ -274,7 +273,7 @@ Como se puede observar en los gr�ficos de las mediciones tomadas para las mism
 \end{center}
 Decidimos darle el valor $10$ a $CANT\_ITERACIONES\_SIN\_MEJORAR$ ya que en las mediciones tomadas se observa un incremento considerable en la cantidad de operaciones, mientras que las soluciones no mejoran de manera significativa.\\
 
-El valor decidido para $CANT\_ITERACIONES\_MAXIMA$ fue $200$, ya que en ninguno de los casos evaluados lleg� a cortar por esa cota.\\
+El valor decidido para $CANT\_ITERACIONES\_MAXIMA$ fue $200$, ya que en ninguno de los casos evaluados lleg\'o a cortar por esa cota.\\
 %El valor decidido para $CANT\_ITERACIONES\_BUSQUEDA\_LOCAL$ fue $50$.\\
 \newpage
 \section{Pseudo-algoritmo}
@@ -301,7 +300,7 @@ Mientras no se superen las $I$ iteraciones totales y las $J$ iteraciones sin mej
 	\emph{Fin Mientras}\\
 	\textbf{Fin Algoritmo B\'usqueda Local}
 
-	\item 5) Calcular los caminos m�nimos entre los nodos del matching.
+	\item 5) Calcular los caminos m\'inimos entre los nodos del matching.
 	\item 6) Calcular el circuito Euleriano\\
 
 
@@ -321,14 +320,14 @@ Complejidades donde $n$ es la cantidad de nodos, $m_{1}$ la cantidad de aristas,
 	En total: $O(n^{2} + m_{1} +m_{2}) \subseteq O(n^{2})$
 	\item FuertementeConexo
 	\begin{itemize}
-		\item Inicializaci�n de listas de adyacencias $O(n + m_{1} + m_{2})$
-		\item resetVisitados y checkVisitados recorren un array de bools de tama�o $n$. $O(n)$
+		\item Inicializaci\'on de listas de adyacencias $O(n + m_{1} + m_{2})$
+		\item resetVisitados y checkVisitados recorren un array de bools de tama\~{n}o $n$. $O(n)$
 		\item visitarNodos recorre recursivamente en DFS las adyacencias y marca los nodos que son accesibles desde el nodo $0$. $O(m_{1} + m_{2})$
 	\end{itemize}
 	En total: $O(n + m_{1} + m_{2})$
 	\item Calcular Dantzig
 	\begin{itemize}	
-		\item Inicializaci�n de la matriz de pesos de caminos m�nimos $O(n^{2})$
+		\item Inicializaci\'on de la matriz de pesos de caminos m\'inimos $O(n^{2})$
 		\item 3 for anidados de $0$ a $n$ con operaciones de tiempo constante $O(n^{3})$
 	\end{itemize}
 	En total: $O(n^{3})$
@@ -338,7 +337,7 @@ Complejidades donde $n$ es la cantidad de nodos, $m_{1}$ la cantidad de aristas,
 	\begin{itemize}
 		\item $m_{1}$ iteraciones de
 		\begin{itemize}
-			\item encontrarNodoAOrientar: Busca cuales nodos cumplen la condici�n dada $O(n)$
+			\item encontrarNodoAOrientar: Busca cuales nodos cumplen la condici\'on dada $O(n)$
 			\item eleccionNodoAOrientar: Elije segun el parametro pasado por cual nodo de la lista anterior va a continuar $O(n)$
 			\item orientarNodo $O(1)$
 		\end{itemize}
@@ -348,16 +347,16 @@ Complejidades donde $n$ es la cantidad de nodos, $m_{1}$ la cantidad de aristas,
 \newpage
 	\item encontrarMatchingNodos
 	\begin{itemize}
-		\item Inicializaci�n de arreglos de longitud $n$ $O(n)$
+		\item Inicializaci\'on de arreglos de longitud $n$ $O(n)$
 		\item para cada exedente de $D_{in}$ arma una pareja con un $D_{out}$ y lo agrega en una lista con el peso calculado con $Dantzig$ $O(\frac{\sum_{i=1}^{n}{|d_{in}(i)-d_{out}(i)|}}{2})$ $\subseteq$ $O(m)$
 	\end{itemize}
 	En total: $O(m + n)$
-	\item encontrarMatchingDeMenorPeso: Dado un matching de tama�o $k$ devuelve el mejor matching que se puede obtener intercambiando los destinos de solo dos items del matching original. \\En total: $O(k^{2})$
-	\item pesoMatching recorre una lista de tama�o a lo sumo $m$\\
+	\item encontrarMatchingDeMenorPeso: Dado un matching de tama\~{n}o $k$ devuelve el mejor matching que se puede obtener intercambiando los destinos de solo dos items del matching original. \\En total: $O(k^{2})$
+	\item pesoMatching recorre una lista de tama\~{n}o a lo sumo $m$\\
 	En total: $O(m)$
 	\item agregarCaminosMatcheados
 	\begin{itemize}
-		\item Inicializaci\'on de matriz de tama�o $n*n$. $O(n^{2})$
+		\item Inicializaci\'on de matriz de tama\~{n}o $n*n$. $O(n^{2})$
 		\item Para cada eje $(i,j)$ del matching (a lo sumo $m$ ejes)
 		\begin{itemize}
 			\item Si no esta calculado el $Dijkstra$ para el nodo $i$ $\rightarrow$ Calcula $Dijkstra$ sobre el grafo original y lo guarda. $O(n^{2})$
@@ -369,7 +368,7 @@ Complejidades donde $n$ es la cantidad de nodos, $m_{1}$ la cantidad de aristas,
 	En total: $O(m*n + n*n^{2})$ como $O(m)$ $\subseteq$ $O(n^{2})$ $\Rightarrow$ $O(m*n + n^{3})$ $\subseteq$ $O(n^{3})$
 	\item Dijkstra
 	\begin{itemize}
-		\item Inicializaci�n de arreglos de int y bool de tama�o $n$. $O(n)$
+		\item Inicializaci\'on de arreglos de int y bool de tama\~{n}o $n$. $O(n)$
 		\item Para cada nodo $i$ ($n$ elementos)
 		\begin{itemize}
 			\item Minvertex $O(n)$
@@ -421,7 +420,7 @@ Complejidades donde $n$ es la cantidad de nodos, $m_{1}$ la cantidad de aristas,
 
 Complejidad:
 	\begin{itemize}
-	\item $O(n^{2})$ de inicializaci�n
+	\item $O(n^{2})$ de inicializaci\'on
 	\item $O(n + m_{1} + m_{2})$ de fuertementeConexo
 	\item $O(n^{3})$ de Dantzig
 	\item $O(m_{1} + m_{2})$ de sumarPesosEjes
@@ -446,7 +445,7 @@ $O(n^{3} + m^{2} + m*n)$ $\subseteq$ $O(n^{3} + m^{2})$\\
 %Como sabemos que el grafo es fuertemente conexo $\Rightarrow$ $ O(n) \subseteq O(m)$ $\Rightarrow$ la complejidad es\\
 %$O(n^{3} + m^{2})$ $\subseteq$ $O(n*m^{2})$
 \\
-Definimos el tama�o de entrada como:
+Definimos el tama\~{n}o de entrada como:
 
 	\begin{center}	
 	$T = log(n) + log(m_{1}) + log(m_{2}) + \displaystyle\sum_{i=1}^{m_{1} + m_{2}}{(log(eje_{i_{nodo1}})+log(eje_{i_{nodo2}}) + log(eje_{i_{peso}}))}$\\
@@ -461,7 +460,7 @@ Definimos el tama�o de entrada como:
 	\begin{center}
 	$T > \displaystyle\sum_{i=1}^{m_{1} + m_{2}}{1} = m_{1} + m_{2} = m$ \\
 	\end{center}
-	Sabemos que el grafo es fuertemente conexo as� que $n$ es del orden de $m$ $\Rightarrow$
+	Sabemos que el grafo es fuertemente conexo as\'i que $n$ es del orden de $m$ $\Rightarrow$
 
 	\begin{center}
 	$T > m \geq n$ \\

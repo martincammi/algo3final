@@ -1,8 +1,11 @@
-\BOOKMARK [2][-]{subsection.0.1}{0.1 Lenguaje utilizado}{}
-\BOOKMARK [2][-]{subsection.0.2}{0.2 Como ejecutar el TP}{}
-\BOOKMARK [1][-]{section.1}{1 Situaciones de la vida real}{}
-\BOOKMARK [1][-]{section.2}{2 Algoritmo Exacto}{}
-\BOOKMARK [1][-]{section.3}{3 Heuristica Constructiva}{}
-\BOOKMARK [1][-]{section.4}{4 Heuristica de busqueda Local}{}
-\BOOKMARK [1][-]{section.5}{5 Metaheuristica}{}
-\BOOKMARK [1][-]{section.6}{6 Heuristica de busqueda Local}{}
+\BOOKMARK [2][-]{subsection.0.1}{0.1 Lenguaje utilizado}{}% 1
+\BOOKMARK [2][-]{subsection.0.2}{0.2 Como ejecutar el TP}{}% 2
+\BOOKMARK [1][-]{section.1}{1 Introducci\363n}{}% 3
+\BOOKMARK [1][-]{section.2}{2 Situaciones de la vida real}{}% 4
+\BOOKMARK [1][-]{section.3}{3 Heur\357\277\275stica Constructiva}{}% 5
+\BOOKMARK [1][-]{section.4}{4 Heur\357\277\275stica de b\372squeda Local}{}% 6
+\BOOKMARK [1][-]{section.5}{5 Metaheuristica Grasp}{}% 7
+\BOOKMARK [2][-]{subsection.5.1}{5.1 Gr\357\277\275ficos de variaci\357\277\275n de ALFA}{section.5}% 8
+\BOOKMARK [2][-]{subsection.5.2}{5.2 Gr\357\277\275ficos de cantidad de iteraciones}{section.5}% 9
+\BOOKMARK [1][-]{section.6}{6 Pseudo-algoritmo}{}% 10
+\BOOKMARK [1][-]{section.7}{7 Complejidad}{}% 11

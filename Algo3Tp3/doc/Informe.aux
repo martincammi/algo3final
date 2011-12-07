@@ -4,18 +4,21 @@
 \catcode`>\active
 \@nameuse{es@quoting}
 \catcode`'\active
-\ifx\hyper@anchor\@undefined
-\global \let \oldcontentsline\contentsline
-\gdef \contentsline#1#2#3#4{\oldcontentsline{#1}{#2}{#3}}
-\global \let \oldnewlabel\newlabel
-\gdef \newlabel#1#2{\newlabelxx{#1}#2}
-\gdef \newlabelxx#1#2#3#4#5#6{\oldnewlabel{#1}{{#2}{#3}}}
-\AtEndDocument{\let \contentsline\oldcontentsline
-\let \newlabel\oldnewlabel}
-\else
-\global \let \hyper@last\relax 
-\fi
-
+\providecommand\HyperFirstAtBeginDocument{\AtBeginDocument}
+\HyperFirstAtBeginDocument{\ifx\hyper@anchor\@undefined
+\global\let\oldcontentsline\contentsline
+\gdef\contentsline#1#2#3#4{\oldcontentsline{#1}{#2}{#3}}
+\global\let\oldnewlabel\newlabel
+\gdef\newlabel#1#2{\newlabelxx{#1}#2}
+\gdef\newlabelxx#1#2#3#4#5#6{\oldnewlabel{#1}{{#2}{#3}}}
+\AtEndDocument{\ifx\hyper@anchor\@undefined
+\let\contentsline\oldcontentsline
+\let\newlabel\oldnewlabel
+\fi}
+\fi}
+\global\let\hyper@last\relax 
+\gdef\HyperFirstAtBeginDocument#1{#1}
+\providecommand\HyField@AuxAddToFields[1]{}
 \select@language{spanish}
 \@writefile{toc}{\select@language{spanish}}
 \@writefile{lof}{\select@language{spanish}}
@@ -23,9 +26,13 @@
 \newlabel{sec:ejecucion}{{}{3}{\contentsname \@mkboth {\MakeUppercase \contentsname }{\MakeUppercase \contentsname }\relax }{section*.1}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {0.1}Lenguaje utilizado}{3}{subsection.0.1}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {0.2}Como ejecutar el TP}{3}{subsection.0.2}}
-\@writefile{toc}{\contentsline {section}{\numberline {1}Situaciones de la vida real}{5}{section.1}}
-\@writefile{toc}{\contentsline {section}{\numberline {2}Algoritmo Exacto}{5}{section.2}}
-\@writefile{toc}{\contentsline {section}{\numberline {3}Heuristica Constructiva}{5}{section.3}}
-\@writefile{toc}{\contentsline {section}{\numberline {4}Heuristica de busqueda Local}{5}{section.4}}
-\@writefile{toc}{\contentsline {section}{\numberline {5}Metaheuristica}{5}{section.5}}
-\@writefile{toc}{\contentsline {section}{\numberline {6}Heuristica de busqueda Local}{5}{section.6}}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introducci\'on}{5}{section.1}}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Situaciones de la vida real}{6}{section.2}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Heur\IeC {\"\i }\IeC {\textquestiondown }\IeC {\textonehalf }stica Constructiva}{7}{section.3}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Heur\IeC {\"\i }\IeC {\textquestiondown }\IeC {\textonehalf }stica de b\'usqueda Local}{9}{section.4}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Metaheuristica Grasp}{11}{section.5}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Gr\IeC {\"\i }\IeC {\textquestiondown }\IeC {\textonehalf }ficos de variaci\IeC {\"\i }\IeC {\textquestiondown }\IeC {\textonehalf }n de ALFA}{12}{subsection.5.1}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Gr\IeC {\"\i }\IeC {\textquestiondown }\IeC {\textonehalf }ficos de cantidad de iteraciones}{13}{subsection.5.2}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Pseudo-algoritmo}{14}{section.6}}
+\@writefile{toc}{\contentsline {section}{\numberline {7}Complejidad}{15}{section.7}}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces Main($grafo$)}}{17}{algorithm.1}}

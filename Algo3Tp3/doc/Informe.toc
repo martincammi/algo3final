@@ -1,9 +1,12 @@
 \select@language {spanish}
 \contentsline {subsection}{\numberline {0.1}Lenguaje utilizado}{3}{subsection.0.1}
 \contentsline {subsection}{\numberline {0.2}Como ejecutar el TP}{3}{subsection.0.2}
-\contentsline {section}{\numberline {1}Situaciones de la vida real}{5}{section.1}
-\contentsline {section}{\numberline {2}Algoritmo Exacto}{5}{section.2}
-\contentsline {section}{\numberline {3}Heuristica Constructiva}{5}{section.3}
-\contentsline {section}{\numberline {4}Heuristica de busqueda Local}{5}{section.4}
-\contentsline {section}{\numberline {5}Metaheuristica}{5}{section.5}
-\contentsline {section}{\numberline {6}Heuristica de busqueda Local}{5}{section.6}
+\contentsline {section}{\numberline {1}Introducci\'on}{5}{section.1}
+\contentsline {section}{\numberline {2}Situaciones de la vida real}{6}{section.2}
+\contentsline {section}{\numberline {3}Heur\IeC {\"\i }\IeC {\textquestiondown }\IeC {\textonehalf }stica Constructiva}{7}{section.3}
+\contentsline {section}{\numberline {4}Heur\IeC {\"\i }\IeC {\textquestiondown }\IeC {\textonehalf }stica de b\'usqueda Local}{9}{section.4}
+\contentsline {section}{\numberline {5}Metaheuristica Grasp}{11}{section.5}
+\contentsline {subsection}{\numberline {5.1}Gr\IeC {\"\i }\IeC {\textquestiondown }\IeC {\textonehalf }ficos de variaci\IeC {\"\i }\IeC {\textquestiondown }\IeC {\textonehalf }n de ALFA}{12}{subsection.5.1}
+\contentsline {subsection}{\numberline {5.2}Gr\IeC {\"\i }\IeC {\textquestiondown }\IeC {\textonehalf }ficos de cantidad de iteraciones}{13}{subsection.5.2}
+\contentsline {section}{\numberline {6}Pseudo-algoritmo}{14}{section.6}
+\contentsline {section}{\numberline {7}Complejidad}{15}{section.7}
