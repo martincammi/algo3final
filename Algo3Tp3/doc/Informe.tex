@@ -401,7 +401,7 @@ Complejidades donde $n$ es la cantidad de nodos, $m_{1}$ la cantidad de aristas,
 			\ENDWHILE
 			\STATE $pesoMatching$ $\gets$ pesoMatching($matching$)
 			\STATE $sumaSolucion$ $\gets$ $pesoMatching + SumaOriginalPesos$
-			\IF{ mejor� la solucion }
+			\IF{ mejor� la solucion }
 				\STATE $SumaSolucionMejor$ $\gets$ $sumaSolucion$
 				\STATE $GrafoCopiaMejor$ $\gets$ $GC$
 				\STATE $MatchingMejor$ $\gets$ $matching$
@@ -467,5 +467,15 @@ Definimos el tama\~{n}o de entrada como:
 	Dado la complejidad calculada y las cotas para $T$ vale $O(n^{3} + m^{2})$ $\subseteq$ $O(T^{3}+T^{2})$ $\subseteq$ $O(T^{3})$
 	\end{center}
 \newpage
+
+
+\section{Conclusiones}
+
+	Es interesante trabajar con problemas para los cuales un algoritmo exacto no sea una opci\'on en materia de tiempo. En el diseño de este algoritmo heur\'istico nos dimos cuenta que el an\'alisis de los par\'ametros y que valores asignarle no es sencillo. Realizando las mediciones nos encontramos con grafos que con ciertos valores de los parámetros se encontraban mejores soluciones que otros, pero a su vez, estos mismos valores no mejoraban considerablemente las soluciones de otros grafos.\\
+
+No solo eso, el algoritmo deb\'ia terminar en un tiempo considerable, y un aumento en la complejidad pod\'ia hacer decidirnos por sacrificar una soluci\'on levemente mejor por obtener un algorimo m\'as r\'apido. As\'i por ejemplo terminamos decidiendo para el par\'ametro ALFA que nos determinaba la amplitud de la vecindad un valor relativamente bajo justificaba ya la calidad de las soluciones que obten\'iamos opuestamente a utilizar un ALFA algo mayor que, mejorando la soluci\'on levemente, aumentaba la complejidad de manera considerable.\\
+
+Es por eso que los algoritmos heur\'isticos se construyen a base de prueba y error, sin descartar claro est\'a una base te\'orica, para determinar que valores de los par\'ametros son los m\'as adecuados para tratar, en el caso de los grafos, la mayor generalidad posible. 
+
 
 \end{document}
