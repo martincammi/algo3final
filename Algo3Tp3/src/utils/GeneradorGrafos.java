@@ -1,6 +1,7 @@
 package utils;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,6 +13,8 @@ public class GeneradorGrafos {
 	private static int RANDOM_PESO = 3000;   //ME DA VALORES DE PESO ENTRE 1 Y 3000 (SI QUIEREN CAMBIAR, CAMBIAN ESTA VARIABLE)
 	
 	public static void main(String[] args) throws IOException {
+		File f = new File("ej.in");
+		f.delete();
 		FileWriter fw = new FileWriter("ej.in", true);
 		BufferedWriter bw = new BufferedWriter(fw);
 		
